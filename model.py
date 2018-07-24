@@ -116,28 +116,6 @@ class Intervention(db.Model):
                                                            self.intervention_description)
 
 
-# class Comment(db.Model):
-#     """association table to connect Behavior and Intervention"""
-
-#     __tablename__ = 'comments'
-
-#     comment_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     behavior_id = db.Column(db.Integer, db.ForeignKey('behaviors.behavior_id'), nullable=False)
-#     intervention_id = db.Column(db.Integer, db.ForeignKey('interventions.intervention_id'), nullable=False)
-
-#     behavior = db.relationship("Behavior")
-#     intervention = db.relationship("Intervention")
-
-#     def __repr__(self):
-#         """show info about the comment"""
-
-#         return """<comment_id = {},
-#                   behavior_id= {},
-#                   intervention_id = {}>""".format(self.comment_id,
-#                                                   self.behavior_id,
-#                                                   self.intervention_id)
-
-
 class Progress(db.Model):
     """progress information"""
 
