@@ -10,7 +10,7 @@ from model import connect_to_db, db
 def load_students():
     """load students from u.student into database."""
 
-    user = User(user_name="Jane Doe")
+    user = User(user_name="Jane Doe", password="ubermelon")
 
     db.session.add(user)
 

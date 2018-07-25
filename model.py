@@ -36,6 +36,7 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_name = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(25), nullable=False)
 
     students = db.relationship("Student")
     progress = db.relationship("Progress")
