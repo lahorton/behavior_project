@@ -23,7 +23,60 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """Homepage"""
+
     return render_template("homepage.html")
+
+
+@app.route('/login')
+def user_login():
+    """gets username and password from user"""
+
+    return render_template('login.html')
+
+
+@app.route('/login', methods=["POST"])
+def check_login():
+    """login existing users"""
+
+    user_name = request.form.get("name")
+    password = request.form.get("password")
+
+    user = User.query.filter(User.user_name == user_name).first()
+
+    password_match = db.session.query(User.password).filter(User.user_name == user_name).first()[0]
+
+    user_id = db.session.query(User.user_id).filter(User.user_name == user_name).first()
+
+    if user:
+        if password == password_match:
+            session["user_id"] = user_id
+            flash("Welcome!")
+            return redirect('/user_info')
+        else:
+            flash("Login failed")
+            return redirect('/login')
+    else:
+        flash("Looks like you're not registered.  Please register.")
+        return redirect('/register')
+
+    # name_match = User.query.filter(User.user_name == user_name, User.password == password).first()
+    # # password = User.query.filter(User.password == password).first()
+
+    # if name_match:
+    #     # if password:
+    #         session["user_name"] = User.user_id
+    #         flash("Welcome!  You're logged in.")
+    #         return render_template("/user_info.html")
+    # else:
+    #     flash("There was a problem with your username or password.  Please login or register.")
+    #     return redirect("/login")
+
+
+@app.route('/user_info')
+def user_info():
+    """lists students associated with the user"""
+
+    return render_template("user_info.html")
 
 
 @app.route('/register')
@@ -41,16 +94,15 @@ def register_new_user():
     password = request.form.get("password")
 
     user = User.query.filter(User.user_name == user_name).first()
-    user_pass = User.query.filter(User.password == password).first()
 
     if user:
         flash("That user_name is already registered.  Please choose another name.")
         return redirect('/register')
     else:
-        user_name = User(user_name=user_name)
+        user_name = User(user_name=user_name, password=password)
         db.session.add(user_name)
         db.session.commit()
-        return render_template('register.html')
+        return redirect('/user_info')
 
 
 if __name__ == "__main__":

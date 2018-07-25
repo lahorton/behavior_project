@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1> Welcome, new user! </h1>
+<h1> Welcome</h1>
 
-<h2> Please register below: </h2>
+<h2> Please log in: </h2>
 
  
-<form action = "/register" method="POST">
+<form action = "/login" method="POST">
     Enter your username:
     <input type="text" name="name"><br>
     <br>
     Enter a password:
     <input type="text" name="password"><br>
     <br>
-    <input type="submit" id="new_user_submit", value="Register">
+    <input type="submit">
 </form>
 
 {% endblock %}
