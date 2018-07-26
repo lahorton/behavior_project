@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1> We love progress updates! </h1>
+
+<h2> Please enter progress below: </h2>
+
+ 
+<form action = "/add_progress" method="POST">
+    Enter Student ID:
+    <input type="text" name="student_id"><br>
+    Date:
+    <input type="text" name="date"><br>
+    Intervention:<br>
+    {% for intervention in interventions %}
+    <input type="radio" name="{{ intervention.intervention_id }}", value="{{ intervention.intervention_id }}">{{ intervention.intervention_name }}
+    <br>
+    {% endfor %}
+    <br>
+    Behavior:<br>
+    {% for behavior in behaviors %}
+    <input type="radio" name="{{ behavior.behavior_id }}", value="{{ behavior.behavior_id }}">{{ behavior.behavior_name }}
+    <br>
+    {% endfor %}
+    <br>
+    Rating (0-10:  0 being no progress, 10 being excellent progress):
+    <input type="text" name="rating"><br>
+    Comment:
+    <input type="text" name="comment"><br>
+    <input type="submit">
+</form>
+
+{% endblock %}

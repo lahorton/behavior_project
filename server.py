@@ -92,12 +92,52 @@ def student_history(student_id):
     student = Student.query.get(student_id)
     #get student name
     student_name = (student.fname) + " " + (student.lname)
+
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and/or call specific attributes.
     progress = db.session.query(Progress).filter(Student.student_id==Progress.student_id).all()
 
-
     return render_template("student_history.html", student=student, student_name=student_name, progress=progress)
 
+
+@app.route("/add_progress/")
+def progress_report():
+    """Gets new progress report info from user"""
+
+    #gets list of all intervention objects from db:
+    interventions = db.session.query(Intervention).all()
+
+    #gets list of all behavior objects from db:
+    behaviors = db.session.query(Behavior).all()
+
+    return render_template("progress.html", interventions=interventions, behaviors=behaviors)
+
+
+@app.route("/add_progress", methods=["POST"])
+def add_progress():
+    """adds new progress report to db"""
+
+    student_id = request.form.get("student_id")
+    date = request.form.get("date")
+    behavior_id = request.form.get("behavior_id")
+    intervention_id = request.form.get("intervention_id")
+    user_id = session["user_id"][0]
+    rating = request.form.get("rating")
+    comment = request.form.get("comment")
+
+    ##Form is not getting the correct values for behavior_id & Intervention_id so the 
+    # db can't add the Progress to the DB. 
+
+    print(Behaviors.behavior_id)
+    print(Interventions.intervention_id)
+    #figure out how to make a calendar pop-up on date to select date in datetime.
+    #make sure session is connecting to the correct user_id
+
+    progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
+                        intervention_id=intervention_id, user_id=user_id, rating=rating,
+                        comment=comment)
+    db.session.add(progress)
+    db.session.commit()
+    return redirect(f"/user_info/<user_id>")
 
 
 @app.route('/register')
