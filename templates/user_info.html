@@ -8,19 +8,13 @@
 
 <p> Students: </p>
 
-<!-- The below loop is throwing an error (i think because of some Jinja typo)
- --><!-- 
-<ul>
-
-  {% for student in {{ students }} %}
-    <li>
-      Student: <br>
-      first name: {{ student.fname }}<br>
-      last name: {{ student.lname }}<br>
-    </li> 
-  {% endfor %}
-  
-</ul> -->
-
+<ul id="student_names">
+    {% for student in student_names %}
+        <li> Student: <br>
+             first name: {{ student[0] }}<br>
+             last name: {{ student[1] }}<br>
+        </li>
+    {% endfor %}
+</ul>
 
 {% endblock %}

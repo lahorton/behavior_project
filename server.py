@@ -72,15 +72,21 @@ def user_info(user_id):
     #This gives you a list of the student objects.  Use SQLAlchemy to reference attributes of each student
     students = user.students
 
-    # # user_name = db.session.query(User.user_name).filter(User.user_id == user.user).first()[0]
-    # print(">>>>>>>>>>>>>>>>>>>>>>>>")
-    # print(user_name)
-    # student_name = students[0].fname
-    # print(student_name)
-    # print(students[0])
-    # print(">>>>>>>>>>>>>>>>>>>>>>>")
+    # user_name = db.session.query(User.user_name).filter(User.user_id == user.user).first()[0]
+    print(">>>>>>>>>>>>>>>>>>>>>>>>")
+    print(user_name)
 
-    return render_template("user_info.html", user=user, user_name=user_name, user_id=user_id, students=students)
+    # generates list of student names for the user
+    student_names = []
+    i = 0
+    while i < len(students):
+        student_names.append((students[i].fname, students[i].lname))
+        i += 1
+
+    print(student_names)
+    print(">>>>>>>>>>>>>>>>>>>>>>>")
+
+    return render_template("user_info.html", user=user, user_name=user_name, user_id=user_id, students=students, student_names=student_names)
 
 
 @app.route('/register')
