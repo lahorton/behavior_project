@@ -73,20 +73,31 @@ def user_info(user_id):
     students = user.students
 
     # user_name = db.session.query(User.user_name).filter(User.user_id == user.user).first()[0]
-    print(">>>>>>>>>>>>>>>>>>>>>>>>")
-    print(user_name)
 
     # generates list of student names for the user
-    student_names = []
+    student_info = []
     i = 0
     while i < len(students):
-        student_names.append((students[i].fname, students[i].lname))
+        student_info.append((students[i].fname, students[i].lname, students[i].student_id))
         i += 1
 
-    print(student_names)
-    print(">>>>>>>>>>>>>>>>>>>>>>>")
+    return render_template("user_info.html", user=user, user_name=user_name, user_id=user_id, students=students, student_info=student_info)
 
-    return render_template("user_info.html", user=user, user_name=user_name, user_id=user_id, students=students, student_names=student_names)
+
+@app.route(f"/student_history/<student_id>")
+def student_history(student_id):
+    """displays student progress-report history"""
+
+    #get student object
+    student = Student.query.get(student_id)
+    #get student name
+    student_name = (student.fname) + " " + (student.lname)
+    #get progress object for student (in a list of progress objects).  Loop through these in Jinja and/or call specific attributes.
+    progress = db.session.query(Progress).filter(Student.student_id==Progress.student_id).all()
+
+
+    return render_template("student_history.html", student=student, student_name=student_name, progress=progress)
+
 
 
 @app.route('/register')
@@ -113,6 +124,7 @@ def register_new_user():
         db.session.add(user_name)
         db.session.commit()
         return redirect('/login')
+
 
 
 if __name__ == "__main__":

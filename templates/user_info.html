@@ -8,11 +8,14 @@
 
 <p> Students: </p>
 
-<ul id="student_names">
-    {% for student in student_names %}
+<ul id="student_info">
+    {% for student in student_info %}
         <li> Student: <br>
-             first name: {{ student[0] }}<br>
-             last name: {{ student[1] }}<br>
+             First name: {{ student[0] }}<br>
+             Last name: {{ student[1] }}<br>
+             Student ID: <a href="/student_history/{{ student[2] }}" name="student_id"> {{ student[2] }}</a>
+             <br>
+             <br>
         </li>
     {% endfor %}
 </ul>

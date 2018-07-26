@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Student History</h2>
+
+<p>Student Name : {{ student_name }} </p>
+
+<p> Progress Reports: </p>
+
+<ul id="student_progress">
+    {% for item in progress %}
+        <li> Progress Report: <br>
+             Date: {{ item.date }}<br>
+             Behavior: {{ item.behavior_id }}<br>
+             Intervention: {{ item.intervention_id }}<br>
+             User_id: {{ item.user_id }}<br>
+             Rating: {{ item.rating }}<br>
+             Comment: {{ item.comment }}<br>
+             <br>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
