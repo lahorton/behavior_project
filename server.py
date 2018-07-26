@@ -50,8 +50,9 @@ def check_login():
     if user:
         if password == password_match:
             session["user_id"] = user_id
+            print(user.user_id)
             flash("Welcome!")
-            return redirect('/user_info')
+            return redirect(f"/user_info/{user.user_id}")
         else:
             flash("Login failed")
             return redirect('/login')
@@ -59,24 +60,27 @@ def check_login():
         flash("Looks like you're not registered.  Please register.")
         return redirect('/register')
 
-    # name_match = User.query.filter(User.user_name == user_name, User.password == password).first()
-    # # password = User.query.filter(User.password == password).first()
 
-    # if name_match:
-    #     # if password:
-    #         session["user_name"] = User.user_id
-    #         flash("Welcome!  You're logged in.")
-    #         return render_template("/user_info.html")
-    # else:
-    #     flash("There was a problem with your username or password.  Please login or register.")
-    #     return redirect("/login")
-
-
-@app.route('/user_info')
-def user_info():
+@app.route(f"/user_info/<user_id>")
+def user_info(user_id):
     """lists students associated with the user"""
 
-    return render_template("user_info.html")
+    user = User.query.get(user_id)
+    user_name = user.user_name
+    user_id = user.user_id
+
+    #This gives you a list of the student objects.  Use SQLAlchemy to reference attributes of each student
+    students = user.students
+
+    # # user_name = db.session.query(User.user_name).filter(User.user_id == user.user).first()[0]
+    # print(">>>>>>>>>>>>>>>>>>>>>>>>")
+    # print(user_name)
+    # student_name = students[0].fname
+    # print(student_name)
+    # print(students[0])
+    # print(">>>>>>>>>>>>>>>>>>>>>>>")
+
+    return render_template("user_info.html", user=user, user_name=user_name, user_id=user_id, students=students)
 
 
 @app.route('/register')
@@ -102,7 +106,7 @@ def register_new_user():
         user_name = User(user_name=user_name, password=password)
         db.session.add(user_name)
         db.session.commit()
-        return redirect('/user_info')
+        return redirect('/login')
 
 
 if __name__ == "__main__":
