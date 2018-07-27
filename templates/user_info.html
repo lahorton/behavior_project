@@ -5,10 +5,15 @@
 
 <p>Username : {{ user_name }} </p>
 <p>User ID: {{ user_id }} </p>
+ 
+<form action = "/user_info/{{ user_id }}" method="POST">
+    Would you like to add a new student?<br>
+    <input type="radio" name="new_student" value="yes">Yes
+    <input type="radio" name="new_student" value="no">No<br>
+    <input type="submit" id="new_student_submit", value="submit">
 
 
-<p> Please click on student ID to see student progress history </p>
-<p> Students: </p>
+<p> Please click on Student ID to see student progress history: </p>
 
 <ul id="student_info">
     {% for student in student_info %}

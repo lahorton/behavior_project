@@ -61,9 +61,22 @@ def check_login():
         return redirect('/register')
 
 
+@app.route('/logout')
+def logout():
+    """Clears user_id from session"""
+
+    del session['user_id']
+    flash("Logged out.")
+    return redirect("/login")
+
+
 @app.route(f"/user_info/<user_id>")
 def user_info(user_id):
     """lists students associated with the user"""
+
+    if "user_id" not in session:
+        flash("Please log in.")
+        return redirect('/login')
 
     user = User.query.get(user_id)
     user_name = user.user_name
@@ -84,6 +97,17 @@ def user_info(user_id):
     return render_template("user_info.html", user=user, user_name=user_name,
                             user_id=user_id, students=students,
                             student_info=student_info)
+
+
+@app.route(f"/user_info/<user_id>", methods=["POST"])
+def route_to_add_student():
+    """give user option to add a student"""
+
+    user_id = session["user_id"][0]
+    if new_student == "yes":
+        return redirect('/add_student')
+    else:
+        return redirect(f"/user_info/{user_id}")
 
 
 @app.route(f"/student_history/<student_id>")
