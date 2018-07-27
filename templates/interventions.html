@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Interventions</h2>
+
+<ul id="interventions">
+    {% for item in interventions %}
+        <li> Name: {{ item.intervention_name }}<br>
+             Description: {{ item.intervention_description }}<br>
+             <br>
+        </li>
+    {% endfor %}
+</ul>
+
+
+<form action = "/interventions" method="POST">
+    Would you like to add a new intervention?<br>
+    <input type="radio" name="new_intervention" value="yes">Yes
+    <input type="radio" name="new_intervention" value="no">No<br>
+    <input type="submit" id="new_intervention_submit", value="submit">
+    
+{% endblock %}

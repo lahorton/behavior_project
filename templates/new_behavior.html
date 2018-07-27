@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1> Add a new behavior to address: </h1>
+
+ 
+<form action = "/add_behavior" method="POST">
+    Enter behavior name:
+    <input type="text" name="behavior_name"><br>
+    Please enter a description:
+    <input type="text" name="behavior_description"><br>
+    <input type="submit">
+</form>
+
+{% endblock %}

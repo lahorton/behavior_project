@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1> Add a new intervention: </h1>
+
+ 
+<form action = "/add_intervention" method="POST">
+    Enter intervention name:
+    <input type="text" name="intervention_name"><br>
+    Please enter a description:
+    <input type="text" name="intervention_description"><br>
+    <input type="submit">
+</form>
+
+{% endblock %}

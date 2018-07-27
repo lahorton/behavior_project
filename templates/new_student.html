@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1> Would you like to add a new student? </h1>
+
+<h2> Please enter student info below: </h2>
+
+ 
+<form action = "/add_student" method="POST">
+    Enter student's first name:
+    <input type="text" name="fname"><br>
+    Enter studnet's last name:
+    <input type="text" name="lname"><br>
+    <input type="submit">
+</form>
+
+{% endblock %}

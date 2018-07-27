@@ -136,12 +136,32 @@ def add_progress():
 
     #figure out how to make a calendar pop-up on date to select date in datetime.
     #make sure session is connecting to the correct user_id
-
     progress = Progress(student_id=student_id, date=date, behavior_id=behavior.behavior_id,
                         intervention_id=intervention.intervention_id, user_id=user_id, rating=rating,
                         comment=comment)
 
     db.session.add(progress)
+    db.session.commit()
+    return redirect(f"/user_info/{user_id}")
+
+
+@app.route("/add_student")
+def new_student_form():
+    """gets new student info from user"""
+
+    return render_template("new_student.html")
+
+
+@app.route("/add_student", methods=["POST"])
+def add_student():
+    """adds a new student to the db"""
+
+    fname = request.form.get("fname")
+    lname = request.form.get("lname")
+    user_id = session["user_id"][0]
+
+    student = Student(fname=fname, lname=lname, user_id=user_id)
+    db.session.add(student)
     db.session.commit()
     return redirect(f"/user_info/{user_id}")
 
@@ -171,6 +191,109 @@ def register_new_user():
         db.session.commit()
         return redirect('/login')
 
+
+@app.route("/interventions")
+def display_interventions():
+    """displays a list of optional interventions"""
+
+    interventions = db.session.query(Intervention).order_by(Intervention.intervention_name).all()
+
+    return render_template("interventions.html", interventions=interventions)
+
+
+@app.route("/interventions", methods=["POST"])
+def new_intervention():
+    """New intervention option for user"""
+
+    interventions = db.session.query(Intervention).order_by(Intervention.intervention_name).all()
+
+    new_intervention = request.form.get("new_intervention")
+
+    if new_intervention == "yes":
+        return redirect('/new_intervention')
+    else:
+        return render_template("interventions.html", interventions=interventions)
+
+
+@app.route("/new_intervention")
+def show_intervention_info():
+    """gets new intervnetion info from user"""
+
+    return render_template('new_intervention.html')
+
+
+@app.route("/add_intervention", methods=["POST"])
+def add_intervention():
+    """adds new intervention to the database"""
+
+    # ideally, I want to only the user that adds this new intervention to see it in the future
+    #OR I want to screen to make sure it's appropriate.  Add in functionality.
+
+    intervention_name = request.form.get("intervention_name")
+    intervention_description = request.form.get("intervention_description")
+    user_id = session["user_id"][0]
+
+    if len(intervention_description) > 200:
+        intervention_description = intervention_description[:200]
+
+    intervention = Intervention(intervention_name=intervention_name, intervention_description=intervention_description)
+
+    db.session.add(intervention)
+    db.session.commit()
+
+    return redirect('/interventions')
+
+
+@app.route("/behaviors")
+def display_behaviors():
+    """displays a list of optional behaviors"""
+
+    behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
+
+    return render_template("behaviors.html", behaviors=behaviors)
+
+
+@app.route("/behaviors", methods=["POST"])
+def new_behavior():
+    """New behavior option for user"""
+
+    behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
+
+    new_behavior = request.form.get("new_behavior")
+
+    if new_behavior == "yes":
+        return redirect('/new_behavior')
+    else:
+        return render_template("behaviors.html", behaviors=behaviors)
+
+
+@app.route("/new_behavior")
+def show_behavior_info():
+    """gets new behavior info from user"""
+
+    return render_template('new_behavior.html')
+
+
+@app.route("/add_behavior", methods=["POST"])
+def add_behavior():
+    """adds new behavior to the database"""
+
+    # ideally, I want to only the user that adds this new behavior to see the new behavior in the future
+    #OR I want to screen to make sure it's appropriate.  Add in functionality.
+
+    behavior_name = request.form.get("behavior_name")
+    behavior_description = request.form.get("behavior_description")
+    user_id = session["user_id"][0]
+
+    if len(behavior_description) > 200:
+        behavior_description = behavior_description[:200]
+
+    behavior = Behavior(behavior_name=behavior_name, behavior_description=behavior_description)
+
+    db.session.add(behavior)
+    db.session.commit()
+
+    return redirect('/behaviors')
 
 
 if __name__ == "__main__":

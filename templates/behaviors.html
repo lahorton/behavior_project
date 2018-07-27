@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Behaviors</h2>
+
+<ul id="behaviors">
+    {% for item in behaviors %}
+        <li> Name: {{ item.behavior_name }}<br>
+             Description: {{ item.behavior_description }}<br>
+             <br>
+        </li>
+    {% endfor %}
+</ul>
+
+
+<form action = "/behaviors" method="POST">
+    Would you like to add a new behavior?<br>
+    <input type="radio" name="new_behavior" value="yes">Yes
+    <input type="radio" name="new_behavior" value="no">No<br>
+    <input type="submit" id="new_behavior_submit", value="submit">
+
+{% endblock %}
