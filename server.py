@@ -81,7 +81,9 @@ def user_info(user_id):
         student_info.append((students[i].fname, students[i].lname, students[i].student_id))
         i += 1
 
-    return render_template("user_info.html", user=user, user_name=user_name, user_id=user_id, students=students, student_info=student_info)
+    return render_template("user_info.html", user=user, user_name=user_name,
+                            user_id=user_id, students=students,
+                            student_info=student_info)
 
 
 @app.route(f"/student_history/<student_id>")
@@ -94,9 +96,13 @@ def student_history(student_id):
     student_name = (student.fname) + " " + (student.lname)
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and/or call specific attributes.
-    progress = db.session.query(Progress).filter(Student.student_id==Progress.student_id).all()
+    progress = db.session.query(Progress).filter(Student.student_id==Progress.student_id).order_by(Progress.date.desc()).all()
+    intervention_name = db.session.query(Intervention.intervention_name).filter(Progress.intervention_id==Intervention.intervention_id).first()[0]
+    behavior_name = db.session.query(Behavior.behavior_name).filter(Progress.behavior_id==Behavior.behavior_id).first()[0]
 
-    return render_template("student_history.html", student=student, student_name=student_name, progress=progress)
+    return render_template("student_history.html", student=student,
+                            student_name=student_name, progress=progress,
+                            behavior_name=behavior_name, intervention_name=intervention_name)
 
 
 @app.route("/add_progress/")
@@ -116,28 +122,28 @@ def progress_report():
 def add_progress():
     """adds new progress report to db"""
 
+    interventions = db.session.query(Intervention).all()
+    behaviors = db.session.query(Behavior).all()
+
     student_id = request.form.get("student_id")
     date = request.form.get("date")
-    behavior_id = request.form.get("behavior_id")
-    intervention_id = request.form.get("intervention_id")
+    behavior_id = request.form.get("behavior.behavior_id")
+    intervention_id = request.form.get("intervention.intervention_id")
     user_id = session["user_id"][0]
     rating = request.form.get("rating")
     comment = request.form.get("comment")
 
-    ##Form is not getting the correct values for behavior_id & Intervention_id so the 
-    # db can't add the Progress to the DB. 
 
-    print(Behaviors.behavior_id)
-    print(Interventions.intervention_id)
     #figure out how to make a calendar pop-up on date to select date in datetime.
     #make sure session is connecting to the correct user_id
 
-    progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
-                        intervention_id=intervention_id, user_id=user_id, rating=rating,
+    progress = Progress(student_id=student_id, date=date, behavior_id=behavior.behavior_id,
+                        intervention_id=intervention.intervention_id, user_id=user_id, rating=rating,
                         comment=comment)
+
     db.session.add(progress)
     db.session.commit()
-    return redirect(f"/user_info/<user_id>")
+    return redirect(f"/user_info/{user_id}")
 
 
 @app.route('/register')
