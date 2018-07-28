@@ -164,7 +164,7 @@ def add_progress():
     return redirect(f"/user_info/{user_id}")
 
 
-@app.route("/add_student", methods=["POST"])
+@app.route("/add_student")
 def new_student_form():
     """gets new student info from user"""
 
