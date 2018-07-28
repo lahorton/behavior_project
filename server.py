@@ -94,20 +94,15 @@ def user_info(user_id):
         student_info.append((students[i].fname, students[i].lname, students[i].student_id))
         i += 1
 
-    return render_template("user_info.html", user=user, user_name=user_name,
-                            user_id=user_id, students=students,
-                            student_info=student_info)
+    #new student option:
+    new_student = request.args.get("new_student")
 
-
-@app.route(f"/user_info/<user_id>", methods=["POST"])
-def route_to_add_student():
-    """give user option to add a student"""
-
-    user_id = session["user_id"][0]
     if new_student == "yes":
         return redirect('/add_student')
     else:
-        return redirect(f"/user_info/{user_id}")
+        return render_template("user_info.html", user=user, user_name=user_name,
+                                user_id=user_id, students=students,
+                                student_info=student_info)
 
 
 @app.route(f"/student_history/<student_id>")
@@ -169,7 +164,7 @@ def add_progress():
     return redirect(f"/user_info/{user_id}")
 
 
-@app.route("/add_student")
+@app.route("/add_student", methods=["POST"])
 def new_student_form():
     """gets new student info from user"""
 
