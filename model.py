@@ -5,9 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 
-
-
 db = SQLAlchemy()
+
 
 def connect_to_db(app):
     """Connect database to Flask app."""
@@ -39,6 +38,7 @@ class User(db.Model):
     password = db.Column(db.String(25), nullable=False)
 
     students = db.relationship("Student")
+
     progress = db.relationship("Progress")
 
     def __repr__(self):
@@ -104,6 +104,7 @@ class Intervention(db.Model):
 
     #creates a relationship with students, through the progress table
     # student = db.relationship("Student", secondary="progress")
+
     progress = db.relationship("Progress")
     # comment = db.relationship("Comment")
 

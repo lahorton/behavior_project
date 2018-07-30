@@ -41,20 +41,23 @@ def check_login():
     user_name = request.form.get("name")
     password = request.form.get("password")
 
-    user = User.query.filter(User.user_name == user_name).first()
+    print(user_name)
+    print(password)
 
-    password_match = db.session.query(User.password).filter(User.user_name == user_name).first()[0]
+    user = User.query.filter(User.user_name == user_name).first()
 
     user_id = db.session.query(User.user_id).filter(User.user_name == user_name).first()
 
     if user:
+        password_match = db.session.query(User.password).filter(User.user_name == user_name).first()
+        password_match = password_match[0]
         if password == password_match:
             session["user_id"] = user_id
             print(user.user_id)
             flash("Welcome!")
             return redirect(f"/user_info/{user.user_id}")
         else:
-            flash("Login failed")
+            flash("Login failed. Please double-check your password.")
             return redirect('/login')
     else:
         flash("Looks like you're not registered.  Please register.")
@@ -115,9 +118,15 @@ def student_history(student_id):
     student_name = (student.fname) + " " + (student.lname)
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and/or call specific attributes.
-    progress = db.session.query(Progress).filter(Student.student_id==Progress.student_id).order_by(Progress.date.desc()).all()
+    progress = Progress.query.filter(Progress.student_id == student.student_id).all()
+
+    # progress = db.session.query(Progress).filter(Student.student_id==Progress.student_id).order_by(Progress.date.desc()).all()
     intervention_name = db.session.query(Intervention.intervention_name).filter(Progress.intervention_id==Intervention.intervention_id).first()[0]
     behavior_name = db.session.query(Behavior.behavior_name).filter(Progress.behavior_id==Behavior.behavior_id).first()[0]
+
+    print("<<<<<<<<<<<<<")
+    print(progress)
+    print("<<<<<<<<<<<<<")
 
     return render_template("student_history.html", student=student,
                             student_name=student_name, progress=progress,
