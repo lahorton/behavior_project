@@ -265,20 +265,6 @@ def display_behaviors():
     return render_template("behaviors.html", behaviors=behaviors)
 
 
-# @app.route("/behaviors")
-# def new_behavior():
-#     """New behavior option for user"""
-
-#     behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
-
-#     new_behavior = request.form.get("new_behavior")
-
-#     # if new_behavior == "yes":
-#     #     return redirect('/new_behavior')
-#     # else:
-#     return render_template("behaviors.html", behaviors=behaviors)
-
-
 @app.route("/new_behavior")
 def show_behavior_info():
     """gets new behavior info from user"""
