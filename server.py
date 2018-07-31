@@ -96,15 +96,9 @@ def user_info(user_id):
         student_info.append((students[i].fname, students[i].lname, students[i].student_id))
         i += 1
 
-    #new student option:
-    new_student = request.args.get("new_student")
-
-    if new_student == "yes":
-        return redirect('/add_student')
-    else:
-        return render_template("user_info.html", user=user, user_name=user_name,
-                                user_id=user_id, students=students,
-                                student_info=student_info)
+    return render_template("user_info.html", user=user, user_name=user_name,
+                            user_id=user_id, students=students,
+                            student_info=student_info)
 
 
 @app.route("/student_history/<student_id>")
@@ -171,8 +165,6 @@ def add_progress(student_id):
                         intervention_id=intervention_id, user_id=user_id, rating=rating,
                         comment=comment)
 
-    print("<<<<<<<<<<<")
-    print(progress)
     db.session.add(progress)
     db.session.commit()
     return redirect(f"/student_history/{student_id}")
@@ -234,20 +226,6 @@ def display_interventions():
     return render_template("interventions.html", interventions=interventions)
 
 
-@app.route("/interventions", methods=["POST"])
-def new_intervention():
-    """New intervention option for user"""
-
-    interventions = db.session.query(Intervention).order_by(Intervention.intervention_name).all()
-
-    new_intervention = request.form.get("new_intervention")
-
-    if new_intervention == "yes":
-        return redirect('/new_intervention')
-    else:
-        return render_template("interventions.html", interventions=interventions)
-
-
 @app.route("/new_intervention")
 def show_intervention_info():
     """gets new intervnetion info from user"""
@@ -287,18 +265,18 @@ def display_behaviors():
     return render_template("behaviors.html", behaviors=behaviors)
 
 
-@app.route("/behaviors", methods=["POST"])
-def new_behavior():
-    """New behavior option for user"""
+# @app.route("/behaviors")
+# def new_behavior():
+#     """New behavior option for user"""
 
-    behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
+#     behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
 
-    new_behavior = request.form.get("new_behavior")
+#     new_behavior = request.form.get("new_behavior")
 
-    if new_behavior == "yes":
-        return redirect('/new_behavior')
-    else:
-        return render_template("behaviors.html", behaviors=behaviors)
+#     # if new_behavior == "yes":
+#     #     return redirect('/new_behavior')
+#     # else:
+#     return render_template("behaviors.html", behaviors=behaviors)
 
 
 @app.route("/new_behavior")

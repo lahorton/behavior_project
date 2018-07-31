@@ -6,12 +6,8 @@
 <p>Username : {{ user_name }} </p>
 <p>User ID: {{ user_id }} </p>
  
-<form action = "/user_info/{{ user_id }}" method="GET">
-    Would you like to add a new student?<br>
-    <input type="radio" name="new_student" value="yes">Yes
-    <input type="radio" name="new_student" value="no">No<br>
-    <input type="submit" id="new_student_submit", value="submit">
 
+ <a href="/add_student" name="new_student"> Add a new student! </a>
 
 <p> Please click on Student ID to see student progress history: </p>
 

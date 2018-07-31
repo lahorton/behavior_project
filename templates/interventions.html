@@ -12,11 +12,7 @@
     {% endfor %}
 </ul>
 
+ <a href="/new_intervention" name="new_intervention"> Add a new intervention! </a>
 
-<form action = "/interventions" method="POST">
-    Would you like to add a new intervention?<br>
-    <input type="radio" name="new_intervention" value="yes">Yes
-    <input type="radio" name="new_intervention" value="no">No<br>
-    <input type="submit" id="new_intervention_submit", value="submit">
-    
+
 {% endblock %}

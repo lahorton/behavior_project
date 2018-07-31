@@ -12,11 +12,6 @@
     {% endfor %}
 </ul>
 
-
-<form action = "/behaviors" method="POST">
-    Would you like to add a new behavior?<br>
-    <input type="radio" name="new_behavior" value="yes">Yes
-    <input type="radio" name="new_behavior" value="no">No<br>
-    <input type="submit" id="new_behavior_submit", value="submit">
+ <a href="/new_behavior" name="new_behavior"> Add a new behavior! </a>
 
 {% endblock %}
