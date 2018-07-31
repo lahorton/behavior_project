@@ -6,6 +6,9 @@
 
 <div class="topnav">
     <a class="active" href="/login">Login</a>
+    {% if 'user_id' in session %}
+        <a href="/user_info/{{ session['user_id'] }}">User Info</a>
+    {% endif %}
     <a href="/interventions">Interventions</a>
     <a href="/behaviors">Behaviors</a>
     <a href="/logout">logout</a>

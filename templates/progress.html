@@ -3,31 +3,54 @@
 
 <h1> We love progress updates! </h1>
 
-<h2> Please enter progress below: </h2>
+<h2> Please enter progress for {{ student.fname}} {{ student.lname}} below: </h2>
 
- 
-<form action = "/add_progress" method="POST">
-    Enter Student ID:
-    <input type="text" name="student_id"><br>
-    Date:
-    <input type="text" name="date"><br>
-    Intervention:<br>
-    {% for intervention in interventions %}
-    <input type="radio" name="{{ intervention.intervention_id }}", value="{{ intervention.intervention_id }}">{{ intervention.intervention_name }}
+
+<form action = "/add_progress/{{ student }}" method="POST">
+    <div>
+        Date:
+        <input type="text" name="date"><br>
+    </div>
+    <fieldset>
+        <legend>Behavior:</legend><br>
+        {% for behavior in behaviors %}
+            <input type="radio" name="behave", value="{{ behavior.behavior_id }}">{{ behavior.behavior_name }}
+            <br>
+        {% endfor %}
+        <br>
+    </fieldset>
+    <fieldset>
+        <legend>Intervention:</legend><br>
+        {% for intervention in interventions %}
+        <input type="radio" name="intervent", value="{{ intervention.intervention_id }}">{{ intervention.intervention_name }}
+        <br>
+        {% endfor %}
+        <br>
+    </fieldset>
+    <div>
+        Rating (0-10:  0 is no progress, 10 is excellent progress):
+        <select name="rating">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+    </div>
     <br>
-    {% endfor %}
+    <p>
+        Comment:
+        <input type="text" name="comment"><br>
+    </p>
     <br>
-    Behavior:<br>
-    {% for behavior in behaviors %}
-    <input type="radio" name="{{ behavior.behavior_id }}", value="{{ behavior.behavior_id }}">{{ behavior.behavior_name }}
-    <br>
-    {% endfor %}
-    <br>
-    Rating (0-10:  0 being no progress, 10 being excellent progress):
-    <input type="text" name="rating"><br>
-    Comment:
-    <input type="text" name="comment"><br>
     <input type="submit">
 </form>
+
 
 {% endblock %}

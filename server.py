@@ -52,8 +52,7 @@ def check_login():
         password_match = db.session.query(User.password).filter(User.user_name == user_name).first()
         password_match = password_match[0]
         if password == password_match:
-            session["user_id"] = user_id
-            print(user.user_id)
+            session["user_id"]= user_id[0]
             flash("Welcome!")
             return redirect(f"/user_info/{user.user_id}")
         else:
@@ -84,6 +83,10 @@ def user_info(user_id):
     user = User.query.get(user_id)
     user_name = user.user_name
     user_id = user.user_id
+
+    print("<<<<<<<<<<")
+    print(user_id)
+    print("<<<<<<<<<<<")
 
     #This gives you a list of the student objects.  Use SQLAlchemy to reference attributes of each student
     students = user.students
@@ -116,25 +119,24 @@ def student_history(student_id):
     student = Student.query.get(student_id)
     #get student name
     student_name = (student.fname) + " " + (student.lname)
+    student_id = student.student_id
+
+    user_id = session["user_id"]
+
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and/or call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).all()
-
-    # progress = db.session.query(Progress).filter(Student.student_id==Progress.student_id).order_by(Progress.date.desc()).all()
     intervention_name = db.session.query(Intervention.intervention_name).filter(Progress.intervention_id==Intervention.intervention_id).first()[0]
     behavior_name = db.session.query(Behavior.behavior_name).filter(Progress.behavior_id==Behavior.behavior_id).first()[0]
 
-    print("<<<<<<<<<<<<<")
-    print(progress)
-    print("<<<<<<<<<<<<<")
-
-    return render_template("student_history.html", student=student,
+    return render_template("student_history.html", student=student, student_id=student_id,
                             student_name=student_name, progress=progress,
-                            behavior_name=behavior_name, intervention_name=intervention_name)
+                            behavior_name=behavior_name, intervention_name=intervention_name,
+                            user_id=user_id)
 
 
-@app.route("/add_progress/")
-def progress_report():
+@app.route(f"/add_progress/<student_id>")
+def progress_report(student_id):
     """Gets new progress report info from user"""
 
     #gets list of all intervention objects from db:
@@ -143,29 +145,34 @@ def progress_report():
     #gets list of all behavior objects from db:
     behaviors = db.session.query(Behavior).all()
 
-    return render_template("progress.html", interventions=interventions, behaviors=behaviors)
+    #get student object
+    student = Student.query.get(student_id)
+    user_id = session["user_id"]
 
 
-@app.route("/add_progress", methods=["POST"])
-def add_progress():
+    return render_template("progress.html", interventions=interventions, behaviors=behaviors,
+                            student_id=student_id, student=student, user_id=user_id)
+
+
+@app.route(f"/add_progress/<student_id>", methods=["POST"])
+def add_progress(student_id):
     """adds new progress report to db"""
 
     interventions = db.session.query(Intervention).all()
     behaviors = db.session.query(Behavior).all()
 
-    student_id = request.form.get("student_id")
     date = request.form.get("date")
-    behavior_id = request.form.get("behavior.behavior_id")
-    intervention_id = request.form.get("intervention.intervention_id")
-    user_id = session["user_id"][0]
+    behavior_id = request.form.get('behave')
+    intervention_id = request.form.get("intervent")
+    user_id = session["user_id"]
     rating = request.form.get("rating")
     comment = request.form.get("comment")
 
 
     #figure out how to make a calendar pop-up on date to select date in datetime.
     #make sure session is connecting to the correct user_id
-    progress = Progress(student_id=student_id, date=date, behavior_id=behavior.behavior_id,
-                        intervention_id=intervention.intervention_id, user_id=user_id, rating=rating,
+    progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
+                        intervention_id=intervention_id, user_id=user_id, rating=rating,
                         comment=comment)
 
     db.session.add(progress)
@@ -186,7 +193,7 @@ def add_student():
 
     fname = request.form.get("fname")
     lname = request.form.get("lname")
-    user_id = session["user_id"][0]
+    uuser_id = session["user_id"]
 
     student = Student(fname=fname, lname=lname, user_id=user_id)
     db.session.add(student)
@@ -259,7 +266,8 @@ def add_intervention():
 
     intervention_name = request.form.get("intervention_name")
     intervention_description = request.form.get("intervention_description")
-    user_id = session["user_id"][0]
+
+    user_id = session["user_id"]
 
     if len(intervention_description) > 200:
         intervention_description = intervention_description[:200]
@@ -269,7 +277,7 @@ def add_intervention():
     db.session.add(intervention)
     db.session.commit()
 
-    return redirect('/interventions')
+    return redirect('/interventions', user_id=user_id)
 
 
 @app.route("/behaviors")
@@ -311,7 +319,7 @@ def add_behavior():
 
     behavior_name = request.form.get("behavior_name")
     behavior_description = request.form.get("behavior_description")
-    user_id = session["user_id"][0]
+    user_id = session["user_id"]
 
     if len(behavior_description) > 200:
         behavior_description = behavior_description[:200]
