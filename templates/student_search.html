@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Student Search</h2>
+
+<p> Please enter search data below: </p>
+ 
+<form action = "/student_list" method="GET">
+    Enter student's first name:
+    <input type="text" name="fname"><br>
+    <br>
+    Enter student's last name:
+    <input type="text" name="lname"><br>
+    <br>
+    Enter student's ID:
+    <input type="text" name="student_id"><br>
+    <input type="submit" id="search_student_submit", value="Search">
+</form>
+
+{% endblock %}

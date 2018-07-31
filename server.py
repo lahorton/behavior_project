@@ -111,9 +111,44 @@ def student_history(student_id):
     user_id = session["user_id"]
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
-    progress = Progress.query.filter(Progress.student_id == student.student_id).all()
+    progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
+    print(progress)
 
     return render_template("student_history.html", student=student, progress=progress, user_id=user_id)
+
+
+@app.route("/student_search")
+def student_search_form():
+    """gets students search info from user"""
+
+    return render_template("student_search.html")
+
+
+@app.route("/student_list")
+def student_list():
+    """displays results from student search"""
+
+    #gets information from student_search form
+    fname = request.args.get("fname").capitalize()
+    lname = request.args.get("lname").capitalize()
+    student_id = request.args.get("student_id")
+
+    #checks to see what info the user entered and generates list of objects that Jinja will loop through.
+    if student_id:
+        student = Student.query.filter(Student.student_id==student_id).all()
+    elif fname and lname:
+        student = Student.query.filter(Student.fname==fname, Student.lname==lname).all()
+    elif fname and (not lname):
+        print(fname)
+        student = Student.query.filter(Student.fname==fname).all()
+    elif lname and (not fname):
+        print(lname)
+        student = Student.query.filter(Student.lname==lname).all()
+    else:
+        flash("Please try again.  That name/ID is not found")
+        return redirect("/student_search")
+
+    return render_template("student_list.html", student=student)
 
 
 @app.route("/add_progress/<student_id>")
@@ -173,8 +208,8 @@ def new_student_form():
 def add_student():
     """adds a new student to the db"""
 
-    fname = request.form.get("fname")
-    lname = request.form.get("lname")
+    fname = request.form.get("fname").strip()
+    lname = request.form.get("lname").strip()
     user_id = session["user_id"]
 
     student = Student(fname=fname, lname=lname, user_id=user_id)
