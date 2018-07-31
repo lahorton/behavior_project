@@ -84,10 +84,6 @@ def user_info(user_id):
     user_name = user.user_name
     user_id = user.user_id
 
-    print("<<<<<<<<<<")
-    print(user_id)
-    print("<<<<<<<<<<<")
-
     #This gives you a list of the student objects.  Use SQLAlchemy to reference attributes of each student
     students = user.students
 
@@ -111,7 +107,7 @@ def user_info(user_id):
                                 student_info=student_info)
 
 
-@app.route(f"/student_history/<student_id>")
+@app.route("/student_history/<student_id>")
 def student_history(student_id):
     """displays student progress-report history"""
 
@@ -135,7 +131,7 @@ def student_history(student_id):
                             user_id=user_id)
 
 
-@app.route(f"/add_progress/<student_id>")
+@app.route("/add_progress/<student_id>")
 def progress_report(student_id):
     """Gets new progress report info from user"""
 
@@ -154,7 +150,7 @@ def progress_report(student_id):
                             student_id=student_id, student=student, user_id=user_id)
 
 
-@app.route(f"/add_progress/<student_id>", methods=["POST"])
+@app.route("/add_progress/<student_id>", methods=["POST"])
 def add_progress(student_id):
     """adds new progress report to db"""
 
@@ -175,9 +171,11 @@ def add_progress(student_id):
                         intervention_id=intervention_id, user_id=user_id, rating=rating,
                         comment=comment)
 
+    print("<<<<<<<<<<<")
+    print(progress)
     db.session.add(progress)
     db.session.commit()
-    return redirect(f"/user_info/{user_id}")
+    return redirect(f"/student_history/{student_id}")
 
 
 @app.route("/add_student")
@@ -193,7 +191,7 @@ def add_student():
 
     fname = request.form.get("fname")
     lname = request.form.get("lname")
-    uuser_id = session["user_id"]
+    user_id = session["user_id"]
 
     student = Student(fname=fname, lname=lname, user_id=user_id)
     db.session.add(student)
@@ -277,7 +275,7 @@ def add_intervention():
     db.session.add(intervention)
     db.session.commit()
 
-    return redirect('/interventions', user_id=user_id)
+    return redirect('/interventions')
 
 
 @app.route("/behaviors")
@@ -342,7 +340,7 @@ if __name__ == "__main__":
 
     connect_to_db(app)
 
-    #DebugToolbar 
+    #DebugToolbar
     DebugToolbarExtension(app)
 
     app.run(port=5000, host="0.0.0.0")
