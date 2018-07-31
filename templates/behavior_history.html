@@ -1,23 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Student History</h2>
+<a href="/student_history/{{ student.student_id }}" name="student_history"> Return to student history!</a><br><br>
 
-<p>Student Name : {{ student.fname }} {{ student.lname }}</p>
+<a href="/add_progress/{{ student.student_id }}" name="new_progress"> Add a new progress report!</a>
 
-<p>See progress of a specific behavior: <p>
-<form action = "/student_history/{{ student.student_id }}/behavior_history" method="GET">
-    Enter behavior:
-    <input type="text" name="behavior_name"><br>
-    <input type="submit">
-</form>
-<br>
 
-<a href="/add_progress/{{ student.student_id }}" name="new_progress"> Add a new progress report! </a>
+<h2> Behavior Progress: </h2>
 
-<p> Progress Reports: </p>
+<p>Student Name: {{ student.fname }} {{ student.lname }}</p>
+<p>Behavior: {{ behavior.behavior_name }}</p>
+<p>Behavior Description: {{ behavior.behavior_description }}</p>
 
-<ul id="student_progress">
+
+<ul id="behavior_progress">
     {% for item in progress %}
         <li> Progress Report: <br>
              Date: {{ item.date }}<br>

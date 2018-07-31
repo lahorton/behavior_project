@@ -87,8 +87,6 @@ def user_info(user_id):
     #This gives you a list of the student objects.  Use SQLAlchemy to reference attributes of each student
     students = user.students
 
-    # user_name = db.session.query(User.user_name).filter(User.user_id == user.user).first()[0]
-
     # generates list of student names for the user
     student_info = []
     i = 0
@@ -112,9 +110,33 @@ def student_history(student_id):
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
-    print(progress)
 
     return render_template("student_history.html", student=student, progress=progress, user_id=user_id)
+
+
+@app.route("/student_history/<student_id>/behavior_history")
+def behavior_history(student_id):
+
+    behavior_name = request.args.get("behavior_name")
+    print(behavior_name)
+    behavior = Behavior.query.filter(Behavior.behavior_name==behavior_name).first()
+    print(behavior)
+    if behavior:
+        behavior_id = behavior.behavior_id
+    else:
+        flash("That behavior is not being tracked.  Please enter an existing behavior or add a new progress report.")
+        return redirect(f"/student_history/{student_id}")
+
+    #get student object:
+    student = Student.query.get(student_id)
+
+    #get progress objects matching the specified behavior for student:
+    progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id).order_by(Progress.date.desc()).all()
+
+    print(">>>>>>>>>>")
+    print(progress)
+    print("<<<<<<<<<<")
+    return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior)
 
 
 @app.route("/student_search")
