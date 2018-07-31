@@ -107,22 +107,13 @@ def student_history(student_id):
 
     #get student object
     student = Student.query.get(student_id)
-    #get student name
-    student_name = (student.fname) + " " + (student.lname)
-    student_id = student.student_id
 
     user_id = session["user_id"]
 
-
-    #get progress object for student (in a list of progress objects).  Loop through these in Jinja and/or call specific attributes.
+    #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).all()
-    intervention_name = db.session.query(Intervention.intervention_name).filter(Progress.intervention_id==Intervention.intervention_id).first()[0]
-    behavior_name = db.session.query(Behavior.behavior_name).filter(Progress.behavior_id==Behavior.behavior_id).first()[0]
 
-    return render_template("student_history.html", student=student, student_id=student_id,
-                            student_name=student_name, progress=progress,
-                            behavior_name=behavior_name, intervention_name=intervention_name,
-                            user_id=user_id)
+    return render_template("student_history.html", student=student, progress=progress, user_id=user_id)
 
 
 @app.route("/add_progress/<student_id>")
@@ -139,9 +130,8 @@ def progress_report(student_id):
     student = Student.query.get(student_id)
     user_id = session["user_id"]
 
-
     return render_template("progress.html", interventions=interventions, behaviors=behaviors,
-                            student_id=student_id, student=student, user_id=user_id)
+                            student_id=student_id, student=student, user_id=user_id,)
 
 
 @app.route("/add_progress/<student_id>", methods=["POST"])
@@ -158,6 +148,8 @@ def add_progress(student_id):
     rating = request.form.get("rating")
     comment = request.form.get("comment")
 
+    print(behavior_id)
+    print(intervention_id)
 
     #figure out how to make a calendar pop-up on date to select date in datetime.
     #make sure session is connecting to the correct user_id

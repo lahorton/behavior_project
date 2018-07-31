@@ -38,7 +38,6 @@ class User(db.Model):
     password = db.Column(db.String(25), nullable=False)
 
     students = db.relationship("Student")
-
     progress = db.relationship("Progress")
 
     def __repr__(self):

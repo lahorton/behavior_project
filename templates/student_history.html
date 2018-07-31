@@ -3,9 +3,9 @@
 
 <h2>Student History</h2>
 
-<p>Student Name : {{ student_name }} </p>
+<p>Student Name : {{ student.fname }} {{ student.lname }}</p>
 
-<a href="/add_progress/{{ student_id }}" name="new_progress"> Add a new progress report! </a>
+<a href="/add_progress/{{ student.student_id }}" name="new_progress"> Add a new progress report! </a>
 
 <p> Progress Reports: </p>
 
@@ -13,8 +13,8 @@
     {% for item in progress %}
         <li> Progress Report: <br>
              Date: {{ item.date }}<br>
-             Behavior: {{ behavior_name }}<br>
-             Intervention: {{ intervention_name }}<br>
+             Behavior: {{ item.behavior.behavior_name }}<br>
+             Intervention: {{ item.intervention.intervention_name }}<br>
              User_id: {{ item.user_id }}<br>
              Rating: {{ item.rating }}<br>
              Comment: {{ item.comment }}<br>
