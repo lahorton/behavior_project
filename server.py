@@ -111,21 +111,22 @@ def student_history(student_id):
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
 
-    return render_template("student_history.html", student=student, progress=progress, user_id=user_id)
+    behaviors = []
+    for report in progress:
+        if report.behavior.behavior_name not in behaviors:
+            behaviors.append(report.behavior.behavior_name)
+
+    print(behaviors)
+
+    return render_template("student_history.html", student=student, progress=progress, user_id=user_id, behaviors=behaviors)
 
 
 @app.route("/student_history/<student_id>/behavior_history")
 def behavior_history(student_id):
 
     behavior_name = request.args.get("behavior_name")
-    print(behavior_name)
     behavior = Behavior.query.filter(Behavior.behavior_name==behavior_name).first()
-    print(behavior)
-    if behavior:
-        behavior_id = behavior.behavior_id
-    else:
-        flash("That behavior is not being tracked.  Please enter an existing behavior or add a new progress report.")
-        return redirect(f"/student_history/{student_id}")
+    behavior_id = behavior.behavior_id
 
     #get student object:
     student = Student.query.get(student_id)
@@ -133,9 +134,6 @@ def behavior_history(student_id):
     #get progress objects matching the specified behavior for student:
     progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id).order_by(Progress.date.desc()).all()
 
-    print(">>>>>>>>>>")
-    print(progress)
-    print("<<<<<<<<<<")
     return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior)
 
 
