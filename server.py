@@ -290,6 +290,17 @@ def add_intervention():
     if len(intervention_description) > 200:
         intervention_description = intervention_description[:200]
 
+    #make list of all the behaviors already in the database
+    interventions = db.session.query(Intervention.intervention_name).all()
+    intervention_list = []
+    for intervention in interventions:
+        intervention_list.append((intervention[0]))
+
+    #make sure user is not able to add a duplicate behavior.
+    if intervention_name in intervention_list:
+        flash("That intervention is already an option.")
+        return redirect("/interventions")
+
     intervention = Intervention(intervention_name=intervention_name, intervention_description=intervention_description)
 
     db.session.add(intervention)
@@ -340,7 +351,6 @@ def add_behavior():
         return redirect("/behaviors")
 
     behavior = Behavior(behavior_name=behavior_name, behavior_description=behavior_description)
-
 
     db.session.add(behavior)
     db.session.commit()

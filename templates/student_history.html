@@ -7,7 +7,7 @@
 
 <a href="/add_progress/{{ student.student_id }}" name="new_progress"> Add a new progress report! </a>
 
-<h3>Behaviors being tracked. Clink on behavior to see history:</h3>
+<h3>Behaviors being tracked. Click on behavior to see history:</h3>
 <ul id="student_progress">
     {% for item in behaviors %}
         <li> <a href="/student_history/{{ student.student_id }}/behavior_history?behavior_name={{ item }}" name="behavior_history">{{ item }}</a><br>
