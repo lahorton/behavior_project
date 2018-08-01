@@ -1,16 +1,10 @@
 from flask import (Flask, render_template, redirect, request, flash, session)
-
 from datetime import datetime
-
 from model import User, Student, Behavior, Intervention, Progress, app
-
 import random
-
 from jinja2 import StrictUndefined
-
 from flask import Flask
 from flask_debugtoolbar import DebugToolbarExtension
-
 from model import connect_to_db, db
 
 app = Flask(__name__)
@@ -123,6 +117,7 @@ def student_history(student_id):
 
 @app.route("/student_history/<student_id>/behavior_history")
 def behavior_history(student_id):
+    """displays history of specific behavior"""
 
     behavior_name = request.args.get("behavior_name")
     behavior = Behavior.query.filter(Behavior.behavior_name==behavior_name).first()
@@ -228,8 +223,8 @@ def new_student_form():
 def add_student():
     """adds a new student to the db"""
 
-    fname = request.form.get("fname").strip()
-    lname = request.form.get("lname").strip()
+    fname = request.form.get("fname").strip().capitalize()
+    lname = request.form.get("lname").strip().capitalize()
     user_id = session["user_id"]
 
     student = Student(fname=fname, lname=lname, user_id=user_id)
@@ -249,7 +244,7 @@ def user_register():
 def register_new_user():
     """adds new user to the db"""
 
-    user_name = request.form.get("name")
+    user_name = request.form.get("name").strip().capitalize()
     password = request.form.get("password")
 
     user = User.query.filter(User.user_name == user_name).first()
@@ -287,8 +282,8 @@ def add_intervention():
     # ideally, I want to only the user that adds this new intervention to see it in the future
     #OR I want to screen to make sure it's appropriate.  Add in functionality.
 
-    intervention_name = request.form.get("intervention_name")
-    intervention_description = request.form.get("intervention_description")
+    intervention_name = request.form.get("intervention_name").strip().capitalize()
+    intervention_description = request.form.get("intervention_description").strip().capitalize()
 
     user_id = session["user_id"]
 
@@ -326,14 +321,26 @@ def add_behavior():
     # ideally, I want to only the user that adds this new behavior to see the new behavior in the future
     #OR I want to screen to make sure it's appropriate.  Add in functionality.
 
-    behavior_name = request.form.get("behavior_name")
-    behavior_description = request.form.get("behavior_description")
+    behavior_name = request.form.get("behavior_name").strip().capitalize()
+    behavior_description = request.form.get("behavior_description").strip().capitalize()
     user_id = session["user_id"]
 
     if len(behavior_description) > 200:
         behavior_description = behavior_description[:200]
 
+    #make list of all the behaviors already in the database
+    behaviors = db.session.query(Behavior.behavior_name).all()
+    behavior_list = []
+    for behavior in behaviors:
+        behavior_list.append((behavior[0]))
+
+    #make sure user is not able to add a duplicate behavior.
+    if behavior_name in behavior_list:
+        flash("That behavior is already an option.")
+        return redirect("/behaviors")
+
     behavior = Behavior(behavior_name=behavior_name, behavior_description=behavior_description)
+
 
     db.session.add(behavior)
     db.session.commit()
