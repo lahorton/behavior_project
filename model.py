@@ -54,6 +54,7 @@ class Student(db.Model):
     student_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     fname = db.Column(db.String(50), nullable=False)
     lname = db.Column(db.String(50), nullable=False)
+    birthdate = db.Column(db.DateTime, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
 
     progress = db.relationship("Progress")
@@ -73,14 +74,15 @@ class Behavior(db.Model):
     __tablename__ = 'behaviors'
 
     behavior_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    behavior_name = db.Column(db.String(100), nullable=False)
-    behavior_description = db.Column(db.String(200), nullable=False)
+    behavior_name = db.Column(db.String(200), nullable=False)
+    behavior_description = db.Column(db.String(1000), nullable=False)
+    behavior_interventions = db.Column(db.String(400), nullable=True)
 
     progress = db.relationship("Progress")
     #creates a relatipnship with students via the progress table,
     #to see all students w that behavior.
     students = db.relationship("Student", secondary="progress")
-    # comment = db.relationship("Comment")
+    interventions = db.relationship("Intervention", secondary="behavior_interventions", backref="behaviors")
 
     def __repr__(self):
         """show info about the behavior"""
@@ -98,14 +100,13 @@ class Intervention(db.Model):
     __tablename__ = 'interventions'
 
     intervention_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    intervention_name = db.Column(db.String(50), nullable=False)
-    intervention_description = db.Column(db.String(500), nullable=False)
+    intervention_name = db.Column(db.String(500), nullable=False)
+    intervention_behaviors = db.Column(db.String(400), nullable=True)
 
     #creates a relationship with students, through the progress table
     # student = db.relationship("Student", secondary="progress")
 
     progress = db.relationship("Progress")
-    # comment = db.relationship("Comment")
 
     def __repr__(self):
         """show info about the intervention"""
@@ -115,6 +116,23 @@ class Intervention(db.Model):
                   intervention_description = {}>""".format(self.intervention_id,
                                                            self.intervention_name,
                                                            self.intervention_description)
+
+
+class BehaviorIntervention(db.Model):
+    """connects behaviors table to interventions table"""
+
+    __tablename__ = 'behavior_interventions'
+
+    association_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    behavior_id = db.Column(db.Integer, db.ForeignKey("behaviors.behavior_id"), nullable=False)
+    intervention_id = db.Column(db.Integer, db.ForeignKey("interventions.intervention_id"), nullable=False)
+
+    def __repr__(self):
+        """shows info on connection between behavior and interventions"""
+
+        return """<association_id = {}, behavior_id = {},
+                   intervention_id = {}>""".format(self.association_id, self.behavior_id, self.intervention_id)
+
 
 
 class Progress(db.Model):
