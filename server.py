@@ -32,11 +32,8 @@ def user_login():
 def check_login():
     """login existing users"""
 
-    user_name = request.form.get("name")
+    user_name = request.form.get("name").strip().capitalize()
     password = request.form.get("password")
-
-    print(user_name)
-    print(password)
 
     user = User.query.filter(User.user_name == user_name).first()
 
@@ -64,6 +61,32 @@ def logout():
     del session['user_id']
     flash("Logged out.")
     return redirect("/login")
+
+
+@app.route('/register')
+def user_register():
+    """Gets email and password from user"""
+
+    return render_template("register.html")
+
+
+@app.route("/register", methods=["POST"])
+def register_new_user():
+    """adds new user to the db"""
+
+    user_name = request.form.get("name").strip().capitalize()
+    password = request.form.get("password")
+
+    user = User.query.filter(User.user_name == user_name).first()
+
+    if user:
+        flash("That user_name is already registered.  Please choose another name.")
+        return redirect('/register')
+    else:
+        user_name = User(user_name=user_name, password=password)
+        db.session.add(user_name)
+        db.session.commit()
+        return redirect('/login')
 
 
 @app.route(f"/user_info/<user_id>")
@@ -99,6 +122,7 @@ def student_history(student_id):
 
     #get student object
     student = Student.query.get(student_id)
+    student.birthdate = student.birthdate.strftime("%B %d, %Y")
 
     user_id = session["user_id"]
 
@@ -123,13 +147,21 @@ def behavior_history(student_id):
     behavior = Behavior.query.filter(Behavior.behavior_name==behavior_name).first()
     behavior_id = behavior.behavior_id
 
+    print(">>>>>>>>>")
+    print(behavior.behavior_description)
+    # behavior_description = behavior.behavior_description.strip("{}").split(",")
+    behavior_description = behavior.behavior_description.strip('"{}"').split('","')
+
+
     #get student object:
     student = Student.query.get(student_id)
+    # student.birthdate = student.birthdate.strftime("%B %d, %Y")
 
     #get progress objects matching the specified behavior for student:
     progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id).order_by(Progress.date.desc()).all()
+    # progress.date = progress.date.strftime("%B %d, %Y")
 
-    return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior)
+    return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior, behavior_description=behavior_description)
 
 
 @app.route("/student_search")
@@ -226,37 +258,12 @@ def add_student():
     fname = request.form.get("fname").strip().capitalize()
     lname = request.form.get("lname").strip().capitalize()
     user_id = session["user_id"]
+    birthdate = request.form.get("birthdate")
 
-    student = Student(fname=fname, lname=lname, user_id=user_id)
+    student = Student(fname=fname, lname=lname, user_id=user_id, birthdate=birthdate)
     db.session.add(student)
     db.session.commit()
     return redirect(f"/user_info/{user_id}")
-
-
-@app.route('/register')
-def user_register():
-    """Gets email and password from user"""
-
-    return render_template("register.html")
-
-
-@app.route("/register", methods=["POST"])
-def register_new_user():
-    """adds new user to the db"""
-
-    user_name = request.form.get("name").strip().capitalize()
-    password = request.form.get("password")
-
-    user = User.query.filter(User.user_name == user_name).first()
-
-    if user:
-        flash("That user_name is already registered.  Please choose another name.")
-        return redirect('/register')
-    else:
-        user_name = User(user_name=user_name, password=password)
-        db.session.add(user_name)
-        db.session.commit()
-        return redirect('/login')
 
 
 @app.route("/interventions")

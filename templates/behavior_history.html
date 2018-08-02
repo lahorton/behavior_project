@@ -10,8 +10,15 @@
 
 <p>Student Name: {{ student.fname }} {{ student.lname }}</p>
 <p>Behavior: {{ behavior.behavior_name }}</p>
-<p>Behavior Description: {{ behavior.behavior_description }}</p>
+<p>Behavior Description:</p>
+<ul id="behavior_description">
+    {% for description in behavior_description %}
+        <li> {{ description }} <br>
+        </li>
+    {% endfor %}
+</ul>
 
+<h2>Progresss History</h2>
 
 <ul id="behavior_progress">
     {% for item in progress %}

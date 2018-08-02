@@ -65,7 +65,8 @@ class Student(db.Model):
 
         return """<student_id = {},
                   first name = {},
-                  last name = {}>""".format(self.student_id, self.fname, self.lname)
+                  last name = {},
+                  birthdate = {}>""".format(self.student_id, self.fname, self.lname, self.birthdate)
 
 
 class Behavior(db.Model):
