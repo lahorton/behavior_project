@@ -156,7 +156,7 @@ def behavior_history(student_id):
 
     #get progress objects matching the specified behavior for student:
     progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id).order_by(Progress.date.desc()).all()
-    progress.date = progress.date.strftime("%B %d, %Y")
+    # progress.date = progress.date.strftime("%B %d, %Y")
 
     return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior, behavior_description=behavior_description)
 
