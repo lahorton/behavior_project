@@ -6,10 +6,13 @@ from jinja2 import StrictUndefined
 from flask import Flask
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db
+from pprint import pprint
+import os
 
 app = Flask(__name__)
 
-app.secret_key = "behavior"
+app.secret_key = os.environ["APP_SECRET_KEY"]
+
 
 app.jinja_env.undefined = StrictUndefined
 
@@ -129,12 +132,27 @@ def student_history(student_id):
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
 
-    behaviors = []
-    for report in progress:
-        if report.behavior.behavior_name not in behaviors:
-            behaviors.append(report.behavior.behavior_name)
+    #in this nested dictionary, each of the student's behaviors is a dictionary key with a nested dictionary
+    #that contains list of progress report dates as the value of 'dates' and a list of corresponding progress ratings
+    #as the values of 'ratings'.
+    behaviors = {}
+    inner_dict = {}
 
-    print(behaviors)
+    for report in progress:
+        # behaviors[report.behavior.behavior_name] = {}
+        if report.behavior.behavior_name not in behaviors.keys():
+            # behaviors[report.behavior.behavior_name] = inner_dict
+            behaviors[report.behavior.behavior_name]= {'dates': [report.date], 'ratings': [report.rating]}
+        else:
+            behaviors[report.behavior.behavior_name]['dates'].append(report.date),
+            behaviors[report.behavior.behavior_name]['ratings'].append(report.rating)
+
+    print(">>>>>>>>>>>>")
+    pprint(behaviors)
+    print(student)
+    print(progress)
+    print(user_id)
+    print(">>>>>>>>>>>>>")
 
     return render_template("student_history.html", student=student, progress=progress, user_id=user_id, behaviors=behaviors)
 
@@ -148,7 +166,6 @@ def behavior_history(student_id):
     behavior_id = behavior.behavior_id
     #creates an iterable list from behavior_description
     behavior_description = behavior.behavior_description.strip('"{}"').split('","')
-
 
     #get student object:
     student = Student.query.get(student_id)

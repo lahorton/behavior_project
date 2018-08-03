@@ -18,6 +18,16 @@
     {% endfor %}
 </ul>
 
+
+{% for behavior in behaviors.keys() %}
+{% for date in behaviors[behavior] %}
+{{ behaviors[behavior][date] }}
+{% endfor %}
+{% endfor %}
+
+
+
+
 <canvas id="myChart"></canvas>
 
 <script>
