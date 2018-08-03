@@ -146,10 +146,7 @@ def behavior_history(student_id):
     behavior_name = request.args.get("behavior_name")
     behavior = Behavior.query.filter(Behavior.behavior_name==behavior_name).first()
     behavior_id = behavior.behavior_id
-
-    print(">>>>>>>>>")
-    print(behavior.behavior_description)
-    # behavior_description = behavior.behavior_description.strip("{}").split(",")
+    #creates an iterable list from behavior_description
     behavior_description = behavior.behavior_description.strip('"{}"').split('","')
 
 
@@ -159,7 +156,7 @@ def behavior_history(student_id):
 
     #get progress objects matching the specified behavior for student:
     progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id).order_by(Progress.date.desc()).all()
-    # progress.date = progress.date.strftime("%B %d, %Y")
+    progress.date = progress.date.strftime("%B %d, %Y")
 
     return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior, behavior_description=behavior_description)
 
@@ -179,10 +176,13 @@ def student_list():
     fname = request.args.get("fname").capitalize()
     lname = request.args.get("lname").capitalize()
     student_id = request.args.get("student_id")
+    birthdate = request.args.get("birthdate")
 
     #checks to see what info the user entered and generates list of objects that Jinja will loop through.
     if student_id:
         student = Student.query.filter(Student.student_id==student_id).all()
+    elif birthdate:
+        student = Student.query.filter(Student.birthdate==birthdate).all()
     elif fname and lname:
         student = Student.query.filter(Student.fname==fname, Student.lname==lname).all()
     elif fname and (not lname):
@@ -271,13 +271,16 @@ def display_interventions():
     """displays a list of optional interventions"""
 
     interventions = db.session.query(Intervention).order_by(Intervention.intervention_name).all()
+    for intervention in interventions:
+        print("<<<<<<<<<<<<")
+        print(intervention.behaviors)
 
     return render_template("interventions.html", interventions=interventions)
 
 
 @app.route("/new_intervention")
 def show_intervention_info():
-    """gets new intervnetion info from user"""
+    """gets new intervention info from user"""
 
     return render_template('new_intervention.html')
 
@@ -321,8 +324,11 @@ def display_behaviors():
     """displays a list of optional behaviors"""
 
     behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
+    #creates an iterable list from behavior_description
+    for behavior in behaviors:
+        behavior_description = behavior.behavior_description.strip('"{}"').split('","')
 
-    return render_template("behaviors.html", behaviors=behaviors)
+    return render_template("behaviors.html", behaviors=behaviors, behavior_description=behavior_description)
 
 
 @app.route("/new_behavior")

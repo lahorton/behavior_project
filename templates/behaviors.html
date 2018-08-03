@@ -5,9 +5,19 @@
 
 <ul id="behaviors">
     {% for item in behaviors %}
-        <li> Name: {{ item.behavior_name }}<br>
-             Description: {{ item.behavior_description }}<br>
-             <br>
+        <li><h3> Name: {{ item.behavior_name }}</h3>
+            <p>Behavior Description:</p>
+                <ul id="behavior_description">
+                {% for description in behavior_description %}
+                    <li> {{ description }} </li>
+                {% endfor %}
+                </ul>
+            <p>Commonly associated interventions:</p>
+            <ul id="associated_interventions">
+                {% for intervention in item.interventions %}
+                    <li> <a href="/interventions" name="intervention_name">{{ intervention.intervention_name }}</a> </li>
+                {% endfor %}
+                </ul>
         </li>
     {% endfor %}
 </ul>

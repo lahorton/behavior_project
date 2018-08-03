@@ -73,7 +73,6 @@ def load_behaviors():
           'Unable to work independently': {'Description': ['Frequently ask teacher or other students for help and assistance, or to do items for them', 'Always need to be around others to work', 'Have difficulty completing assignments', 'Quick to cease effort wen task becomes challenging', 'Makes up many excuses', 'Act helpless'], "Appropriate Interventions": ['Break down directions', 'Break, moving position in class', 'Clear, consistent, and predictable consequences', 'Organize materials daily', 'Reduce assignment', 'Use timer']},
           'Unmotivated': {'Description': ['Seem lackluster, sluggish, emotionally flat', 'Express no concern about incomplete work, grades, achievement', 'Not appear to enjoy school', 'Have frequent absences or frequent reports of illness'], "Appropriate Interventions": ['Break down directions', 'Draw a picture or write in a journal', 'Engage student', 'Give choices', 'Praise when good attitude and involvement occur', 'Reflection sheet']}}
 
-    interventions=[]
     #Breaks up dicitionary into required Class attributes + instantiates a Behavior object
     for behavior_name in b_dict:
         behavior_description = b_dict[behavior_name]['Description']
@@ -83,14 +82,17 @@ def load_behaviors():
 
         #instantiates an intervention object and appends to the appropriate behavior object.
         for i_name in b_dict[behavior_name]['Appropriate Interventions']:
-            #adds all the interventions to all_interventions
-            if i_name not in interventions:
+            #check if intervention with that intervention name is in the db ,if not, create it and add it to the behavior.
+            #if it is, get that intervention and add it to the behavior and the behavior to the intervention.
+            if Intervention.query.filter(Intervention.intervention_name==i_name).first():
+                x = Intervention.query.filter(Intervention.intervention_name==i_name).first()
+                x.behaviors.append(behavior)
+                behavior.interventions.append(x)
+            else:
                 intervention = Intervention(intervention_name=i_name)
                 db.session.add(intervention)
-                #appends that intervention object to the appropriate behavior object
+                intervention.behaviors.append(behavior)
                 behavior.interventions.append(intervention)
-                #appends the intervention to the list to avoid duplicating intervention objects.
-                interventions.append(i_name)
 
     db.session.commit()
 

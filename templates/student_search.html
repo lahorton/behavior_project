@@ -3,7 +3,8 @@
 
 <h2>Student Search</h2>
 
-<p> Please enter search data below: </p>
+<h3> Please enter search data below: </h3>
+<p> (At least one field must be present)</p>
  
 <form action = "/student_list" method="GET">
     Enter student's first name:
@@ -13,7 +14,10 @@
     <input type="text" name="lname"><br>
     <br>
     Enter student's ID:
-    <input type="text" name="student_id"><br>
+    <input type="text" name="student_id"><br><br>
+    Enter student's birthdate:
+    <input type="date" name="birthdate"><br>
+    <br>
     <input type="submit" id="search_student_submit", value="Search">
 </form>
 

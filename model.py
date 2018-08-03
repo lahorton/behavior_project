@@ -108,6 +108,8 @@ class Intervention(db.Model):
     # student = db.relationship("Student", secondary="progress")
 
     progress = db.relationship("Progress")
+    #THIS IS WHERE YOU MAY BE Fing EVERYTHING UP.
+    # behaviors = db.relationship("Behavior", secondary="behavior_interventions", backref="interventions")
 
     def __repr__(self):
         """show info about the intervention"""
@@ -116,7 +118,7 @@ class Intervention(db.Model):
                   intervention_name,
                   intervention_description = {}>""".format(self.intervention_id,
                                                            self.intervention_name,
-                                                           self.intervention_description)
+                                                           self.intervention_behaviors)
 
 
 class BehaviorIntervention(db.Model):
