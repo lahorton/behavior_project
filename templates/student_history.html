@@ -11,49 +11,52 @@
 <a href="/add_progress/{{ student.student_id }}" name="new_progress"> Add a new progress report! </a>
 
 <h3>Behaviors being tracked. Click on behavior to see history:</h3>
+
 <ul id="student_progress">
     {% for item in behaviors %}
         <li> <a href="/student_history/{{ student.student_id }}/behavior_history?behavior_name={{ item }}" name="behavior_history">{{ item }}</a><br>
-        </li>
-    {% endfor %}
+         </li>
+     {% endfor %}
 </ul>
-
-
-{% for behavior in behaviors %}
-    <li>Behavior Name: {{ behavior }}</li>
-    {% for item in behaviors[behavior] %}
-        {% for date in item %}
-        <li>Date: {{ date }} </li>
-        {% endfor %}
-    {% endfor %}
-{% endfor %}
-
 
 
 
 <canvas id="myChart"></canvas>
 
-<script>
-let ctx = document.getElementById('myChart').getContext('2d');
-let myChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    // I want lebels to be dates, depending on progress reports
-    labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-    // I want dataset to be labels = behaviors and data = ratings
-    datasets: [{
-      label: 'apples',
-      data: [12, 19, 3, 17, 6, 3, 7],
-      backgroundColor: "rgba(153,255,51,0.4)"
-    }, {
-      label: 'oranges',
-      data: [2, 29, 5, 5, 2, 3, 10],
-      backgroundColor: "rgba(255,153,0,0.4)"
-    }]
-  }
-});
-</script>
+<script type="text/javascript">
+let behaviors = {{ behaviors_json|tojson }}
+behaviors = JSON.parse(behaviors)
+console.log(behaviors);
+let names = []
+for (let date in behaviors){
+    console.log(date + ':', behaviors[date]);
+    names.push(date);
+    for (let item in behaviors[date]){
+        console.log(item + ':', behaviors[date][item]);
+    }
+}
 
+let ctx = document.getElementById('myChart').getContext('2d');
+let chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "behaviors",
+            backgroundColor: "rgb(255, 99, 132)",
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45],
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+
+</script>
 
 <h3> Progress Reports: </h3>
 
@@ -71,4 +74,5 @@ let myChart = new Chart(ctx, {
     {% endfor %}
 </ul>
 
-{% endblock %}
+
+{% endblock %} 

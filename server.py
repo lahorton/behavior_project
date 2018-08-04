@@ -8,6 +8,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db
 from pprint import pprint
 import os
+import json
 
 app = Flask(__name__)
 
@@ -142,20 +143,24 @@ def student_history(student_id):
         # behaviors[report.behavior.behavior_name] = {}
         if report.behavior.behavior_name not in behaviors.keys():
             # behaviors[report.behavior.behavior_name] = inner_dict
-            behaviors[report.behavior.behavior_name]= {'dates': [report.date], 'ratings': [report.rating]}
+            behaviors[report.behavior.behavior_name] = {'dates': [report.date], 'ratings': [report.rating]}
         else:
             behaviors[report.behavior.behavior_name]['dates'].append(report.date),
             behaviors[report.behavior.behavior_name]['ratings'].append(report.rating)
 
+    behaviors_json = json.dumps(behaviors, default=str)
+
     print(">>>>>>>>>>>>")
     pprint(behaviors)
     print(student)
-    print(progress)    
+    print(progress)
     print(user_id)
+    print(behaviors_json)
 
     print(">>>>>>>>>>>>>")
 
-    return render_template("student_history.html", student=student, progress=progress, user_id=user_id, behaviors=behaviors)
+    return render_template("student_history.html", student=student, progress=progress, user_id=user_id,
+                            behaviors=behaviors, behaviors_json=behaviors_json)
 
 
 @app.route("/student_history/<student_id>/behavior_history")
