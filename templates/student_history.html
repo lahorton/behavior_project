@@ -19,10 +19,13 @@
 </ul>
 
 
-{% for behavior in behaviors.keys() %}
-{% for date in behaviors[behavior] %}
-{{ behaviors[behavior][date] }}
-{% endfor %}
+{% for behavior in behaviors %}
+    <li>Behavior Name: {{ behavior }}</li>
+    {% for item in behaviors[behavior] %}
+        {% for date in item %}
+        <li>Date: {{ date }} </li>
+        {% endfor %}
+    {% endfor %}
 {% endfor %}
 
 

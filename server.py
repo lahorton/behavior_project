@@ -11,7 +11,7 @@ import os
 
 app = Flask(__name__)
 
-app.secret_key = os.environ["APP_SECRET_KEY"]
+app.secret_key = os.environ["SERVER_APP_SECRET_KEY"]
 
 
 app.jinja_env.undefined = StrictUndefined
@@ -46,7 +46,7 @@ def check_login():
         password_match = db.session.query(User.password).filter(User.user_name == user_name).first()
         password_match = password_match[0]
         if password == password_match:
-            session["user_id"]= user_id[0]
+            session["user_id"] = user_id[0]
             flash("Welcome!")
             return redirect(f"/user_info/{user.user_id}")
         else:
@@ -150,8 +150,9 @@ def student_history(student_id):
     print(">>>>>>>>>>>>")
     pprint(behaviors)
     print(student)
-    print(progress)
+    print(progress)    
     print(user_id)
+
     print(">>>>>>>>>>>>>")
 
     return render_template("student_history.html", student=student, progress=progress, user_id=user_id, behaviors=behaviors)
