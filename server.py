@@ -132,10 +132,9 @@ def student_history(student_id):
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
-
-    #in this nested dictionary, each of the student's behaviors is a dictionary key with a nested dictionary
-    #that contains list of progress report dates as the value of 'dates' and a list of corresponding progress ratings
-    #as the values of 'ratings'.
+    # #in this nested dictionary, each of the student's behaviors is a dictionary key with a nested dictionary
+    # #that contains list of progress report dates as the value of 'dates' and a list of corresponding progress ratings
+    # #as the values of 'ratings'.
     behaviors = {}
     inner_dict = {}
 
@@ -148,19 +147,33 @@ def student_history(student_id):
             behaviors[report.behavior.behavior_name]['dates'].append(report.date),
             behaviors[report.behavior.behavior_name]['ratings'].append(report.rating)
 
-    behaviors_json = json.dumps(behaviors, default=str)
+    # behaviors_json = json.dumps(behaviors, default=str)
 
-    print(">>>>>>>>>>>>")
-    pprint(behaviors)
-    print(student)
-    print(progress)
-    print(user_id)
-    print(behaviors_json)
+    #create dictionary with data formatted for charts.js
+    chart_data = {}
+    colors = ['red', 'yellow', 'green', 'blue', 'orange', 'purple']
+    for report in progress:
+        if report.behavior.behavior_name not in chart_data.keys():
+            chart_data[report.behavior.behavior_name] = {
+                          'labels' : ['Jan', 'Feb', 'March', 'April', 'May', 'June',
+                                      'July', 'August', 'Sept', 'Oct', 'Nov', 'Dec',],
+                          'background_color' : random.choice(colors),
+                          'border_color' : random.choice(colors),
+                          'data' : [report.rating]}
+        else:
+            chart_data[report.behavior.behavior_name]['data'].append(report.rating)
 
-    print(">>>>>>>>>>>>>")
 
-    return render_template("student_history.html", student=student, progress=progress, user_id=user_id,
-                            behaviors=behaviors, behaviors_json=behaviors_json)
+    print(">>>>>>>>>>>")
+    print(chart_data)
+    print(json.dumps(chart_data))
+
+    chart_json = json.dumps(chart_data, default=str)
+
+    return render_template("student_history.html", student=student, progress=progress,
+                            user_id=user_id, behaviors=behaviors, chart_json=chart_json)
+    # behaviors_json=behaviors_json
+
 
 
 @app.route("/student_history/<student_id>/behavior_history")

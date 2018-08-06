@@ -21,20 +21,46 @@
 
 
 
-<canvas id="myChart"></canvas>
+<canvas id="myChart" width="400" height="100"></canvas>
 
 <script type="text/javascript">
-let behaviors = {{ behaviors_json|tojson }}
-behaviors = JSON.parse(behaviors)
-console.log(behaviors);
-let names = []
-for (let date in behaviors){
-    console.log(date + ':', behaviors[date]);
-    names.push(date);
-    for (let item in behaviors[date]){
-        console.log(item + ':', behaviors[date][item]);
-    }
+// let behaviors =   behaviors_json|tojson  
+// behaviors = JSON.parse(behaviors)
+// console.log(behaviors);
+// let names = []
+// for (let date in behaviors){
+//     console.log(date + ':', behaviors[date]);
+//     names.push(date);
+//     for (let item in behaviors[date]){
+//         console.log(item + ':', behaviors[date][item]);
+//     }
+// }
+
+let behavior = {{ chart_json|tojson }}
+behavior = JSON.parse(behavior)
+// console.log(behavior);
+
+// for (let k in behavior){
+//     console.log(k);
+//     console.log(behavior[k]['labels']);
+//     console.log(behavior[k]['background_color']);
+//     console.log(behavior[k]['border_color']);
+//     console.log(behavior[k]['data']);
+// }
+
+
+const data_ary = [];
+for (let b in behavior){
+    const b_name = new Object(); 
+    b_name.label = b;
+    b_name.backgroundColor = behavior[b]['background_color'];
+    b_name.borderColor = behavior[b]['border_color'];
+    b_name.data = behavior[b]['data'];
+    b_name.fill= false;
+    data_ary.push(b_name);
 }
+
+console.log(data_ary); 
 
 let ctx = document.getElementById('myChart').getContext('2d');
 let chart = new Chart(ctx, {
@@ -42,19 +68,12 @@ let chart = new Chart(ctx, {
     type: 'line',
 
     // The data for our dataset
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "behaviors",
-            backgroundColor: "rgb(255, 99, 132)",
-            borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45],
-        }]
-    },
-
-    // Configuration options go here
-    options: {}
-});
+        data: {
+            labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June',
+                     'July', 'August', 'Sept', 'Oct', 'Nov', 'Dec'],
+            datasets: data_ary
+            }
+    });
 
 </script>
 
