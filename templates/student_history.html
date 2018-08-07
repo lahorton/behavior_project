@@ -19,10 +19,12 @@
      {% endfor %}
 </ul>
 
-
-
-<canvas id="myChart" width="400" height="100"></canvas>
-
+<div class="container">
+    <h3>Progress Chart</h3>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
 <script type="text/javascript">
 
 let behavior = {{ chart_json|tojson }}
@@ -54,8 +56,8 @@ let chart = new Chart(ctx, {
 
     // The data for graph
         data: {
-            labels: ['Most Recent Data Point', 'Data Point', 'Data Point', 'Data Point',
-                     'Data Point', 'Data Point', 'Data Point', 'Oldest Data Point'],
+            labels: ['Most Recent Rating', 'Rating', 'Rating', 'Rating',
+                     'Rating', 'Rating', 'Rating', 'Oldest Rating'],
             datasets: data_ary
             }
     });

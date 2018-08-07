@@ -161,6 +161,7 @@ def student_history(student_id):
                           'data' : [report.rating]}
         else:
             chart_data[report.behavior.behavior_name]['data'].append(report.rating)
+        chart_data[report.behavior.behavior_name]['data'] = chart_data[report.behavior.behavior_name]['data'][:8]
 
     chart_json = json.dumps(chart_data, default=str)
 
@@ -198,6 +199,7 @@ def behavior_history(student_id):
                 'data': [report.rating]}
         else:
             behavior_progress[report.behavior.behavior_name]['data'].append(report.rating)
+        behavior_progress[report.behavior.behavior_name]['data'] = behavior_progress[report.behavior.behavior_name]['data'][:8]
 
     behavior_progress_json = json.dumps(behavior_progress, default=str)
 
@@ -315,11 +317,11 @@ def display_interventions():
     """displays a list of optional interventions"""
 
     interventions = db.session.query(Intervention).order_by(Intervention.intervention_name).all()
-    for intervention in interventions:
-        print("<<<<<<<<<<<<")
-        print(intervention.behaviors)
 
-    return render_template("interventions.html", interventions=interventions)
+    interventions_json = json.dumps(interventions, default=str)
+
+    return render_template("interventions.html", interventions=interventions,
+                            interventions_json=interventions_json)
 
 
 @app.route("/new_intervention")

@@ -18,8 +18,12 @@
     {% endfor %}
 </ul>
 
-
-<canvas id="myChart" width="400" height="100"></canvas>
+<div class="container">
+    <h3>Behavior Progress Chart</h3>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
 
 <script type="text/javascript">
 
@@ -59,8 +63,8 @@ let chart = new Chart(ctx, {
 
     // The data for our dataset
         data: {
-            labels: ['Most Recent Data Point', 'Data Point', 'Data Point', 'Data Point',
-                     'Data Point', 'Data Point', 'Data Point', 'Oldest Data Point'],
+            labels: ['Most Recent Rating', 'Rating', 'Rating', 'Rating',
+                     'Rating', 'Rating', 'Rating', 'Oldest Rating'],
             datasets: graph_data
             }
     });

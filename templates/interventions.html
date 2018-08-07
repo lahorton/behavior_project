@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+<div id="the-basics">
+  <input class="typeahead" type="text" placeholder="Intervention Names">
+</div>
 
 <h2>Interventions</h2>
 
@@ -19,4 +22,14 @@
  <a href="/new_intervention" name="new_intervention"> Add a new intervention! </a>
 
 
+<script >
+
+let interventions = {{ interventions_json|tojson }}
+interventions = JSON.parse(interventions)
+console.log(interventions);
+
+//ADD IN TWITTER TYPE-AHEAD JS CODE HERE
+
 {% endblock %}
+
+
