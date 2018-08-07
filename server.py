@@ -344,11 +344,12 @@ def add_intervention():
     #OR I want to screen to make sure it's appropriate.  Add in functionality.
 
     intervention_name = request.form.get("intervention_name").strip().capitalize()
-    intervention_behaviors = request.form.get("intervention_behaviors").strip().capitalize()
+    intervention_behaviors = request.form.get("intervention_behaviors").split(",")
 
-    intervention_behaviors = []
+    related_behaviors = []
     for i in intervention_behaviors:
-        intervention_behaviors.extend(i)
+        i = i.strip(" ").capitalize()
+        related_behaviors.append(i)
 
     user_id = session["user_id"]
 
@@ -366,10 +367,14 @@ def add_intervention():
         flash("That intervention is already an option.")
         return redirect("/interventions")
 
-    intervention = Intervention(intervention_name=intervention_name, intervention_behaviors=intervention_behaviors)
-
+    intervention = Intervention(intervention_name=intervention_name)
     db.session.add(intervention)
-    intervention.behaviors.append(intervention_behaviors)
+
+    for behavior in related_behaviors:
+        if db.session.query(Behavior).filter(Behavior.behavior_name==behavior).first():
+            behavior = db.session.query(Behavior).filter(Behavior.behavior_name==behavior).first()
+            intervention.behaviors.append(behavior)
+
     db.session.commit()
 
     return redirect('/interventions')
