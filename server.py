@@ -132,6 +132,7 @@ def student_history(student_id):
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
+
     # #in this nested dictionary, each of the student's behaviors is a dictionary key with a nested dictionary
     # #that contains list of progress report dates as the value of 'dates' and a list of corresponding progress ratings
     # #as the values of 'ratings'.
@@ -147,8 +148,6 @@ def student_history(student_id):
             behaviors[report.behavior.behavior_name]['dates'].append(report.date),
             behaviors[report.behavior.behavior_name]['ratings'].append(report.rating)
 
-    # behaviors_json = json.dumps(behaviors, default=str)
-
     #create dictionary with data formatted for charts.js
     chart_data = {}
     colors = ['red', 'yellow', 'green', 'blue', 'orange', 'purple']
@@ -163,17 +162,10 @@ def student_history(student_id):
         else:
             chart_data[report.behavior.behavior_name]['data'].append(report.rating)
 
-
-    print(">>>>>>>>>>>")
-    print(chart_data)
-    print(json.dumps(chart_data))
-
     chart_json = json.dumps(chart_data, default=str)
 
     return render_template("student_history.html", student=student, progress=progress,
                             user_id=user_id, behaviors=behaviors, chart_json=chart_json)
-    # behaviors_json=behaviors_json
-
 
 
 @app.route("/student_history/<student_id>/behavior_history")
@@ -194,7 +186,23 @@ def behavior_history(student_id):
     progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id).order_by(Progress.date.desc()).all()
     # progress.date = progress.date.strftime("%B %d, %Y")
 
-    return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior, behavior_description=behavior_description)
+     #create dictionary with data formatted for charts.js
+    behavior_progress = {}
+    colors = ['red', 'yellow', 'green', 'blue', 'orange', 'purple']
+    ratings = []
+    for report in progress:
+        if report.behavior.behavior_name not in behavior_progress.keys():
+            behavior_progress[report.behavior.behavior_name] = {
+                'background_color': random.choice(colors),
+                'border_color': random.choice(colors),
+                'data': [report.rating]}
+        else:
+            behavior_progress[report.behavior.behavior_name]['data'].append(report.rating)
+
+    behavior_progress_json = json.dumps(behavior_progress, default=str)
+
+    return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior,
+                            behavior_description=behavior_description, behavior_progress_json=behavior_progress_json)
 
 
 @app.route("/student_search")

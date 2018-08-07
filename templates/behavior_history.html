@@ -18,6 +18,55 @@
     {% endfor %}
 </ul>
 
+
+<canvas id="myChart" width="400" height="100"></canvas>
+
+<script type="text/javascript">
+
+let behavior_progress = {{ behavior_progress_json|tojson }}
+behavior_progress = JSON.parse(behavior_progress)
+console.log(behavior_progress);
+
+for (let k in behavior_progress){
+    console.log(k);
+    console.log(behavior_progress[k]['background_color']);
+    console.log(behavior_progress[k]['border_color']);
+    console.log(behavior_progress[k]['data']);
+}
+
+const graph_data = [];
+for (let b in behavior_progress){
+    const b_name = new Object(); 
+    b_name.label = b;
+    b_name.borderColor = behavior_progress[b]['border_color'];
+    // b_name.background_color = behavior[b]['background_color'];
+    b_name.data = behavior_progress[b]['data'];
+    b_name.fill= false;
+    graph_data.push(b_name);
+}
+
+let label_name = [];
+for (let name in behavior_progress){
+    label_name.push(name);
+}
+
+console.log(graph_data); 
+
+let ctx = document.getElementById('myChart').getContext('2d');
+let chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+        data: {
+            labels: ['Most Recent Data Point', 'Data Point', 'Data Point', 'Data Point',
+                     'Data Point', 'Data Point', 'Data Point', 'Oldest Data Point'],
+            datasets: graph_data
+            }
+    });
+</script>
+
+
 <h2>Progresss History</h2>
 
 <ul id="behavior_progress">

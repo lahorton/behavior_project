@@ -24,53 +24,38 @@
 <canvas id="myChart" width="400" height="100"></canvas>
 
 <script type="text/javascript">
-// let behaviors =   behaviors_json|tojson  
-// behaviors = JSON.parse(behaviors)
-// console.log(behaviors);
-// let names = []
-// for (let date in behaviors){
-//     console.log(date + ':', behaviors[date]);
-//     names.push(date);
-//     for (let item in behaviors[date]){
-//         console.log(item + ':', behaviors[date][item]);
-//     }
-// }
 
 let behavior = {{ chart_json|tojson }}
 behavior = JSON.parse(behavior)
-// console.log(behavior);
-
-// for (let k in behavior){
-//     console.log(k);
-//     console.log(behavior[k]['labels']);
-//     console.log(behavior[k]['background_color']);
-//     console.log(behavior[k]['border_color']);
-//     console.log(behavior[k]['data']);
-// }
-
 
 const data_ary = [];
 for (let b in behavior){
     const b_name = new Object(); 
     b_name.label = b;
-    b_name.backgroundColor = behavior[b]['background_color'];
     b_name.borderColor = behavior[b]['border_color'];
+    // b_name.background_color = behavior[b]['background_color'];
     b_name.data = behavior[b]['data'];
     b_name.fill= false;
     data_ary.push(b_name);
 }
 
+let label_name = [];
+for (let name in behavior){
+    label_name.push(name);
+}
+
+
 console.log(data_ary); 
 
 let ctx = document.getElementById('myChart').getContext('2d');
 let chart = new Chart(ctx, {
-    // The type of chart we want to create
+    // The type of chart 
     type: 'line',
 
-    // The data for our dataset
+    // The data for graph
         data: {
-            labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June',
-                     'July', 'August', 'Sept', 'Oct', 'Nov', 'Dec'],
+            labels: ['Most Recent Data Point', 'Data Point', 'Data Point', 'Data Point',
+                     'Data Point', 'Data Point', 'Data Point', 'Oldest Data Point'],
             datasets: data_ary
             }
     });
