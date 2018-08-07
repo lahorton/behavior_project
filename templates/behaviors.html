@@ -5,23 +5,58 @@
   <input class="typeahead" type="text" placeholder="Search Behaviors">
 </div>
 
-<h2>Behaviors</h2>
+<h3>Behaviors</h3>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBehaviorModal">
+Add a Behavior
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addBehaviorModal" tabindex="-1" role="dialog" aria-labelledby="addBehaviorModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Add Behavior</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/add_behavior" method="POST">
+        Enter behavior name:
+        <input type="text" name="behavior_name"><br>
+        Enter behavior description:
+        <input type="text" name="behavior_description"><br>
+        Please enter any associated interventions for this behavior (optional):
+        <input type="text" name="associated_interventions"><br>
+      </div>
+      <div class="modal-footer">
+        <input type="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <ul id="behaviors">
     {% for item in behaviors %}
-        <li><h3> Name: {{ item.behavior_name }}</h3>
+        <li><h5>Name: {{ item.behavior_name }}</h5>
             <p>Behavior Description:</p>
                 <ul id="behavior_description">
                 {% for description in behavior_description %}
                     <li> {{ description }} </li>
                 {% endfor %}
                 </ul>
+                <br>
             <p>Commonly associated interventions:</p>
             <ul id="associated_interventions">
                 {% for intervention in item.interventions %}
                     <li> <a href="/interventions" name="intervention_name">{{ intervention.intervention_name }}</a> </li>
                 {% endfor %}
                 </ul>
+                <br>
         </li>
     {% endfor %}
 </ul>

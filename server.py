@@ -340,9 +340,6 @@ def show_intervention_info():
 def add_intervention():
     """adds new intervention to the database"""
 
-    # ideally, I want to only the user that adds this new intervention to see it in the future
-    #OR I want to screen to make sure it's appropriate.  Add in functionality.
-
     intervention_name = request.form.get("intervention_name").strip().capitalize()
     intervention_behaviors = request.form.get("intervention_behaviors").split(",")
 
@@ -413,15 +410,31 @@ def show_behavior_info():
 def add_behavior():
     """adds new behavior to the database"""
 
-    # ideally, I want to only the user that adds this new behavior to see the new behavior in the future
-    #OR I want to screen to make sure it's appropriate.  Add in functionality.
-
     behavior_name = request.form.get("behavior_name").strip().capitalize()
-    behavior_description = request.form.get("behavior_description").strip().capitalize()
+    behavior_d = request.form.get("behavior_description").split(",")
+    associated_interventions = request.form.get("associated_interventions").split(",")
+
+    behavior_description = []
+    for behavior in behavior_d:
+        behavior = behavior.strip(" ").capitalize()
+        behavior_description.append(behavior)
+
+    print(">>>>>>>>>>Behavior Description >>>>>>>>>>>>")
+    print(behavior_description)
+
+
+    related_interventions = []
+    for i in associated_interventions:
+        i = i.strip(" ").capitalize()
+        related_interventions.append(i)
+
+    print(">>>>>>>>>>Related Interventions >>>>>>>>>>>>")
+    print(related_interventions)
+
     user_id = session["user_id"]
 
-    if len(behavior_description) > 200:
-        behavior_description = behavior_description[:200]
+    if len(behavior_description) > 1000:
+        behavior_description = behavior_description[:1000]
 
     #make list of all the behaviors already in the database
     behaviors = db.session.query(Behavior.behavior_name).all()
@@ -435,8 +448,13 @@ def add_behavior():
         return redirect("/behaviors")
 
     behavior = Behavior(behavior_name=behavior_name, behavior_description=behavior_description)
-
     db.session.add(behavior)
+
+    for intervention in related_interventions:
+        if db.session.query(Intervention).filter(Intervention.intervention_name==intervention).first():
+            intervention = db.session.query(Intervention).filter(Intervention.intervention_name==intervention).first()
+            behavior.interventions.append(intervention)
+
     db.session.commit()
 
     return redirect('/behaviors')
