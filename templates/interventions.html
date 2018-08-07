@@ -1,10 +1,43 @@
 {% extends 'base.html' %}
 {% block content %}
-<div id="the-basics">
-  <input class="typeahead" type="text" placeholder="Intervention Names">
+
+<div id="bloodhound">
+  <input class="typeahead" type="text" placeholder="Search Interventions">
 </div>
 
 <h2>Interventions</h2>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addInterventionModal">
+  Add an intervention
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addInterventionModal" tabindex="-1" role="dialog" aria-labelledby="addInterventionModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Add Intervention</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/add_intervention" method="POST">
+        Enter intervention name:
+        <input type="text" name="intervention_name"><br>
+        Please enter any behaviors this intervention targets (optional):
+        <input type="text" name="intervention_behaviors"><br>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <input type="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <ul id="interventions">
     {% for item in interventions %}
@@ -19,16 +52,30 @@
     {% endfor %}
 </ul>
 
- <a href="/new_intervention" name="new_intervention"> Add a new intervention! </a>
-
 
 <script >
-
-let interventions = {{ interventions_json|tojson }}
-interventions = JSON.parse(interventions)
+const interventions = JSON.parse({{ interventions_json|tojson }});
 console.log(interventions);
 
-//ADD IN TWITTER TYPE-AHEAD JS CODE HERE
+// constructs the suggestion engine
+let intervention_search = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.whitespace,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  // `interventions` is the array if intervention names created in server.py
+  local: interventions
+});
+
+$('#bloodhound .typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'interventions',
+  source: intervention_search
+});
+
+</script >
 
 {% endblock %}
 

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div id="bloodhound">
+  <input class="typeahead" type="text" placeholder="Search Behaviors">
+</div>
+
 <h2>Behaviors</h2>
 
 <ul id="behaviors">
@@ -23,5 +27,31 @@
 </ul>
 
  <a href="/new_behavior" name="new_behavior"> Add a new behavior! </a>
+
+
+<script >
+const behaviors = JSON.parse({{ behaviors_json|tojson }});
+console.log(behaviors);
+
+// constructs the suggestion engine
+let behavior_search = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.whitespace,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  // `interventions` is the array if intervention names created in server.py
+  local: behaviors
+});
+
+$('#bloodhound .typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'behaviors',
+  source: behavior_search
+  // onselect:  use this to trigger an event once the user selects the behavior from searchbox
+});
+
+</script >
 
 {% endblock %}

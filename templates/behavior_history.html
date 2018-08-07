@@ -29,14 +29,14 @@
 
 let behavior_progress = {{ behavior_progress_json|tojson }}
 behavior_progress = JSON.parse(behavior_progress)
-console.log(behavior_progress);
+// console.log(behavior_progress);
 
-for (let k in behavior_progress){
-    console.log(k);
-    console.log(behavior_progress[k]['background_color']);
-    console.log(behavior_progress[k]['border_color']);
-    console.log(behavior_progress[k]['data']);
-}
+// for (let k in behavior_progress){
+//     console.log(k);
+//     console.log(behavior_progress[k]['background_color']);
+//     console.log(behavior_progress[k]['border_color']);
+//     console.log(behavior_progress[k]['data']);
+// }
 
 const graph_data = [];
 for (let b in behavior_progress){

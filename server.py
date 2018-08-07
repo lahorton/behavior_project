@@ -317,8 +317,13 @@ def display_interventions():
     """displays a list of optional interventions"""
 
     interventions = db.session.query(Intervention).order_by(Intervention.intervention_name).all()
+    names = db.session.query(Intervention.intervention_name).order_by(Intervention.intervention_name).all()
 
-    interventions_json = json.dumps(interventions, default=str)
+    intervention_names= []
+    for name in names:
+        intervention_names.append(name[0])
+
+    interventions_json = json.dumps(intervention_names)
 
     return render_template("interventions.html", interventions=interventions,
                             interventions_json=interventions_json)
@@ -339,12 +344,16 @@ def add_intervention():
     #OR I want to screen to make sure it's appropriate.  Add in functionality.
 
     intervention_name = request.form.get("intervention_name").strip().capitalize()
-    intervention_description = request.form.get("intervention_description").strip().capitalize()
+    intervention_behaviors = request.form.get("intervention_behaviors").strip().capitalize()
+
+    intervention_behaviors = []
+    for i in intervention_behaviors:
+        intervention_behaviors.extend(i)
 
     user_id = session["user_id"]
 
-    if len(intervention_description) > 200:
-        intervention_description = intervention_description[:200]
+    if len(intervention_behaviors) > 400:
+        intervention_behaviors = intervention_behaviors[:400]
 
     #make list of all the behaviors already in the database
     interventions = db.session.query(Intervention.intervention_name).all()
@@ -357,9 +366,10 @@ def add_intervention():
         flash("That intervention is already an option.")
         return redirect("/interventions")
 
-    intervention = Intervention(intervention_name=intervention_name, intervention_description=intervention_description)
+    intervention = Intervention(intervention_name=intervention_name, intervention_behaviors=intervention_behaviors)
 
     db.session.add(intervention)
+    intervention.behaviors.append(intervention_behaviors)
     db.session.commit()
 
     return redirect('/interventions')
@@ -374,7 +384,17 @@ def display_behaviors():
     for behavior in behaviors:
         behavior_description = behavior.behavior_description.strip('"{}"').split('","')
 
-    return render_template("behaviors.html", behaviors=behaviors, behavior_description=behavior_description)
+    b_names = db.session.query(Behavior.behavior_name).order_by(Behavior.behavior_name).all()
+
+    behavior_names = []
+    for name in b_names:
+        behavior_names.append(name[0])
+
+    behaviors_json = json.dumps(behavior_names)
+
+    return render_template("behaviors.html", behaviors=behaviors,
+                           behavior_description=behavior_description,
+                           behaviors_json=behaviors_json)
 
 
 @app.route("/new_behavior")
