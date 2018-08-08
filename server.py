@@ -14,14 +14,12 @@ app = Flask(__name__)
 
 app.secret_key = os.environ["SERVER_APP_SECRET_KEY"]
 
-
 app.jinja_env.undefined = StrictUndefined
 
 
 @app.route('/')
 def index():
     """Homepage"""
-
     return render_template("homepage.html")
 
 
@@ -35,12 +33,13 @@ def user_login():
 @app.route('/login', methods=["POST"])
 def check_login():
     """login existing users"""
-
+ 
     user_name = request.form.get("name").strip().capitalize()
     password = request.form.get("password")
 
     user = User.query.filter(User.user_name == user_name).first()
 
+    #doubles up - just reference user object above
     user_id = db.session.query(User.user_id).filter(User.user_name == user_name).first()
 
     if user:
@@ -320,6 +319,10 @@ def display_interventions():
     names = db.session.query(Intervention.intervention_name).order_by(Intervention.intervention_name).all()
     behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
 
+    #creates an iterable list from behavior_description
+    for behavior in behaviors:
+        behavior.behavior_description = behavior.behavior_description.strip('"{}"').split('","')
+
     intervention_names= []
     for name in names:
         intervention_names.append(name[0])
@@ -364,6 +367,11 @@ def add_intervention():
     if intervention_name in intervention_list:
         flash("That intervention is already an option.")
         return redirect("/interventions")
+
+    #make sure all the fields are filled out:
+    if intervention_name is None:
+        flash("Please enter an intervention name")
+        return redirect("/add_intervention")
 
     intervention = Intervention(intervention_name=intervention_name)
     db.session.add(intervention)
@@ -464,6 +472,14 @@ def add_behavior():
     if behavior_name in behavior_list:
         flash("That behavior is already an option.")
         return redirect("/behaviors")
+
+    #make sure all the fields are filled out:
+    if behavior_name is None:
+        flash("Please enter a behavior name")
+        return redirect("/add_behavior")
+    if behavior_d is None:
+        flash("Please enter a behavior description")
+        return redirect("/add_behavior")
 
     behavior = Behavior(behavior_name=behavior_name, behavior_description=behavior_description)
     db.session.add(behavior)

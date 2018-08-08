@@ -5,20 +5,42 @@
 
 <h3> Please enter search data below: </h3>
 <p> (At least one field must be present)</p>
- 
-<form action = "/student_list" method="GET">
-    Enter student's first name:
-    <input type="text" name="fname"><br>
-    <br>
-    Enter student's last name:
-    <input type="text" name="lname"><br>
-    <br>
-    Enter student's ID:
-    <input type="text" name="student_id"><br><br>
-    Enter student's birthdate:
-    <input type="date" name="birthdate"><br>
-    <br>
-    <input type="submit" id="search_student_submit", value="Search">
-</form>
+
+
+<!-- Button trigger addIntervention modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchStudent">
+  Student Search
+</button>
+
+<!-- Add Intervention Form Modal -->
+<div class="modal fade" id="searchStudentModal" tabindex="-1" role="dialog" aria-labelledby="searchStudentModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Search Students</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/student_list" method="GET">
+        Enter student's first name:
+        <input type="text" name="fname"><br>
+        Enter student's last name:
+        <input type="text" name="lname"><br>
+        Enter student's ID:
+        <input type="text" name="student_id"><br><br>
+        Enter student's birthdate:
+        <input type="date" name="birthdate"><br>
+        <br>
+        </div>
+        <div class="modal-footer">
+        <input type="Submit" id="search_student_submit", value="Search">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}

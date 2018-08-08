@@ -7,12 +7,12 @@
 
 <h2>Interventions</h2>
 
-<!-- Button trigger modal -->
+<!-- Button trigger addIntervention modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addInterventionModal">
   Add an intervention
 </button>
 
-<!-- Modal -->
+<!-- Add Intervention Form Modal -->
 <div class="modal fade" id="addInterventionModal" tabindex="-1" role="dialog" aria-labelledby="addInterventionModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -45,16 +45,39 @@
              <ul id="associated_behaviors">
                 {% for behavior in item.behaviors %}
                     <div class="container">
-                    <li><a href="#myModal" class="btn">{{ behavior.behavior_name }}</a>
+                    <li><a href="#{{ behavior.behavior_id }}" class="btn">{{ behavior.behavior_name }}</a>
+                    </div>
+
+                    <div class="modal fade" id="{{ behavior.behavior_id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button>
+                          </div>
+                          <div class="modal-body">
+                           
+                                <h2>{{ behavior.behavior_name }}</h2>
+
+                                <ul id="behavior_info"
+
+                                <p>Behavior Description:</p>
+                                {% for item in behavior.behavior_description %}
+                                <li>{{ item }} </li>
+                                {% endfor %}
+                        
+                          </div>
+
+                        </div>
+                      </div>
                     </div>
                 {% endfor %}
-                </ul>
+            </ul>
         </li><br>
     {% endfor %}
 </ul>
 
 
-<!-- Modal -->
+<!-- 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -68,7 +91,7 @@
 
     </div>
   </div>
-</div>
+</div> -->
 
 
 <script >
@@ -93,12 +116,12 @@ $('#bloodhound .typeahead').typeahead({
   source: intervention_search
 });
 
-
+//This references the behavior_info modal
 jQuery(document).ready(function() {
  // executes when HTML-Document is loaded and DOM is ready
 console.log("document is ready");
   
-  jQuery('.btn[href]').click(function(e){
+  jQuery('.myModal').click(function(e){
     e.preventDefault();
     let href = jQuery(this).attr('href');
     jQuery(href).modal('toggle');
@@ -106,11 +129,13 @@ console.log("document is ready");
 });
 
 
+
+//This references the add_intervention modal
 jQuery(document).ready(function() {
  // executes when HTML-Document is loaded and DOM is ready
 console.log("document is ready");
   
-  jQuery('.myModal').click(function(e){
+  jQuery('.btn[href]').click(function(e){
     e.preventDefault();
     let href = jQuery(this).attr('href');
     jQuery(href).modal('toggle');
