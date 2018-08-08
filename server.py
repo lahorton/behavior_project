@@ -407,6 +407,9 @@ def behavior_info(behavior_id):
     #get behavior object
     behavior = Behavior.query.get(behavior_id)
 
+    print("<<<<<<<<<<<")
+    print(behavior)
+
     #creates an iterable list from behavior.behavior_description
     description = behavior.behavior_description.strip('"{}"').split('","')
 
