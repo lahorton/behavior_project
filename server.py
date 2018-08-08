@@ -318,6 +318,7 @@ def display_interventions():
 
     interventions = db.session.query(Intervention).order_by(Intervention.intervention_name).all()
     names = db.session.query(Intervention.intervention_name).order_by(Intervention.intervention_name).all()
+    behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
 
     intervention_names= []
     for name in names:
@@ -326,7 +327,7 @@ def display_interventions():
     interventions_json = json.dumps(intervention_names)
 
     return render_template("interventions.html", interventions=interventions,
-                            interventions_json=interventions_json)
+                            interventions_json=interventions_json, behaviors=behaviors)
 
 
 @app.route("/new_intervention")
@@ -399,6 +400,27 @@ def display_behaviors():
                            behaviors_json=behaviors_json)
 
 
+@app.route("/behavior_info/<behavior_id>")
+def behavior_info(behavior_id):
+    """displays info about a specific behavior"""
+
+    #get behavior object
+    behavior = Behavior.query.get(behavior_id)
+
+    #creates an iterable list from behavior.behavior_description
+    description = behavior.behavior_description.strip('"{}"').split('","')
+
+    #gets an iterable list of related intervention names for the behavior
+    associated_interventions =[]
+    for intervention in behavior.interventions:
+        associated_interventions.append(intervention.intervention_name)
+
+    user_id = session["user_id"]
+
+    return render_template("behavior_info.html", behavior=behavior,
+                           description=description, associated_interventions=associated_interventions)
+
+
 @app.route("/new_behavior")
 def show_behavior_info():
     """gets new behavior info from user"""
@@ -419,17 +441,10 @@ def add_behavior():
         behavior = behavior.strip(" ").capitalize()
         behavior_description.append(behavior)
 
-    print(">>>>>>>>>>Behavior Description >>>>>>>>>>>>")
-    print(behavior_description)
-
-
     related_interventions = []
     for i in associated_interventions:
         i = i.strip(" ").capitalize()
         related_interventions.append(i)
-
-    print(">>>>>>>>>>Related Interventions >>>>>>>>>>>>")
-    print(related_interventions)
 
     user_id = session["user_id"]
 

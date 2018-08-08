@@ -42,7 +42,7 @@ Add a Behavior
 
 <ul id="behaviors">
     {% for item in behaviors %}
-        <li><h5>Name: {{ item.behavior_name }}</h5>
+        <li>Name: <a href="/behavior_info/{{ item.behavior_id }}"name="behavior_id">{{ item.behavior_name }}</a>
             <p>Behavior Description:</p>
                 <ul id="behavior_description">
                 {% for description in behavior_description %}
@@ -60,9 +60,6 @@ Add a Behavior
         </li>
     {% endfor %}
 </ul>
-
- <a href="/new_behavior" name="new_behavior"> Add a new behavior! </a>
-
 
 <script >
 const behaviors = JSON.parse({{ behaviors_json|tojson }});

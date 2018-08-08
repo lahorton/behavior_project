@@ -44,12 +44,32 @@
              Associated Behaviors:<br>
              <ul id="associated_behaviors">
                 {% for behavior in item.behaviors %}
-                    <li>{{ behavior.behavior_name }}</li>
+                    <div class="container">
+                    <li><a href="#myModal" class="btn">{{ behavior.behavior_name }}</a>
+                    </div>
                 {% endfor %}
                 </ul>
         </li><br>
     {% endfor %}
 </ul>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button>
+      </div>
+      <div class="modal-body">
+       <iframe width="100%" height="700" style="overflow: hidden;" src="/behavior_info/{{ behavior.behavior_id }}" frameborder="0" marginheight="0" marginwidth="0" scrolling="no">Loading&amp;#8230;</iframe>
+        MODAL CONTENT HERE?
+
+      </div>
+
+    </div>
+  </div>
+</div>
 
 
 <script >
@@ -73,6 +93,19 @@ $('#bloodhound .typeahead').typeahead({
   name: 'interventions',
   source: intervention_search
 });
+
+
+jQuery(document).ready(function() {
+ // executes when HTML-Document is loaded and DOM is ready
+console.log("document is ready");
+  
+  jQuery('.btn[href]').click(function(e){
+    e.preventDefault();
+    let href = jQuery(this).attr('href');
+    jQuery(href).modal('toggle');
+  });
+});  
+
 
 </script >
 
