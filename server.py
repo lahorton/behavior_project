@@ -393,7 +393,7 @@ def display_behaviors():
     behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
     #creates an iterable list from behavior_description
     for behavior in behaviors:
-        behavior_description = behavior.behavior_description.strip('"{}"').split('","')
+        behavior.behavior_description = behavior.behavior_description.strip('"{}"').split('","')
 
     b_names = db.session.query(Behavior.behavior_name).order_by(Behavior.behavior_name).all()
 
@@ -404,7 +404,6 @@ def display_behaviors():
     behaviors_json = json.dumps(behavior_names)
 
     return render_template("behaviors.html", behaviors=behaviors,
-                           behavior_description=behavior_description,
                            behaviors_json=behaviors_json)
 
 
@@ -414,9 +413,6 @@ def behavior_info(behavior_id):
 
     #get behavior object
     behavior = Behavior.query.get(behavior_id)
-
-    print("<<<<<<<<<<<")
-    print(behavior)
 
     #creates an iterable list from behavior.behavior_description
     description = behavior.behavior_description.strip('"{}"').split('","')

@@ -13,55 +13,81 @@ Add a Behavior
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="addBehaviorModal" tabindex="-1" role="dialog" aria-labelledby="addBehaviorModal" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h5 class="modal-title" id="exampleModalLabel">Add Behavior</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action = "/add_behavior" method="POST">
-        Enter behavior name:
-        <input type="text" name="behavior_name"><br>
-        Enter behavior description:
-        <input type="text" name="behavior_description"><br>
-        Please enter any associated interventions for this behavior (optional):
-        <input type="text" name="associated_interventions"><br>
-      </div>
-      <div class="modal-footer">
-        <input type="Submit">
-        </form>
-      </div>
+<div class="modal fade" id="addBehaviorModal" tabindex="-1" role="dialog" aria-labelledby="addBehaviorModal
+            "aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="exampleModalLabel">Add Behavior</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <form action = "/add_behavior" method="POST">
+                Enter behavior name:
+                <input type="text" name="behavior_name"><br>
+                Enter behavior description:
+                <input type="text" name="behavior_description"><br>
+                Please enter any associated interventions for this behavior (optional):
+                <input type="text" name="associated_interventions"><br>
+            </div>
+            <div class="modal-footer">
+                <input type="Submit">
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 
-<ul id="behaviors">
+<div class="behaviors-container" id="behaviors">
     {% for item in behaviors %}
-        <li>Name: <a href="/behavior_info/{{ item.behavior_id }}"name="behavior_id">{{ item.behavior_name }}</a>
-            <p>Behavior Description:</p>
-                <ul id="behavior_description">
-                {% for description in behavior_description %}
-                    <li> {{ description }} </li>
-                {% endfor %}
-                </ul>
-                <br>
-            <p>Commonly associated interventions:</p>
-            <ul id="associated_interventions">
-                {% for intervention in item.interventions %}
-                    <li> <a href="/interventions" name="intervention_name">{{ intervention.intervention_name }}</a> </li>
-                {% endfor %}
-                </ul>
-                <br>
-        </li>
-    {% endfor %}
-</ul>
+        <div class="behavior-item">
+            <!-- creates link to activate modal -->
+            <li>
+                <a href="#{{ item.behavior_id }}" class="btn">
+                        {{ item.behavior_name }}
+                </a>
+            </li>
+            <!-- creates modal -->
+            <div class="modal fade" id="{{ item.behavior_id }}" 
+                 tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            >
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" 
+                                    data-dismiss="modal" aria-label="Close"
+                            >
+                                <span aria-hidden="true">Close</span>
+                            </button>
+                        </div>
 
-<script >
+                        <div class="modal-body">
+                            <h2>{{ item.behavior_name }}</h2>
+                            <p>Behavior Description:</p>
+                            <ul id="behavior_info">
+                                {% for item in item.behavior_description %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                            <p>Commonly associated interventions:</p>
+                            <ul id="associated_interventions">
+                                {% for intervention in item.interventions %}
+                                    <li>{{ intervention.intervention_name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>     
+    {% endfor %}
+</div>
+
+
+<script>
 const behaviors = JSON.parse({{ behaviors_json|tojson }});
 console.log(behaviors);
 

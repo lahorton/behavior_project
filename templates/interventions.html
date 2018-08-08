@@ -38,60 +38,54 @@
 </div>
 
 
-<ul id="interventions">
+<div class="interventions-container" id="interventions">
     {% for item in interventions %}
-        <li> Name: {{ item.intervention_name }}<br>
-             Associated Behaviors:<br>
-             <ul id="associated_behaviors">
-                {% for behavior in item.behaviors %}
-                    <div class="container">
-                    <li><a href="#{{ behavior.behavior_id }}" class="btn">{{ behavior.behavior_name }}</a>
-                    </div>
+        <div class="intervention-item">
+            <ul>
+                <li>Name: {{ item.intervention_name }}</li>
+                <li>
+                    Associated Behaviors:
+                    <ul id="associated_behaviors">
+                        {% for behavior in item.behaviors %}
+                            <li>
+                                <a href="#{{ behavior.behavior_id }}" class="btn">
+                                    {{ behavior.behavior_name }}
+                                </a>
+                            </li>
 
-                    <div class="modal fade" id="{{ behavior.behavior_id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button>
-                          </div>
-                          <div class="modal-body">
-                           
-                                <h2>{{ behavior.behavior_name }}</h2>
+                            <div class="modal fade" id="{{ behavior.behavior_id }}"
+                                 tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel"
+                            >
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close"
+                                                    data-dismiss="modal" aria-label="Close"
+                                            >
+                                                <span aria-hidden="true">Close</span>
+                                            </button>
+                                        </div>
 
-                                <ul id="behavior_info"
-
-                                <p>Behavior Description:</p>
-                                {% for item in behavior.behavior_description %}
-                                <li>{{ item }} </li>
-                                {% endfor %}
-                        
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-                {% endfor %}
+                                        <div class="modal-body">
+                                            <h2>{{ behavior.behavior_name }}</h2>
+                                            <p>Behavior Description:</p>
+                                            <ul id="behavior_info">
+                                                {% for item in behavior.behavior_description %}
+                                                    <li>{{ item }} </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </li>
             </ul>
-        </li><br>
+        </div>
     {% endfor %}
-</ul>
-
-
-<!-- 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button>
-      </div>
-      <div class="modal-body">
-       <iframe width="100%" height="700" style="overflow: hidden;" src="/behavior_info/<behavior_id>" frameborder="0" marginheight="0" marginwidth="0" scrolling="no"></iframe>
-       ANY OTHER MODAL CONTENT HERE!
-      </div>
-
-    </div>
-  </div>
-</div> -->
+</div>
 
 
 <script >
