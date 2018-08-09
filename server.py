@@ -33,7 +33,7 @@ def user_login():
 @app.route('/login', methods=["POST"])
 def check_login():
     """login existing users"""
- 
+
     user_name = request.form.get("name").strip().capitalize()
     password = request.form.get("password")
 
@@ -164,8 +164,15 @@ def student_history(student_id):
 
     chart_json = json.dumps(chart_data, default=str)
 
+    #gets list of all intervention objects from db:
+    interventions = db.session.query(Intervention).all()
+
+    #gets list of all behavior objects from db:
+    behaviors_list = db.session.query(Behavior).all()
+
     return render_template("student_history.html", student=student, progress=progress,
-                            user_id=user_id, behaviors=behaviors, chart_json=chart_json)
+                            user_id=user_id, behaviors=behaviors, chart_json=chart_json,
+                            interventions=interventions, behaviors_list=behaviors_list)
 
 
 @app.route("/student_history/<student_id>/behavior_history")
