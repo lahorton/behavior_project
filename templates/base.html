@@ -22,13 +22,11 @@
 
 <div class="topnav">
     <a class="active" href="/login">Login</a>
+    <!-- Makes sure only logged in users can search students -->
     {% if 'user_id' in session %}
         <a href="/user_info/{{ session['user_id'] }}">User Info</a>
-
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchStudentModal">
-        Student Search
-        </button>
-<!--         <a href="/student_search">Search Students</a>
+        <!-- modal href button for student search modal -->
+        <a href="#student_search" class="btn" class="btn">Student Search</a>
  -->    {% endif %}
     <a href="/interventions">Interventions</a>
     <a href="/behaviors">Behaviors</a>
@@ -41,9 +39,11 @@
         {% endfor %}
   </ul>
 
+ Behaviors
+  <hr>
 
 <!-- Student Search Form Modal -->
-<div class="modal fade" id="searchStudentModal" tabindex="-1" role="dialog" aria-labelledby="searchStudentModal" aria-hidden="true">
+<div class="modal fade" id="student_search" tabindex="-1" role="dialog" aria-labelledby="searchStudentModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -72,10 +72,32 @@
   </div>
 </div>
 
-  Behaviors
-  <hr>
+<script>
+
+//This references the search student modal and acts as the eventClicker
+jQuery(document).ready(function() {
+ // executes when HTML-Document is loaded and DOM is ready
+console.log("document is ready");
+  
+  // Looks for the button for behavior that's linked & shows the the modal
+  jQuery('.btn[href]').click(function(e){
+    // prevents from taking it to the href
+    e.preventDefault();
+    // take the href of the element that was clicked on
+
+    let href = jQuery(this).attr('href');
+    // select the item with that href and show the modal
+    jQuery(href).modal('toggle');
+  });
+});  
+
+
+</script >
+
 
   {% block content %} put your content here {% endblock %}
+
+
 
 </body>
 </html>
