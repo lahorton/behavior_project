@@ -110,28 +110,21 @@ $('#bloodhound .typeahead').typeahead({
   source: intervention_search
 });
 
-//This references the behavior_info modal
+
+
+//This references the intervention info modals
 jQuery(document).ready(function() {
  // executes when HTML-Document is loaded and DOM is ready
 console.log("document is ready");
   
-  jQuery('.myModal').click(function(e){
-    e.preventDefault();
-    let href = jQuery(this).attr('href');
-    jQuery(href).modal('toggle');
-  });
-});
-
-
-
-//This references the add_intervention modal
-jQuery(document).ready(function() {
- // executes when HTML-Document is loaded and DOM is ready
-console.log("document is ready");
-  
+  // Looks for the button for behavior that's linked & shows the the modal
   jQuery('.btn[href]').click(function(e){
+    // prevents from taking it to the href
     e.preventDefault();
+    // take the href of the element that was clicked on
+
     let href = jQuery(this).attr('href');
+    // select the item with that href and show the modal
     jQuery(href).modal('toggle');
   });
 });  
