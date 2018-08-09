@@ -5,8 +5,10 @@
 
 <p>User ID: {{ user_id }} </p>
  
-
- <a href="/add_student" name="new_student"> Add a new student! </a>
+<!-- Button trigger addStudent modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudent">
+Add a student
+</button>
 
 <p> Please click on Student ID to see student progress history: </p>
 
@@ -21,5 +23,32 @@
         </li>
     {% endfor %}
 </ul>
+
+<!-- addStudent Form Modal -->
+<div class="modal fade" id="addStudent" tabindex="-1" role="dialog" aria-labelledby="addStudent" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/add_student" method="POST">
+            Enter student's first name:
+            <input type="text" name="fname"><br>
+            Enter studnet's last name:
+            <input type="text" name="lname"><br>
+            Enter studnet's birthdate:
+            <input type="date" name="birthdate"><br>
+      </div>
+      <div class="modal-footer">
+        <input type="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
