@@ -51,19 +51,22 @@ def check_login():
             return redirect(f"/user_info/{user.user_id}")
         else:
             flash("Login failed. Please double-check your password.")
-            return redirect('/login')
+            return redirect("/")
     else:
         flash("Looks like you're not registered.  Please register.")
-        return redirect('/register')
+        return redirect("/")
 
 
 @app.route('/logout')
 def logout():
     """Clears user_id from session"""
-
-    del session['user_id']
-    flash("Logged out.")
-    return redirect("/login")
+    if 'user_id' in session:
+        del session['user_id']
+        flash("Logged out.")
+        return redirect("/")
+    else:
+        flash("Please login")
+        return redirect("/")
 
 
 @app.route('/register')
@@ -84,12 +87,13 @@ def register_new_user():
 
     if user:
         flash("That user_name is already registered.  Please choose another name.")
-        return redirect('/register')
+        return redirect('/')
     else:
         user_name = User(user_name=user_name, password=password)
         db.session.add(user_name)
         db.session.commit()
-        return redirect('/login')
+        flash("Thank you for registering.  Please login to get started!")
+        return redirect("/")
 
 
 @app.route(f"/user_info/<user_id>")
