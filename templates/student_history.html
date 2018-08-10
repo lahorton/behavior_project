@@ -107,6 +107,8 @@ for (let b in behavior){
     b_name.data = behavior[b]['data'];
     b_name.fill= false;
     data_ary.push(b_name);
+    // this reverses the order of the data so that the visual presenatation is accureate on the graph.
+    b_name.data.reverse()
 }
 
 let label_name = [];
@@ -115,7 +117,11 @@ for (let name in behavior){
 }
 
 
+console.log(">>>>>>>>>>>>"); 
 console.log(data_ary); 
+console.log(">>>>>>>>>>>>"); 
+
+
 
 let ctx = document.getElementById('myChart').getContext('2d');
 let chart = new Chart(ctx, {
@@ -124,8 +130,8 @@ let chart = new Chart(ctx, {
 
     // The data for graph
         data: {
-            labels: ['Most Recent Rating', 'Rating', 'Rating', 'Rating',
-                     'Rating', 'Rating', 'Rating', 'Oldest Rating'],
+            labels: ['Oldest Rating', 'Rating', 'Rating', 'Rating',
+                     'Rating', 'Rating', 'Rating', 'Most Recent Rating'],
             datasets: data_ary
             },
         options: {

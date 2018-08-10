@@ -408,6 +408,13 @@ def display_behaviors():
 
     b_names = db.session.query(Behavior.behavior_name).order_by(Behavior.behavior_name).all()
 
+    #create dictionary of behavior name key with behavior id as value (for typeahead-modal functionality)
+    b_id = {}
+    for behavior in behaviors:
+        b_id[behavior.behavior_name] = behavior.behavior_id
+
+    b_id_json = json.dumps(b_id)
+
     behavior_names = []
     for name in b_names:
         behavior_names.append(name[0])
@@ -415,7 +422,7 @@ def display_behaviors():
     behaviors_json = json.dumps(behavior_names)
 
     return render_template("behaviors.html", behaviors=behaviors,
-                           behaviors_json=behaviors_json)
+                           behaviors_json=behaviors_json, b_id_json=b_id_json)
 
 
 @app.route("/behavior_info/<behavior_id>")

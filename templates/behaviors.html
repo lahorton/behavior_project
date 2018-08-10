@@ -2,7 +2,7 @@
 {% block content %}
 
 <div id="bloodhound">
-  <input class="typeahead" type="text" placeholder="Search Behaviors">
+  <input class="typeahead" type="text" placeholder="Search Behaviors" buttonObject.value = text>
 </div>
 
 <h3>Behaviors</h3>
@@ -106,9 +106,36 @@ $('#bloodhound .typeahead').typeahead({
 },
 {
   name: 'behaviors',
-  source: behavior_search
-  // onselect:  use this to trigger an event once the user selects the behavior from searchbox
+  source: behavior_search 
 });
+
+
+const b_id = JSON.parse({{ b_id_json|tojson }});
+console.log(b_id)
+
+// specify what object is being acted on (here, bloodhound id).
+let button = document.querySelector('#bloodhound');
+
+
+// specify what should happen when the object is acted on
+function alert(evt){
+    evt.preventDefault();
+    // if return is pressed, do this:
+    if (evt.keyCode === 13){
+    //get value of the bloodhound and call the matching modal id.
+        let value = button.value;
+        let id = b_id[value];
+        console.log(value);
+        console.log(id);
+    // show the modal window where the id is equal to that id number.
+    $('#id').modal('show');
+};
+//speficy what action will call the above function:
+button.addEventListener("keyup", alert(evt));
+};
+
+// `#${id}`
+// `#${id}`
 
 
 //This references the behavior info modals
@@ -121,12 +148,11 @@ console.log("document is ready");
     // prevents from taking it to the href
     e.preventDefault();
     // take the href of the element that was clicked on
-
     let href = jQuery(this).attr('href');
     // select the item with that href and show the modal
     jQuery(href).modal('toggle');
+    });
   });
-});  
 
 </script >
 
