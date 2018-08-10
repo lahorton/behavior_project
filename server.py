@@ -354,6 +354,13 @@ def display_interventions():
     for behavior in behaviors:
         behavior.behavior_description = behavior.behavior_description.strip('"{}"').split('","')
 
+    #create dictionary of intervention name key with intervention id as value (for typeahead-modal functionality)
+    int_id = {}
+    for intervention in interventions:
+        int_id[intervention.intervention_name] = intervention.intervention_id
+
+    int_id_json = json.dumps(int_id)
+
     intervention_names= []
     for name in names:
         intervention_names.append(name[0])
@@ -361,7 +368,8 @@ def display_interventions():
     interventions_json = json.dumps(intervention_names)
 
     return render_template("interventions.html", interventions=interventions,
-                            interventions_json=interventions_json, behaviors=behaviors)
+                            interventions_json=interventions_json, behaviors=behaviors,
+                            int_id_json=int_id_json)
 
 
 @app.route("/new_intervention")

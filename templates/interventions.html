@@ -37,7 +37,7 @@
   </div>
 </div>
 
-
+<!-- 
 <div class="interventions-container" id="interventions">
     {% for item in interventions %}
         <div class="intervention-item">
@@ -86,6 +86,47 @@
         </div>
     {% endfor %}
 </div>
+ -->
+
+
+<div class="interventions-container" id="interventions">
+  {% for item in interventions %}
+  <div class = "intervention-item">
+    <!-- creates a link to activate modal -->
+    <li><a href="#{{ item.intervention_id }}" class="btn">{{ item.intervention_name }}
+    </a></li>
+    <!-- creates the content for the modal -->
+      <div class="modal fade" id="{{ item.intervention_id }}"
+             tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                
+                <button type="button" class="close"
+                          data-dismiss="modal" aria-label="Close"
+                >
+                  <span aria-hidden="true">Close</span>
+                </button>
+              </div>
+
+            <div class="modal-body">
+              <h3>{{ item.intervention_name }}</h3>
+              <p>Associated Behaviors:</p>
+                {% for behavior in item.behaviors %}
+                  <h5>{{ behavior.behavior_name }}</h5>
+                  <p>Behavior Description:</p>
+                  <ul id="behavior_info">
+                    {% for item in behavior.behavior_description %}
+                      <li>{{ item }} </li>
+                    {% endfor %}
+                  </ul>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+  {% endfor %}
+</div>
 
 
 <script >
@@ -112,6 +153,22 @@ $('#bloodhound .typeahead').typeahead({
 
 
 
+// Code below makes the modal window w behavior information pop up when autoselected from typeahead.
+// creates an object matching behavior names to respective behavior ids.  
+const int_id = JSON.parse({{ int_id_json|tojson }});
+
+// specify what should happen when the object is acted on
+function showModal(evt, behave){
+        // this shows the modal with the behavior_id when triggered by the eventhandler below.
+        $('#' + int_id[behave]).modal('show');
+};
+
+//calls the showModal funtion with the value typed in when selected from the tyepahead field. 
+$('.typeahead').bind('typeahead:select', showModal);
+
+
+
+
 //This references the intervention info modals and acts as the eventClicker
 jQuery(document).ready(function() {
  // executes when HTML-Document is loaded and DOM is ready
@@ -122,7 +179,6 @@ console.log("document is ready");
     // prevents from taking it to the href
     e.preventDefault();
     // take the href of the element that was clicked on
-
     let href = jQuery(this).attr('href');
     // select the item with that href and show the modal
     jQuery(href).modal('toggle');
