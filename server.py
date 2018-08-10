@@ -279,6 +279,8 @@ def add_progress(student_id):
     interventions = db.session.query(Intervention).all()
     behaviors = db.session.query(Behavior).all()
 
+    # ADD IN CHECKS TO MAKE SURE ALL FIELDS ARE FILLED OUT
+    # ADD LIMITS TO Intervention choices so that the same one was tried at least 6 times?
     date = request.form.get("date")
     behavior_id = request.form.get('behave')
     intervention_id = request.form.get("intervent")
@@ -289,8 +291,7 @@ def add_progress(student_id):
     print(behavior_id)
     print(intervention_id)
 
-    #figure out how to make a calendar pop-up on date to select date in datetime.
-    #make sure session is connecting to the correct user_id
+    # adds progress report to database.
     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
                         intervention_id=intervention_id, user_id=user_id, rating=rating,
                         comment=comment)
