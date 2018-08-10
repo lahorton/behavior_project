@@ -2,7 +2,7 @@
 {% block content %}
 
 <div id="bloodhound">
-  <input class="typeahead" type="text" placeholder="Search Behaviors" buttonObject.value = text>
+  <input class="typeahead" type="text" placeholder="Search Behaviors" >
 </div>
 
 <h3>Behaviors</h3>
@@ -88,6 +88,7 @@ Add a Behavior
 
 
 <script>
+"use strict";
 const behaviors = JSON.parse({{ behaviors_json|tojson }});
 console.log(behaviors);
 
@@ -110,32 +111,21 @@ $('#bloodhound .typeahead').typeahead({
 });
 
 
+// Code below makes the modal window w behavior information pop up when autoselected from typeahead.
+// creates an object matching behavior names to respective behavior ids.  
 const b_id = JSON.parse({{ b_id_json|tojson }});
-console.log(b_id)
-
-// specify what object is being acted on (here, bloodhound id).
-let button = document.querySelector('#bloodhound');
 
 // specify what should happen when the object is acted on
-function alert(evt){
-    evt.preventDefault();
-    // if return is pressed, do this:
-    if (evt.keyCode === 13){
-    //get value of the bloodhound and call the matching modal id.
-        let value = button.value;
-        let id = b_id[value];
-        console.log(value);
-        console.log(id);
-    // show the modal window where the id is equal to that id number.
-    $('#id').modal('show');
-};
-//speficy what action will call the above function:
-button.addEventListener("keyup", alert(evt));
+function showModal(evt, behave){
+        // this shows the modal with the behavior_id when triggered by the eventhandler below.
+        $('#' + b_id[behave]).modal('show');
 };
 
-// `#${id}`
-// `#${id}`
+//calls the showModal funtion with the value typed in when selected from the tyepahead field. 
+$('.typeahead').bind('typeahead:select', showModal);
 
+
+// This code makes the modals pop up when the behaviors are clicked on.
 
 //This references the behavior info modals
 jQuery(document).ready(function() {

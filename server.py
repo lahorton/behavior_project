@@ -186,18 +186,19 @@ def behavior_history(student_id):
     behavior_name = request.args.get("behavior_name")
     behavior = Behavior.query.filter(Behavior.behavior_name==behavior_name).first()
     behavior_id = behavior.behavior_id
+ 
     #creates an iterable list from behavior_description
     behavior_description = behavior.behavior_description.strip('"{}"').split('","')
 
     #get student object:
     student = Student.query.get(student_id)
-    # student.birthdate = student.birthdate.strftime("%B %d, %Y")
+    # birthdate = student.birthdate.strftime("%B %d, %Y")
 
     #get progress objects matching the specified behavior for student:
     progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id).order_by(Progress.date.desc()).all()
-    # progress.date = progress.date.strftime("%B %d, %Y")
+    # date = progress.date.strftime("%B %d, %Y")
 
-     #create dictionary with data formatted for charts.js
+    #create dictionary with data formatted for charts.js
     behavior_progress = {}
     colors = ['red', 'yellow', 'green', 'blue', 'orange', 'purple']
     ratings = []
@@ -298,6 +299,16 @@ def add_progress(student_id):
 
     print(behavior_id)
     print(intervention_id)
+
+    # #get progress objects matching the specified behavior & same intervention for student:
+    # behavior_progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id, Intervention.intervention_id=intervention_id).order_by(Progress.date.desc()).all()
+
+    # print("<<<<<<<<<<<")
+    # print(behavior_progress)
+
+    # #checks to see if there have been at least 6 progress reports for that behavior with the same intervention.
+    # if behavior_progress < 6 and :
+    #     flash("")
 
     # adds progress report to database.
     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
