@@ -213,8 +213,16 @@ def behavior_history(student_id):
 
     behavior_progress_json = json.dumps(behavior_progress, default=str)
 
+    #gets list of all intervention objects from db:
+    interventions = db.session.query(Intervention).all()
+
+    #gets list of all behavior objects from db:
+    behaviors_list = db.session.query(Behavior).all()
+
+
     return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior,
-                            behavior_description=behavior_description, behavior_progress_json=behavior_progress_json)
+                            behavior_description=behavior_description, behavior_progress_json=behavior_progress_json,
+                            interventions=interventions, behaviors_list=behaviors_list)
 
 
 @app.route("/student_search")
