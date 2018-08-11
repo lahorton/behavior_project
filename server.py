@@ -186,7 +186,7 @@ def behavior_history(student_id):
     behavior_name = request.args.get("behavior_name")
     behavior = Behavior.query.filter(Behavior.behavior_name==behavior_name).first()
     behavior_id = behavior.behavior_id
- 
+
     #creates an iterable list from behavior_description
     behavior_description = behavior.behavior_description.strip('"{}"').split('","')
 
@@ -300,15 +300,40 @@ def add_progress(student_id):
     print(behavior_id)
     print(intervention_id)
 
-    # #get progress objects matching the specified behavior & same intervention for student:
-    # behavior_progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id, Intervention.intervention_id=intervention_id).order_by(Progress.date.desc()).all()
+    #get progress objects matching the specified behavior & same intervention for student:
+    # intervention_progress = Progress.query.filter(Progress.student_id==student_id, Progress.behavior_id==behavior_id, Progress.intervention_id==intervention_id).order_by(Progress.date.desc()).all()
 
-    # print("<<<<<<<<<<<")
-    # print(behavior_progress)
+    #get progress objects matching the specified behavior for student:
+    behavior_progress = Progress.query.filter(Progress.student_id==student_id, Progress.behavior_id==behavior_id).order_by(Progress.intervention_id).all()
 
-    # #checks to see if there have been at least 6 progress reports for that behavior with the same intervention.
-    # if behavior_progress < 6 and :
-    #     flash("")
+    print("<<<<<<<<<<<")
+    print(len(behavior_progress))
+    print(behavior_progress)
+
+    # creates a dictionary with intervention_ids as key and number of times they've been used as values.
+    intervents= {}
+    for progress in behavior_progress:
+        if progress.intervention_id in intervents:
+            intervents[progress.intervention_id] = intervents[progress.intervention_id] + 1
+        else:
+            intervents[progress.intervention_id] = 1
+
+    print("<<<<<<<<<<<")
+    print(intervents)
+
+#
+    #checks to see if there have been at least 6 progress reports for that behavior with the same intervention.
+    
+# the below is happening even if the intervention id IS in the dictionary...FIX THIS!
+    if intervention_id not in intervents.keys():
+        # if the intervention id is not in the dictionary, check and see if there's another intervention we should try a little longer.
+        for item in intervents.items():
+            if item[1] < 6:
+                # It would be nice to include the name of the intervention to tell them to keep trying it - use item[0] but connect it to the inter name, not id.
+                # make a dif dictionary to connect intervent_id with intervent_name (it's on the intervention page, i think.)
+                flash(f"We notice you've only tried {item[0]} {item[1]} times.")
+        flash("We highly reccommend applying the same intervention to the targeted behavior at least 6 times before changing interventions.")
+        return redirect(f"/student_history/{student_id}")
 
     # adds progress report to database.
     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,

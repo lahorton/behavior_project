@@ -116,6 +116,8 @@ for (let b in behavior_progress){
     b_name.data = behavior_progress[b]['data'];
     b_name.fill= false;
     graph_data.push(b_name);
+    // this reverses the order of the data so that the visual presenatation is accureate on the graph.
+    b_name.data.reverse()
 }
 
 let label_name = [];
@@ -123,7 +125,6 @@ for (let name in behavior_progress){
     label_name.push(name);
 }
 
-console.log(graph_data); 
 
 let ctx = document.getElementById('myChart').getContext('2d');
 let chart = new Chart(ctx, {

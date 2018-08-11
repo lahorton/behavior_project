@@ -37,57 +37,6 @@
   </div>
 </div>
 
-<!-- 
-<div class="interventions-container" id="interventions">
-    {% for item in interventions %}
-        <div class="intervention-item">
-            <ul>
-                <li>Name: {{ item.intervention_name }}</li>
-                <li>
-                    Associated Behaviors:
-                    <ul id="associated_behaviors">
-                        {% for behavior in item.behaviors %}
-                            <li>
-                                <a href="#{{ behavior.behavior_id }}" class="btn">
-                                    {{ behavior.behavior_name }}
-                                </a>
-                            </li>
-
-                            <div class="modal fade" id="{{ behavior.behavior_id }}"
-                                 tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel"
-                            >
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close"
-                                                    data-dismiss="modal" aria-label="Close"
-                                            >
-                                                <span aria-hidden="true">Close</span>
-                                            </button>
-                                        </div>
-
-                                        <div class="modal-body">
-                                            <h2>{{ behavior.behavior_name }}</h2>
-                                            <p>Behavior Description:</p>
-                                            <ul id="behavior_info">
-                                                {% for item in behavior.behavior_description %}
-                                                    <li>{{ item }} </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    {% endfor %}
-</div>
- -->
-
 
 <div class="interventions-container" id="interventions">
   {% for item in interventions %}
