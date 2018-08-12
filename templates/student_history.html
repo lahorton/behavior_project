@@ -147,10 +147,12 @@ let chart = new Chart(ctx, {
 <h3> Progress Reports: </h3>
 
 <ul id="progress reports">
+<p>
   {% for behavior in behaviors %}
   <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ behavior }}" aria-expanded="false" aria-controls="collapse">{{ behavior }}<br>
   </button>
   {% endfor %}
+</p>
 
   {% for behavior in behaviors %}
     {% for info in behaviors[behavior]['reports'] %} 

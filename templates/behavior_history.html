@@ -98,14 +98,6 @@
 
 let behavior_progress = {{ behavior_progress_json|tojson }}
 behavior_progress = JSON.parse(behavior_progress)
-// console.log(behavior_progress);
-
-// for (let k in behavior_progress){
-//     console.log(k);
-//     console.log(behavior_progress[k]['background_color']);
-//     console.log(behavior_progress[k]['border_color']);
-//     console.log(behavior_progress[k]['data']);
-// }
 
 const graph_data = [];
 for (let b in behavior_progress){
@@ -156,15 +148,22 @@ let chart = new Chart(ctx, {
 
 <ul id="behavior_progress">
     {% for item in progress %}
-        <li> Progress Report: <br>
-             Date: {{ item.date }}<br>
-             Behavior: {{ item.behavior.behavior_name }}<br>
-             Intervention: {{ item.intervention.intervention_name }}<br>
-             User_id: {{ item.user_id }}<br>
-             Rating: {{ item.rating }}<br>
-             Comment: {{ item.comment }}<br>
-             <br>
-        </li>
+    <p>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#item" aria-expanded="false" aria-controls="collapseExample">{{ item.date.strftime('%b %d, %Y') }}
+        </button>
+    </p>
+        <div class="collapse" id="item">
+            <div class="card card-body">
+               <li> Progress Report: <br>
+                    Date: {{ item.date.strftime('%b %d, %Y') }}<br>
+                    Behavior: {{ item.behavior.behavior_name }}<br>
+                    Intervention: {{ item.intervention.intervention_name }}<br>
+                    User_id: {{ item.user_id }}<br>
+                    Rating: {{ item.rating }}<br>
+                    Comment: {{ item.comment }}<br>
+                </li>
+            </div>
+        </div>
     {% endfor %}
 </ul>
 

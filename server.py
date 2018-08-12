@@ -9,13 +9,13 @@ from model import connect_to_db, db
 from pprint import pprint
 import os
 import json
+from twilio.rest import Client
 
 app = Flask(__name__)
 
 app.secret_key = os.environ["SERVER_APP_SECRET_KEY"]
 
 app.jinja_env.undefined = StrictUndefined
-
 
 @app.route('/')
 def index():
@@ -219,7 +219,7 @@ def behavior_history(student_id):
 
     #create dictionary with data formatted for charts.js
     behavior_progress = {}
-    colors = ['red', 'yellow', 'green', 'blue', 'orange', 'purple']
+    colors = ['red', 'yellow', 'blue', 'green', 'orange', 'purple']
     ratings = []
     for report in progress:
         if report.behavior.behavior_name not in behavior_progress.keys():
@@ -229,7 +229,7 @@ def behavior_history(student_id):
                 'data': [report.rating]}
         else:
             behavior_progress[report.behavior.behavior_name]['data'].append(report.rating)
-        behavior_progress[report.behavior.behavior_name]['data'] = behavior_progress[report.behavior.behavior_name]['data'][:8]
+            behavior_progress[report.behavior.behavior_name]['data'] = behavior_progress[report.behavior.behavior_name]['data'][:8]
 
     behavior_progress_json = json.dumps(behavior_progress, default=str)
 
@@ -619,6 +619,25 @@ def add_behavior():
     db.session.commit()
 
     return redirect('/behaviors')
+
+
+@app.route("/send_progress")
+def send_progress():
+    """sends progress report to parent"""
+
+    account_sid = os.environ["ACCOUNT_SID_KEY"]
+    auth_token = os.environ["AUTH_TOKEN"]
+    client = Client(account_sid, auth_token)
+
+    user_id = session["user_id"]
+
+    message = client.messages.create(
+                              body='Hello there!',
+                              from_='+12486218673',
+                              to='+13132589798'
+                            )
+
+    print(message.sid)
 
 
 if __name__ == "__main__":
