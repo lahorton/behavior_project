@@ -136,20 +136,39 @@ def student_history(student_id):
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
 
+
+
+
     # #in this nested dictionary, each of the student's behaviors is a dictionary key with a nested dictionary
     # #that contains list of progress report dates as the value of 'dates' and a list of corresponding progress ratings
     # #as the values of 'ratings'.
+
     behaviors = {}
     inner_dict = {}
 
     for report in progress:
         # behaviors[report.behavior.behavior_name] = {}
+        report.date = report.date.strftime("%B %d, %Y")
         if report.behavior.behavior_name not in behaviors.keys():
             # behaviors[report.behavior.behavior_name] = inner_dict
-            behaviors[report.behavior.behavior_name] = {'dates': [report.date], 'ratings': [report.rating]}
+            behaviors[report.behavior.behavior_name] = {'reports': [(report.date, report.rating, report.comment)]}
         else:
-            behaviors[report.behavior.behavior_name]['dates'].append(report.date),
-            behaviors[report.behavior.behavior_name]['ratings'].append(report.rating)
+            behaviors[report.behavior.behavior_name]['reports'].append((report.date, report.rating, report.comment))
+
+
+    # b_p_l = []
+    # i = 0
+    # while i < len(behaviors):
+    #     for behavior in behaviors:
+    #         b_p = (behaviors[behavior]['dates'][i], behaviors[behavior]['ratings'][i], behaviors[behavior]['comments'][i])
+    #         b_p_l.append(b_p)
+    #         i += 1
+
+    # print(b_p_l)
+    print("<<<<<<<<<<<<")
+    print(behaviors)
+    print("<<<<<<<<<<<<")
+
 
     #create dictionary with data formatted for charts.js
     chart_data = {}
@@ -307,11 +326,29 @@ def add_progress(student_id):
     behavior_progress = Progress.query.filter(Progress.student_id==student_id, Progress.behavior_id==behavior_id).order_by(Progress.intervention_id).all()
 
     print("<<<<<<<<<<<")
-    print(len(behavior_progress))
     print(behavior_progress)
 
+    #creates a dictionary sorting progress reports by behavior.
+    progress_dict = {}
+    for progress in behavior_progress:
+        if progress.behavior_id not in progress_dict:
+            progress_dict[progress.behavior_id] = {'Date': [progress.date],
+                                                   'Intervention': [progress.intervention_id],
+                                                   'Rating': [progress.rating],
+                                                   'Comment': [progress.comment]}
+        else:
+            progress_dict[progress.behavior_id]['Date'].append(progress.date)
+            progress_dict[progress.behavior_id]['Intervention'].append(progress.intervention_id)
+            progress_dict[progress.behavior_id]['Rating'].append(progress.rating)
+            progress_dict[progress.behavior_id]['Comment'].append(progress.comment)
+
+    print(progress_dict)
+
+    # if len(progress_dict[progress.behavior_id]["Intervention"]) < 6:
+    #     flash(f"You've tried {progress_dict[progress.behavior_id]["Intervention"]} {len(progress_dict[progress.behavior_id]["Intervention"])} times.")
+
     # creates a dictionary with intervention_ids as key and number of times they've been used as values.
-    intervents= {}
+    intervents = {}
     for progress in behavior_progress:
         if progress.intervention_id in intervents:
             intervents[progress.intervention_id] = intervents[progress.intervention_id] + 1
@@ -320,29 +357,52 @@ def add_progress(student_id):
 
     print("<<<<<<<<<<<")
     print(intervents)
+    print(behavior_id)
+    print("intervention id:")
+    print(intervention_id)
+    print(intervents.keys())
+    print("<<<<<<<<<<<")
 
-#
-    #checks to see if there have been at least 6 progress reports for that behavior with the same intervention.
-    
-# the below is happening even if the intervention id IS in the dictionary...FIX THIS!
-    if intervention_id not in intervents.keys():
-        # if the intervention id is not in the dictionary, check and see if there's another intervention we should try a little longer.
-        for item in intervents.items():
-            if item[1] < 6:
-                # It would be nice to include the name of the intervention to tell them to keep trying it - use item[0] but connect it to the inter name, not id.
-                # make a dif dictionary to connect intervent_id with intervent_name (it's on the intervention page, i think.)
-                flash(f"We notice you've only tried {item[0]} {item[1]} times.")
-        flash("We highly reccommend applying the same intervention to the targeted behavior at least 6 times before changing interventions.")
-        return redirect(f"/student_history/{student_id}")
-
-    # adds progress report to database.
     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
                         intervention_id=intervention_id, user_id=user_id, rating=rating,
                         comment=comment)
-
     db.session.add(progress)
     db.session.commit()
-    return redirect(f"/student_history/{student_id}")
+
+    return redirect(f"/student_history/{student_id}", progress_dict)
+
+    # FIX BELOW IF YOU WANT TO LIMIT CHANGING OF INTERVENTIONS.
+
+    # # #checks the number of progress reports with that intervention and reccomends an evaluation after 6 progress reports.
+    # # if intervention_id in intervents:
+    # #     print("IT'S IN THE DICTIONARY!")
+    # #     # if the intervention id is in the dictionary, check and see how many times it's been used.
+    # #     if intervents[intervention_id] < 6:
+    # #         flash(f"This is the {intervents[intervention_id]} time you've tried {intervention_id}.")
+    # #         flash("We reccommend applying the same intervention to the targeted behavior at least 6 times before changing interventions.")
+    # #     else:
+    # #         flash(f"You've tried {intervention_id} {intervents[intervention_id]} times.  It's a good time to evaluate your progress!")
+
+    #     # adds progress report to database.
+    #     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
+    #                         intervention_id=intervention_id, user_id=user_id, rating=rating,
+    #                         comment=comment)
+    #     db.session.add(progress)
+    #     db.session.commit()
+
+    #     return redirect(f"/student_history/{student_id}")
+
+    # #if there have not been 6 progress reports with the same intervention, and another intervention is attempted
+    # #cancel the report and prompt the user to try the same intervention longer.
+    # else:
+    #     print("The intervention isn't in the dictionary.")
+    #     for item in intervents.items():
+    #         if item[1] < 6:
+    #             # It would be nice to include the name of the intervention to tell them to keep trying it - use item[0] but connect it to the inter name, not id.
+    #             # make a dif dictionary to connect intervent_id with intervent_name (it's on the intervention page, i think.)
+    #             flash(f"We notice you've only tried {item[0]} {item[1]} times.")
+    #     flash("We highly reccommend applying the same intervention to the targeted behavior at least 6 times before changing interventions.")
+    #     return redirect(f"/student_history/{student_id}")
 
 
 @app.route("/add_student")

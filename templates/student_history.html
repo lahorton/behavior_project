@@ -143,21 +143,18 @@ let chart = new Chart(ctx, {
 
 </script>
 
+
 <h3> Progress Reports: </h3>
 
-<ul id="student_progress">
-    {% for item in progress %}
-        <li> Progress Report: <br>
-             Date: {{ item.date }}<br>
-             Behavior: {{ item.behavior.behavior_name }}<br>
-             Intervention: {{ item.intervention.intervention_name }}<br>
-             User_id: {{ item.user_id }}<br>
-             Rating: {{ item.rating }}<br>
-             Comment: {{ item.comment }}<br>
-             <br>
-        </li>
-    {% endfor %}
+<ul id="progress reports">
+  {% for behavior in behaviors %}
+    <strong>{{ behavior }}:</strong> <br>
+    {% for info in behaviors[behavior]['reports'] %} 
+      <li>Date: {{ info[0] }}, Rating: {{ info[1] }}, Comment: {{ info[2] }}</li>
+    {% endfor %}<br>
+  {% endfor %}
 </ul>
+
 
 
 {% endblock %} 
