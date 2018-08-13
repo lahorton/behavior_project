@@ -149,14 +149,14 @@ let chart = new Chart(ctx, {
 <ul id="progress reports">
 <p>
   {% for behavior in behaviors %}
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ behavior }}" aria-expanded="false" aria-controls="collapse">{{ behavior }}<br>
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ behavior|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapse">{{ behavior }}<br>
   </button>
   {% endfor %}
 </p>
 
   {% for behavior in behaviors %}
     {% for info in behaviors[behavior]['reports'] %} 
-        <div class="collapse" id="{{ behavior }}">
+        <div class="collapse" id="{{ behavior|replace(" ", "_") }}">
             <div class="card card-body">
                 <li>Date: {{ info[0] }}, Rating: {{ info[1] }}, Comment: {{ info[2] }}</li>
             </div>

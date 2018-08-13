@@ -344,9 +344,6 @@ def add_progress(student_id):
 
     print(progress_dict)
 
-    # if len(progress_dict[progress.behavior_id]["Intervention"]) < 6:
-    #     flash(f"You've tried {progress_dict[progress.behavior_id]["Intervention"]} {len(progress_dict[progress.behavior_id]["Intervention"])} times.")
-
     # creates a dictionary with intervention_ids as key and number of times they've been used as values.
     intervents = {}
     for progress in behavior_progress:
@@ -360,49 +357,29 @@ def add_progress(student_id):
     print(behavior_id)
     print("intervention id:")
     print(intervention_id)
-    print(intervents.keys())
-    print("<<<<<<<<<<<")
+    # print("<<<<<<<<<<<")
 
+    #checks the number of progress reports with that intervention and reccomends an evaluation after 6 progress reports.
+    if intervention_id not in intervents:
+        print("IT'S NOT IN THE DICTIONARY!")
+        # if the intervention id is in the dictionary, check and see how many times it's been used.
+        for item in intervents:
+            if intervents[item] < 6:
+                flash(f"This is the {intervents[item]} time you've tried {item}.")
+                flash("We reccommend applying the same intervention to the targeted behavior at least 6 times before changing interventions.")
+            return redirect(f"/student_history/{student_id}")
+            # else:
+            #     flash(f"You've tried {intervention_id} {intervents[item]} times.  It's a good time to evaluate your progress!")
+
+    # if intervention_id is in the dictionary or we've tried other interventions
+    # at least 6 times, update it to add progress report to database.
     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
                         intervention_id=intervention_id, user_id=user_id, rating=rating,
                         comment=comment)
     db.session.add(progress)
     db.session.commit()
 
-    return redirect(f"/student_history/{student_id}", progress_dict)
-
-    # FIX BELOW IF YOU WANT TO LIMIT CHANGING OF INTERVENTIONS.
-
-    # # #checks the number of progress reports with that intervention and reccomends an evaluation after 6 progress reports.
-    # # if intervention_id in intervents:
-    # #     print("IT'S IN THE DICTIONARY!")
-    # #     # if the intervention id is in the dictionary, check and see how many times it's been used.
-    # #     if intervents[intervention_id] < 6:
-    # #         flash(f"This is the {intervents[intervention_id]} time you've tried {intervention_id}.")
-    # #         flash("We reccommend applying the same intervention to the targeted behavior at least 6 times before changing interventions.")
-    # #     else:
-    # #         flash(f"You've tried {intervention_id} {intervents[intervention_id]} times.  It's a good time to evaluate your progress!")
-
-    #     # adds progress report to database.
-    #     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
-    #                         intervention_id=intervention_id, user_id=user_id, rating=rating,
-    #                         comment=comment)
-    #     db.session.add(progress)
-    #     db.session.commit()
-
-    #     return redirect(f"/student_history/{student_id}")
-
-    # #if there have not been 6 progress reports with the same intervention, and another intervention is attempted
-    # #cancel the report and prompt the user to try the same intervention longer.
-    # else:
-    #     print("The intervention isn't in the dictionary.")
-    #     for item in intervents.items():
-    #         if item[1] < 6:
-    #             # It would be nice to include the name of the intervention to tell them to keep trying it - use item[0] but connect it to the inter name, not id.
-    #             # make a dif dictionary to connect intervent_id with intervent_name (it's on the intervention page, i think.)
-    #             flash(f"We notice you've only tried {item[0]} {item[1]} times.")
-    #     flash("We highly reccommend applying the same intervention to the targeted behavior at least 6 times before changing interventions.")
-    #     return redirect(f"/student_history/{student_id}")
+    return redirect(f"/student_history/{student_id}")
 
 
 @app.route("/add_student")
