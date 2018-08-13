@@ -3,21 +3,26 @@
 
 <a href="/student_history/{{ student.student_id }}" name="student_history"> Return to student history!</a><br>
 
-<h2> Behavior Progress: </h2>
+<h4> Behavior Progress: </h4>
 
 <p>Student Name: {{ student.fname }} {{ student.lname }}</p>
-<p>Behavior: {{ behavior.behavior_name }}</p>
-<p>Behavior Description:</p>
-<ul id="behavior_description">
+
+
+<div class="collapse" id="{{ behavior.behavior_name|replace(" ", "_") }}">
+  <div class="card card-body">
+    <ul id="behavior_description">
     {% for description in behavior_description %}
         <li> {{ description }} <br>
         </li>
     {% endfor %}
-</ul>
+    </ul>
+  </div>
+</div>
+
 
 <div class="container">
-    <h3>Behavior Progress Chart</h3>
-    <div>
+<!--     <h3>Behavior Progress Chart</h3>
+ -->    <div>
         <canvas id="myChart"></canvas>
     </div>
 </div>
@@ -71,6 +76,10 @@ let chart = new Chart(ctx, {
     });
 </script>
 
+
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ behavior.behavior_name|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapseExample">
+{{ behavior.behavior_name }}
+</button>
 
 <!-- Button trigger addProgressModal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProgressModal">Add a Progress Report
