@@ -153,7 +153,7 @@ def student_history(student_id):
 
     #create dictionary with data formatted for charts.js
     chart_data = {}
-    colors = ['red', 'yellow', 'green', 'blue', 'orange', 'purple']
+    colors = ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC']
     for report in progress:
         if report.behavior.behavior_name not in chart_data.keys():
             chart_data[report.behavior.behavior_name] = {
@@ -162,9 +162,10 @@ def student_history(student_id):
                           'background_color' : random.choice(colors),
                           'border_color' : random.choice(colors),
                           'data' : [report.rating]}
+            colors.remove(chart_data[report.behavior.behavior_name]['background_color'])
         else:
             chart_data[report.behavior.behavior_name]['data'].append(report.rating)
-        chart_data[report.behavior.behavior_name]['data'] = chart_data[report.behavior.behavior_name]['data'][:8]
+            chart_data[report.behavior.behavior_name]['data'] = chart_data[report.behavior.behavior_name]['data'][:8]
 
     chart_json = json.dumps(chart_data, default=str)
 
@@ -200,7 +201,8 @@ def behavior_history(student_id):
 
     #create dictionary with data formatted for charts.js
     behavior_progress = {}
-    colors = ['red', 'yellow', 'blue', 'green', 'orange', 'purple']
+    # colors = ['red', 'yellow', 'blue', 'green', 'orange', 'purple']
+    colors = ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC']
     ratings = []
     for report in progress:
         if report.behavior.behavior_name not in behavior_progress.keys():
@@ -347,7 +349,7 @@ def add_progress(student_id):
     elif int(intervention_id) in intervents.keys():
     # if intervention_id is in the dictionary update it to add progress report to database.
         # if int(intervents[intervention_id]) > 6:
-        #     flash(f"You've tried this intervention {intervents[intervention_id]} times.  It's a good time to evaluate progress.")
+        # flash(f"You've tried this intervention {intervents[intervention_id]} times.  It's a good time to evaluate progress.")
         progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
                             intervention_id=intervention_id, user_id=user_id, rating=rating,
                             comment=comment)
@@ -579,17 +581,12 @@ def send_progress():
 
     user_id = session["user_id"]
 
-    parent_number = request.args.get("parent_number")
+    # Gets the number, message and report from the form
+    parent_number = request.args.get("parent_number").strip("- ")
     comment = request.args.get("comment")
     report = request.args.get("report")
 
-    report = comment + " " + report
-    print(">>>>>>>>>>>>>PARENT NUMBER>>>>>>>>>>>>")
-    print(parent_number)
-    print(">>>>>>>>>>>>>")
-
-    # ADD A FILTER TO REMOVE ANY DASHES or SPACES.
-    # parent_number = int(parent_number)
+    report = "Progress Report Update: " + comment + " " + report
 
     account_sid = os.environ["ACCOUNT_SID_KEY"]
     auth_token = os.environ["AUTH_TOKEN"]
@@ -606,7 +603,6 @@ def send_progress():
     print(message.sid)
     return redirect(f"/user_info/{user_id}")
     # return redirect(f"/student_history/{student_id}")
-
 
 
 if __name__ == "__main__":
