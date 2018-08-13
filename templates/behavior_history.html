@@ -144,6 +144,58 @@ let chart = new Chart(ctx, {
 </script>
 
 
+
+<!-- Button trigger send SMS -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sendSMSModal">Text Progress Report Home
+</button>
+
+
+<!-- Add SMS # Form Modal -->
+<div class="modal fade" id="sendSMSModal" tabindex="-1" role="dialog" aria-labelledby="sendSMSModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Send a text</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/send_progress" method="GET">
+        <div>
+        Enter Phone Number:
+        <input type="text" name="parent_number"><br>
+        </div>
+        <div>
+        Enter Message:
+        <input type="text" name="comment"><br>
+        </div>
+        <fieldset>
+            <legend>Progress Report:</legend><br>
+            {% for item in progress %}
+                <input type="radio" name="report", 
+                    value=" Progress Report:
+                    Date: {{ item.date.strftime('%b %d, %Y') }}
+                    Behavior: {{ item.behavior.behavior_name }}
+                    Intervention: {{ item.intervention.intervention_name }}
+                    User_id: {{ item.user_id }}
+                    Rating: {{ item.rating }}
+                    Comment: {{ item.comment }}"
+                >{{ item.date.strftime('%b %d, %Y') }}
+                <br>
+            {% endfor %}
+            <br>
+        </fieldset>
+      </div>
+      <div class="modal-footer">
+        <input type="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <h2>Progresss History</h2>
 
 <ul id="behavior_progress">

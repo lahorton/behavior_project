@@ -151,21 +151,6 @@ def student_history(student_id):
         else:
             behaviors[report.behavior.behavior_name]['reports'].append((report.date, report.rating, report.comment))
 
-
-    # b_p_l = []
-    # i = 0
-    # while i < len(behaviors):
-    #     for behavior in behaviors:
-    #         b_p = (behaviors[behavior]['dates'][i], behaviors[behavior]['ratings'][i], behaviors[behavior]['comments'][i])
-    #         b_p_l.append(b_p)
-    #         i += 1
-
-    # print(b_p_l)
-    print("<<<<<<<<<<<<")
-    print(behaviors)
-    print("<<<<<<<<<<<<")
-
-
     #create dictionary with data formatted for charts.js
     chart_data = {}
     colors = ['red', 'yellow', 'green', 'blue', 'orange', 'purple']
@@ -592,6 +577,20 @@ def add_behavior():
 def send_progress():
     """sends progress report to parent"""
 
+    user_id = session["user_id"]
+
+    parent_number = request.args.get("parent_number")
+    comment = request.args.get("comment")
+    report = request.args.get("report")
+
+    report = comment + " " + report
+    print(">>>>>>>>>>>>>PARENT NUMBER>>>>>>>>>>>>")
+    print(parent_number)
+    print(">>>>>>>>>>>>>")
+
+    # ADD A FILTER TO REMOVE ANY DASHES or SPACES.
+    # parent_number = int(parent_number)
+
     account_sid = os.environ["ACCOUNT_SID_KEY"]
     auth_token = os.environ["AUTH_TOKEN"]
     client = Client(account_sid, auth_token)
@@ -599,12 +598,15 @@ def send_progress():
     user_id = session["user_id"]
 
     message = client.messages.create(
-                              body='Hello there!',
+                              body=report,
                               from_='+12486218673',
-                              to='+13132589798'
+                              to=parent_number
                             )
 
     print(message.sid)
+    return redirect(f"/user_info/{user_id}")
+    # return redirect(f"/student_history/{student_id}")
+
 
 
 if __name__ == "__main__":

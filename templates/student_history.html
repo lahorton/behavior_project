@@ -141,6 +141,7 @@ let chart = new Chart(ctx, {
         }
     });
 
+
 </script>
 
 
@@ -165,6 +166,35 @@ let chart = new Chart(ctx, {
   {% endfor %}
 </ul>
 
+<script>
 
+// function getNumber(){
+//     $.get("/send_progress", function(
+//     })
+// }
+// Event handler to send a sms to parent 
+// let sms_button = document.querySelector('#sms_button');
+
+
+// function sendProgress(){
+//     // sends progress report to parent
+//     const accountSid = os.environ["ACCOUNT_SID_KEY"];
+//     const authToken = os.environ["AUTH_TOKEN"];
+//     const client = require('twilio')(accountSid, authToken);
+
+//     client.messages
+//         .create({
+//             body: 'PUT THE PROGRESS REPORT HERE',
+//             from: '+12486218673',
+//             to: '+13132589798'
+//         })
+//         .then(message => console.log(message.sid))
+//         .done();
+// };
+
+// sms_button.addEventListener('click', sendProgress);
+
+
+</script>
 
 {% endblock %} 
