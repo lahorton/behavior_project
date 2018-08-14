@@ -10,6 +10,7 @@ from pprint import pprint
 import os
 import json
 from twilio.rest import Client
+from sqlalchemy import update
 
 app = Flask(__name__)
 
@@ -614,6 +615,32 @@ def send_progress(student_id):
                             )
 
     print(message.sid)
+    return redirect(f"/student_history/{student_id}")
+
+
+@app.route("/edit_student/<student_id>", methods=["POST"])
+def edit_student_profile(student_id):
+    """allows user to edit student profile"""
+
+    # get student object
+    student = Student.query.get(student_id)
+
+    phone_number = request.form.get("phone_number").strip("- ")
+    birthdate = request.form.get("birthdate")
+
+    # check to see if form is filled out or keep previous values.
+    if phone_number is None:
+        student.phone_number = student.phone_number
+    else:
+        student.phone_number = phone_number.strip("- ")
+
+    if birthdate == '':
+        student.birthdate = student.birthdate
+    else:
+        student.birthdate = birthdate
+
+    db.session.commit()
+
     return redirect(f"/student_history/{student_id}")
 
 
