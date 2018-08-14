@@ -328,8 +328,23 @@ def add_progress(student_id):
         else:
             intervents[progress.intervention_id] = 1
 
+    print(">>>>>>>>>>>>")
+    print(intervention_id)
+    print(behavior_id)
+    print(intervents)
+    print(">>>>>>>>>>>>")
+
     #checks the number of progress reports with that intervention and reccomends an evaluation after 6 progress reports.
-    if int(intervention_id) not in intervents.keys():
+    if intervents == {}:
+        progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
+                            intervention_id=intervention_id, user_id=user_id, rating=rating,
+                            comment=comment)
+        db.session.add(progress)
+        db.session.commit()
+
+        return redirect(f"/student_history/{student_id}")
+
+    elif (int(intervention_id) not in intervents.keys()):
         print("IT'S NOT IN THE DICTIONARY!")
         # if the intervention id is in the dictionary, check and see how many times it's been used.
         for item in intervents:
@@ -346,7 +361,7 @@ def add_progress(student_id):
                 db.session.commit()
                 return redirect(f"/student_history/{student_id}")
 
-    elif int(intervention_id) in intervents.keys():
+    elif (int(intervention_id) in intervents.keys()):
     # if intervention_id is in the dictionary update it to add progress report to database.
         # if int(intervents[intervention_id]) > 6:
         # flash(f"You've tried this intervention {intervents[intervention_id]} times.  It's a good time to evaluate progress.")
@@ -357,6 +372,15 @@ def add_progress(student_id):
         db.session.commit()
 
         return redirect(f"/student_history/{student_id}")
+
+    # elif intervents == None:
+    #     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
+    #                         intervention_id=intervention_id, user_id=user_id, rating=rating,
+    #                         comment=comment)
+    #     db.session.add(progress)
+    #     db.session.commit()
+
+    #     return redirect(f"/student_history/{student_id}")
 
 
 @app.route("/add_student")

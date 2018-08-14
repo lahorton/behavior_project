@@ -26,11 +26,13 @@ def load_students():
 
     fake = Faker()
 
-    for student in range(50):
+    for student in range(500):
         fname = fake.first_name()
         lname = fake.last_name()
         birthdate = fake.date_of_birth(tzinfo=None, minimum_age=5, maximum_age=18)
         user_id = random.randint(1, 20)
+        # phone_number = fake.phone_number()
+        # photo = still figuring this out.
         student = Student(fname=fname, lname=lname, birthdate=birthdate, user_id=user_id)
         db.session.add(student)
 
@@ -118,7 +120,7 @@ def load_progress():
     #generates random user_id
     all_users = db.session.query(User.user_id).all()
 
-    for progress in range(50):
+    for progress in range(5000):
         student_id = random.choice(all_students)
         behavior_id = random.choice(all_behaviors)
         intervention_id = random.choice(all_interventions)

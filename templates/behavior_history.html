@@ -8,18 +8,6 @@
 <p>Student Name: {{ student.fname }} {{ student.lname }}</p>
 
 
-<div class="collapse" id="{{ behavior.behavior_name|replace(" ", "_") }}">
-  <div class="card card-body">
-    <ul id="behavior_description">
-    {% for description in behavior_description %}
-        <li> {{ description }} <br>
-        </li>
-    {% endfor %}
-    </ul>
-  </div>
-</div>
-
-
 <div class="container">
 <!--     <h3>Behavior Progress Chart</h3>
  -->    <div>
@@ -80,6 +68,17 @@ let chart = new Chart(ctx, {
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ behavior.behavior_name|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapseExample">
 {{ behavior.behavior_name }}
 </button>
+
+<div class="collapse" id="{{ behavior.behavior_name|replace(" ", "_") }}">
+  <div class="card card-body">
+    <ul id="behavior_description">
+    {% for description in behavior_description %}
+        <li> {{ description }} <br>
+        </li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
 
 <!-- Button trigger addProgressModal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProgressModal">Add a Progress Report
