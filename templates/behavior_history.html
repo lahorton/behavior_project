@@ -99,11 +99,8 @@ let chart = new Chart(ctx, {
         </button>
       </div>
       <div class="modal-body">
-        <form action = "/send_progress" method="GET">
-        <div>
-        Enter Phone Number:
-        <input type="text" name="parent_number"><br>
-        </div>
+        <form action = "/send_progress/{{ student.student_id }}" method="GET">
+        
         <div>
         Enter Message:
         <input type="text" name="comment"><br>

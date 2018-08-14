@@ -108,7 +108,7 @@ def user_info(user_id):
     user_name = user.user_name
     user_id = user.user_id
 
-    #This gives you a list of the student objects.  Use SQLAlchemy to reference attributes of each student
+    #This gives you a list of the student objects, so you can reference attributes of each student
     students = user.students
 
     # generates list of student names for the user
@@ -328,12 +328,6 @@ def add_progress(student_id):
         else:
             intervents[progress.intervention_id] = 1
 
-    print(">>>>>>>>>>>>")
-    print(intervention_id)
-    print(behavior_id)
-    print(intervents)
-    print(">>>>>>>>>>>>")
-
     #checks the number of progress reports with that intervention and reccomends an evaluation after 6 progress reports.
     if intervents == {}:
         progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
@@ -345,7 +339,6 @@ def add_progress(student_id):
         return redirect(f"/student_history/{student_id}")
 
     elif (int(intervention_id) not in intervents.keys()):
-        print("IT'S NOT IN THE DICTIONARY!")
         # if the intervention id is in the dictionary, check and see how many times it's been used.
         for item in intervents:
             # if other interventions have been tried <6 times, don't add the new intervention.
@@ -373,14 +366,6 @@ def add_progress(student_id):
 
         return redirect(f"/student_history/{student_id}")
 
-    # elif intervents == None:
-    #     progress = Progress(student_id=student_id, date=date, behavior_id=behavior_id,
-    #                         intervention_id=intervention_id, user_id=user_id, rating=rating,
-    #                         comment=comment)
-    #     db.session.add(progress)
-    #     db.session.commit()
-
-    #     return redirect(f"/student_history/{student_id}")
 
 
 @app.route("/add_student")
@@ -398,8 +383,9 @@ def add_student():
     lname = request.form.get("lname").strip().capitalize()
     user_id = session["user_id"]
     birthdate = request.form.get("birthdate")
+    phone_number = request.form.get("phone")
 
-    student = Student(fname=fname, lname=lname, user_id=user_id, birthdate=birthdate)
+    student = Student(fname=fname, lname=lname, user_id=user_id, birthdate=birthdate, phone_number=phone_number)
     db.session.add(student)
     db.session.commit()
     return redirect(f"/user_info/{user_id}")
@@ -599,17 +585,20 @@ def add_behavior():
     return redirect('/behaviors')
 
 
-@app.route("/send_progress")
-def send_progress():
+@app.route("/send_progress/<student_id>")
+def send_progress(student_id):
     """sends progress report to parent"""
 
     user_id = session["user_id"]
 
-    # Gets the number, message and report from the form
-    parent_number = request.args.get("parent_number").strip("- ")
+    # get student object
+    student = Student.query.get(student_id)
+
+    # Gets the number saved for student in the database
+    phone_number = student.phone_number.strip("- ")
+    # Gets the message and report from the form
     comment = request.args.get("comment")
     report = request.args.get("report")
-
     report = "Progress Report Update: " + comment + " " + report
 
     account_sid = os.environ["ACCOUNT_SID_KEY"]
@@ -621,12 +610,11 @@ def send_progress():
     message = client.messages.create(
                               body=report,
                               from_='+12486218673',
-                              to=parent_number
+                              to=phone_number
                             )
 
     print(message.sid)
-    return redirect(f"/user_info/{user_id}")
-    # return redirect(f"/student_history/{student_id}")
+    return redirect(f"/student_history/{student_id}")
 
 
 if __name__ == "__main__":

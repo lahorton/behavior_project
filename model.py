@@ -55,8 +55,8 @@ class Student(db.Model):
     fname = db.Column(db.String(50), nullable=False)
     lname = db.Column(db.String(50), nullable=False)
     birthdate = db.Column(db.DateTime, nullable=False)
-    # phone_number = db.Column(db.Integer, nullable=True)
-    # twilio will only send sms to valid phone numbers
+    # twilio api will only send sms to valid phone numbers - so for demo my number is connected to all students.
+    phone_number = db.Column(db.String(15), nullable=False)
     # photo = w sqlalchemy imageattach or with random user generator api
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
 

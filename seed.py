@@ -31,9 +31,9 @@ def load_students():
         lname = fake.last_name()
         birthdate = fake.date_of_birth(tzinfo=None, minimum_age=5, maximum_age=18)
         user_id = random.randint(1, 20)
-        # phone_number = fake.phone_number()
+        phone_number = '3132589798'
         # photo = still figuring this out.
-        student = Student(fname=fname, lname=lname, birthdate=birthdate, user_id=user_id)
+        student = Student(fname=fname, lname=lname, birthdate=birthdate, phone_number=phone_number, user_id=user_id)
         db.session.add(student)
 
     db.session.commit()
