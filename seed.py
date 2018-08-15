@@ -5,6 +5,8 @@ import random
 from datetime import datetime
 from faker import Faker
 from model import connect_to_db, db
+import json
+import pprint
 
 
 def load_users():
@@ -26,13 +28,19 @@ def load_students():
 
     fake = Faker()
 
+    json_string = open("random_pics.json").read()
+    pic_dict = json.loads(json_string)
+
     for student in range(500):
         fname = fake.first_name()
         lname = fake.last_name()
         birthdate = fake.date_of_birth(tzinfo=None, minimum_age=5, maximum_age=18)
         user_id = random.randint(1, 20)
         phone_number = '3132589798'
-        photo = '/static/images/cage.jpg'
+        pic = random.choice(pic_dict['results'])
+        photo = pic['picture']['thumbnail']
+        del pic
+        # photo = '/static/images/cage.jpg'
         student = Student(fname=fname, lname=lname, birthdate=birthdate,
                           phone_number=phone_number, photo=photo, user_id=user_id)
         db.session.add(student)

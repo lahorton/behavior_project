@@ -57,7 +57,7 @@ class Student(db.Model):
     birthdate = db.Column(db.DateTime, nullable=False)
     # twilio api will only send sms to valid phone numbers - so for demo my number is connected to all students.
     phone_number = db.Column(db.String(15), nullable=False)
-    photo = db.Column(db.String(400), nullable=True)
+    photo = db.Column(db.String(600), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
 
     progress = db.relationship("Progress")
