@@ -30,7 +30,7 @@
 </button>
 
 
-<!-- Button trigger addProgressModal -->
+<!-- Button trigger editStudentProfile -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editStudentProfile">Edit Student Profile
 </button>
 
@@ -121,6 +121,10 @@
         <p>Student ID: {{ student.student_id }}</P>
         <p>Current phone number: {{ student.phone_number }}</P>
         <p>Birthdate: {{ student.birthdate }}</P>
+        <div>
+        First Name:
+        <input type="text" name="fname"><br>
+        </div>
         <div>
         Student birthdate:
         <input type="date" name="birthdate"><br>

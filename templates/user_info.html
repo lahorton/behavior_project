@@ -10,6 +10,10 @@
 Add a student
 </button>
 
+<!-- Button trigger editUserProfile -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editUserPassword">Reset User Password
+</button>
+
 <p> Click on Student ID to see student progress history: </p>
 
 <ul id="student_info">
@@ -52,6 +56,41 @@ Add a student
     </div>
   </div>
 </div>
+
+
+
+<!-- Edit user password Modal -->
+<div class="modal fade" id="editUserPassword" tabindex="-1" role="dialog" aria-labelledby="editUserPassword" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Reset User Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/edit_user/{{ user.user_id }}" method="POST">
+        <h2>{{ user.user_name }}</h2>
+        <div>
+        Please enter your current password:
+        <input type="text" name="current_password"><br>
+        </div>
+        <div>
+        New Password:
+        <input type="text" name="new_password"><br>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <input type="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <!-- 
 
 <div class="container">

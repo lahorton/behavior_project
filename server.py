@@ -175,11 +175,6 @@ def student_history(student_id):
     #gets list of all intervention objects from db:
     interventions = db.session.query(Intervention).all()
 
-    print(">>>>>>>>>>>>")
-    print(interventions)
-    print(">>>>>>>>>>>>")
-
-
     #gets list of all behavior objects from db:
     behaviors_list = db.session.query(Behavior).all()
 
@@ -304,12 +299,17 @@ def add_progress(student_id):
         intervent_name[intervention.intervention_id] = intervention.intervention_name
 
     # ADD IN CHECKS TO MAKE SURE ALL FIELDS ARE FILLED OUT
+
     date = request.form.get("date")
     behavior_id = request.form.get('behave')
     intervention_id = request.form.get("intervent")
     user_id = session["user_id"]
     rating = request.form.get("rating")
     comment = request.form.get("comment")
+
+    if date is '':
+        flash("Please select a date.")
+        return redirect(f"/student_history/{student_id}")
 
     #get progress objects matching the specified behavior for student:
     behavior_progress = Progress.query.filter(Progress.student_id==student_id, Progress.behavior_id==behavior_id).order_by(Progress.intervention_id).all()
@@ -393,6 +393,10 @@ def add_student():
     birthdate = request.form.get("birthdate")
     phone_number = request.form.get("phone")
     photo = request.form.get("photo")
+
+    if (fname is '') or (lname is '') or (phone_number is '') or (birthdate is ''):
+        flash("Please complete all fields of the student profile.")
+        return redirect(f"/user_info/{user_id}")
 
     student = Student(fname=fname, lname=lname, user_id=user_id, birthdate=birthdate, phone_number=phone_number, photo=photo)
     db.session.add(student)
@@ -633,11 +637,17 @@ def edit_student_profile(student_id):
     # get student object
     student = Student.query.get(student_id)
 
+    fname = request.form.get("fname").capitalize()
     phone_number = request.form.get("phone_number").strip("- ")
     birthdate = request.form.get("birthdate")
     photo = request.form.get("photo")
 
     # check to see if form is filled out or keep previous values.
+    if fname is '':
+        student.fname = student.fname
+    else:
+        student.fname = fname
+
     if phone_number is None:
         student.phone_number = student.phone_number
     else:
@@ -656,6 +666,29 @@ def edit_student_profile(student_id):
     db.session.commit()
 
     return redirect(f"/student_history/{student_id}")
+
+
+@app.route("/edit_user/<user_id>", methods=["POST"])
+def edit_user_profile(user_id):
+    """allows user to edit user profile"""
+
+    # get student object
+    user = User.query.get(user_id)
+    print(">>>>>>>>>>")
+    print(user)
+    print(">>>>>>>>>>")
+
+    current_password = request.form.get("current_password")
+    new_password = request.form.get("new_password").strip(" ")
+
+    # check to see if current password is correct:
+    if current_password == user.password:
+        user.password = new_password
+        db.session.commit()
+        return redirect(f"/user_info/{user_id}")
+    else:
+        flash("Your current password does not match our records.  Please try again.")
+        return redirect(f"/user_info/{user_id}")
 
 
 if __name__ == "__main__":

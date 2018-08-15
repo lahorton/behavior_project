@@ -149,23 +149,26 @@ let chart = new Chart(ctx, {
         Date:
         <input type="date" name="date"><br>
         </div>
-        <fieldset>
-            <legend>Behavior:</legend><br>
-            {% for behavior in behaviors_list %}
-                <input type="radio" name="behave", value="{{ behavior.behavior_id }}">
-                {{ behavior.behavior_name }}
-                <br>
-            {% endfor %}
+        <br>
+            <div>
+                Select the behavior you'd like to target:
+                <select name="behave">
+                {% for behavior in behaviors_list %}
+                    <option value="{{ behavior.behavior_id }}">{{ behavior.behavior_name }}</option>
+                {% endfor %}
+                </select>
+            </div>
             <br>
-        </fieldset>
-        <fieldset>
-            <legend>Intervention:</legend><br>
-            {% for intervention in interventions %}
-                <input type="radio" name="intervent", value="{{ intervention.intervention_id }}">{{ intervention.intervention_name }}
-                <br>
-            {% endfor %}
+            <div>
+                Select the intervention you'd like to use:
+                <select name="intervent">
+                {% for intervention in interventions %}
+                    <option value="{{ intervention.intervention_id }}">{{ intervention.intervention_name }}
+                    </option>
+                {% endfor %}
+                </select>
+            </div>
             <br>
-        </fieldset>
         <div>
             Rating (0-10:  0 is no progress, 10 is excellent progress):
             <select name="rating">
