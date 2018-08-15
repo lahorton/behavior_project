@@ -13,13 +13,14 @@ Add a student
 <p> Click on Student ID to see student progress history: </p>
 
 <ul id="student_info">
-    {% for student in student_info %}
-        <li> {{ student[0] }} {{ student[1] }}<br>
-             Student ID: <a href="/student_history/{{ student[2] }}" name="student_id"> {{ student[2] }}</a>
-             <br>
-        </li>
-    {% endfor %}
+{% for student in students %}
+    <li><a href="/student_history/{{ student.student_id }}" name="student_id">
+        {{ student.fname }} {{student.lname }}</a>
+        <p><img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
+    </li>
+{% endfor %}
 </ul>
+
 
 <!-- addStudent Form Modal -->
 <div class="modal fade" id="addStudent" tabindex="-1" role="dialog" aria-labelledby="addStudent" aria-hidden="true">
@@ -28,7 +29,7 @@ Add a student
       <div class="modal-header text-center">
         <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
@@ -41,6 +42,8 @@ Add a student
             <input type="date" name="birthdate"><br>
             Enter phone number:
             <input type="text" name="phone"><br>
+            Add a photo (link to jpg):
+            <input type="text" name="photo"><br>
       </div>
       <div class="modal-footer">
         <input type="Submit">
@@ -49,29 +52,29 @@ Add a student
     </div>
   </div>
 </div>
-
+<!-- 
 
 <div class="container">
     <div>
         <img src="" alt="photo cannot be displayed" id="picture">
     </div>
-</div>
+</div> -->
 
 <!-- This generates random photos as user profile photos -->
 <script>
 
-// uses ajax & jquery to generate random src linked to an image generator
-$.ajax({
-  url: 'https://randomuser.me/api/',
-  dataType: 'json',
-  success: function(data) {
-    console.log(data);
-    let photo = $('#picture');
-    photo.attr('src', data.results[0].picture.thumbnail);
-  }
-});
+// // uses ajax & jquery to generate random src linked to an image generator
+// $.ajax({
+//   url: 'https://randomuser.me/api/',
+//   dataType: 'json',
+//   success: function(data) {
+//     console.log(data);
+//     let photo = $('#picture');
+//     photo.attr('src', data.results[0].picture.thumbnail);
+//   }
+// });
 
 
-</script>
+// </script>
 
 {% endblock %}

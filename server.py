@@ -112,6 +112,8 @@ def user_info(user_id):
     #This gives you a list of the student objects, so you can reference attributes of each student
     students = user.students
 
+    print(students)
+
     # generates list of student names for the user
     student_info = []
     i = 0
@@ -172,6 +174,11 @@ def student_history(student_id):
 
     #gets list of all intervention objects from db:
     interventions = db.session.query(Intervention).all()
+
+    print(">>>>>>>>>>>>")
+    print(interventions)
+    print(">>>>>>>>>>>>")
+
 
     #gets list of all behavior objects from db:
     behaviors_list = db.session.query(Behavior).all()
@@ -385,8 +392,9 @@ def add_student():
     user_id = session["user_id"]
     birthdate = request.form.get("birthdate")
     phone_number = request.form.get("phone")
+    photo = request.form.get("photo")
 
-    student = Student(fname=fname, lname=lname, user_id=user_id, birthdate=birthdate, phone_number=phone_number)
+    student = Student(fname=fname, lname=lname, user_id=user_id, birthdate=birthdate, phone_number=phone_number, photo=photo)
     db.session.add(student)
     db.session.commit()
     return redirect(f"/user_info/{user_id}")
@@ -627,6 +635,7 @@ def edit_student_profile(student_id):
 
     phone_number = request.form.get("phone_number").strip("- ")
     birthdate = request.form.get("birthdate")
+    photo = request.form.get("photo")
 
     # check to see if form is filled out or keep previous values.
     if phone_number is None:
@@ -638,6 +647,11 @@ def edit_student_profile(student_id):
         student.birthdate = student.birthdate
     else:
         student.birthdate = birthdate
+
+    if photo == " ":
+        student.photo = student.photo
+    else:
+        student.photo = photo
 
     db.session.commit()
 

@@ -28,6 +28,7 @@ def load_students():
 
     fake = Faker()
 
+    # this is a file of random pics from the random image generator API
     json_string = open("random_pics.json").read()
     pic_dict = json.loads(json_string)
 
@@ -37,6 +38,7 @@ def load_students():
         birthdate = fake.date_of_birth(tzinfo=None, minimum_age=5, maximum_age=18)
         user_id = random.randint(1, 20)
         phone_number = '3132589798'
+        # this loads a random pic from the file to assign as a student image.
         pic = random.choice(pic_dict['results'])
         photo = pic['picture']['thumbnail']
         del pic

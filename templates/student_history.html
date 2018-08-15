@@ -47,52 +47,55 @@
       </div>
       <div class="modal-body">
         <form action = "/add_progress/{{ student.student_id }}" method="POST">
-        <div>
-        Date:
-        <input type="date" name="date"><br>
-        </div>
-        <fieldset>
-            <legend>Behavior:</legend><br>
-            {% for behavior in behaviors_list %}
-                <input type="radio" name="behave", value="{{ behavior.behavior_id }}">
-                {{ behavior.behavior_name }}
-                <br>
-            {% endfor %}
+            <div>
+            Date:
+            <input type="date" name="date"><br>
+            </div>
             <br>
-        </fieldset>
-        <fieldset>
-            <legend>Intervention:</legend><br>
-            {% for intervention in interventions %}
-                <input type="radio" name="intervent", value="{{ intervention.intervention_id }}">{{ intervention.intervention_name }}
-                <br>
-            {% endfor %}
+            <div>
+                Select the behavior you'd like to target:
+                <select name="behave">
+                {% for behavior in behaviors_list %}
+                    <option value="{{ behavior.behavior_id }}">{{ behavior.behavior_name }}</option>
+                {% endfor %}
+                </select>
+            </div>
             <br>
-        </fieldset>
-        <div>
-            Rating (0-10:  0 is no progress, 10 is excellent progress):
-            <select name="rating">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
+            <div>
+                Select the intervention you'd like to use:
+                <select name="intervent">
+                {% for intervention in interventions %}
+                    <option value="{{ intervention.intervention_id }}">{{ intervention.intervention_name }}
+                    </option>
+                {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div>
+                Rating (0-10:  0 is no progress, 10 is excellent progress):
+                <select name="rating">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <br>
+            <p>
+                Comment:
+                <input type="text" name="comment"><br>
+            </p>
+            <br>
         </div>
-        <br>
-        <p>
-            Comment:
-            <input type="text" name="comment"><br>
-        </p>
-        <br>
-      </div>
-      <div class="modal-footer">
-        <input type="Submit">
+        <div class="modal-footer">
+            <input type="Submit">
         </form>
       </div>
     </div>
@@ -114,6 +117,7 @@
       <div class="modal-body">
         <form action = "/edit_student/{{ student.student_id }}" method="POST">
         <h2>{{ student.fname }} {{ student.lname }}</h2>
+        <p><img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
         <p>Student ID: {{ student.student_id }}</P>
         <p>Current phone number: {{ student.phone_number }}</P>
         <p>Birthdate: {{ student.birthdate }}</P>
@@ -124,6 +128,10 @@
         <div>
         Phone Number:
         <input type="text" name="phone_number"><br>
+        </div>
+        <div>
+        Update Photo:
+        <input type="text" name="photo"><br>
         </div>
       </div>
       <div class="modal-footer">

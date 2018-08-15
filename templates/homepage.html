@@ -68,17 +68,40 @@ Register
 
 
 <h2>Behavior Intervention Basics</h2>
-<ul id="basics">
-    <li> 1) Choose one targeted behavior and thoughtfully select one intervention to address it. 
+<ol id="basics">
+    <li>Choose one targeted behavior and thoughtfully select one intervention to address it. 
     </li><br>
-    <li> 2) Collect baseline data.  Collect 3-5 data-points before starting the intervention to determine the student’s baseline, or starting point, in the behavior that is being targeted for intervention. This baseline will be useful to compare to the the outcome and measure progress after implementing the intervention. 
+    <li>Collect baseline data.  Collect 3-5 data-points before starting the intervention to determine the student’s baseline, or starting point, in the behavior that is being targeted for intervention. This baseline will be useful to compare to the the outcome and measure progress after implementing the intervention. 
     </li><br>
-    <li> 3) Determine the length of the intervention.  Good practice suggests 6-8 weeks to evaluate meaningful progress.
+    <li>Determine the length of the intervention.  Good practice suggests 6-8 weeks to evaluate meaningful progress.
     </li><br>
-    <li> 4) Based on the baseline and the length of the intervention, determine the intervention goal.  
+    <li>Based on the baseline and the length of the intervention, determine the intervention goal.  
     </li><br>
-    <li> 5) Once you've tried the intervention for the determined timeframe, evaluate progress.  This is a good opportunity to reflect on how appropriate the intervention was for the targetted behavior, strategize next steps, and celebrate student success!  
+    <li>Once you've tried the intervention for the determined timeframe, evaluate progress.  This is a good opportunity to reflect on how appropriate the intervention was for the targetted behavior, strategize next steps, and celebrate student success!  
     </li><br>
 </ul>
+
+
+<div class="container">
+    <div>
+        <img src="" alt="photo cannot be displayed" id="picture">
+    </div>
+</div>
+
+
+<script>
+
+// uses ajax & jquery to generate random src linked to an image generator
+$.ajax({
+  url: 'https://randomuser.me/api/',
+  dataType: 'json',
+  success: function(data) {
+    console.log(data);
+    let photo = $('#picture');
+    photo.attr('src', data.results[0].picture.thumbnail);
+  }
+});
+
+</script>
 
 {% endblock %}

@@ -21,7 +21,7 @@
 <body>
 
 <div class="topnav">
-    <a class="active" href="/login">Login</a>
+    <a class="active" href="/">Login</a>
     <!-- Makes sure only logged in users can search students -->
     {% if 'user_id' in session %}
         <a href="/user_info/{{ session['user_id'] }}">User Info</a>
