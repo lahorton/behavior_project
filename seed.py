@@ -32,15 +32,16 @@ def load_students():
         birthdate = fake.date_of_birth(tzinfo=None, minimum_age=5, maximum_age=18)
         user_id = random.randint(1, 20)
         phone_number = '3132589798'
-        # photo = still figuring this out.
-        student = Student(fname=fname, lname=lname, birthdate=birthdate, phone_number=phone_number, user_id=user_id)
+        photo = '/static/images/cage.jpg'
+        student = Student(fname=fname, lname=lname, birthdate=birthdate,
+                          phone_number=phone_number, photo=photo, user_id=user_id)
         db.session.add(student)
 
     db.session.commit()
 
 
 def load_behaviors():
-    """load behaviors from u.behavior into database"""
+    """load behaviors from behavior dictionary into database"""
 
     b_dict = {'Agressive-Bullying': {'Description': ['Verbally or physically harass others', 'causing them to report incidents to adult', 'Engage in bullying activity', 'intimidation, threats', 'Be observed hitting, kicking, and repeatedly pushing others', 'Demonstrate Intense anger,Frequently lose temper or have blow-ups', 'Become easily frustrated, Instigate and be involved in frequent conflicts, arguments, and fights', 'Value being seen as tough and one to be feared or avoided', 'Demonstrate threatening body language, like puffing up chest, clenching fists, and flinching at others'], "Appropriate Interventions": ['Move to a new location in the classroom', 'Take away privileges', 'Take away unstructured or free time', 'Talk one on one with student']},
         'Anxiety': {'Description': ['Unable to control their constant worries', 'Frequently ask how to do tasks', 'Apprehensive to start and work on own', 'Give up and discontinue effort easily', 'Unable to relax', 'Seem shy and not seek out help', 'volunteer, or participate'], "Appropriate Interventions": ['Alternative modes of completing assignments', 'Break down assignment', 'Draw a picture or write in a journal', 'Encourage interaction with a more self confident student', 'Listen to music', 'Reassurance', 'Reduce assignment', 'Take a break', 'Teach coping skills', 'Teach relaxation techniques', 'Teach social skills']},

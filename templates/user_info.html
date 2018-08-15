@@ -37,7 +37,7 @@ Add a student
             <input type="text" name="fname"><br>
             Enter student's last name:
             <input type="text" name="lname"><br>
-            Enter studnet's birthdate:
+            Enter student's birthdate:
             <input type="date" name="birthdate"><br>
             Enter phone number:
             <input type="text" name="phone"><br>
@@ -49,5 +49,29 @@ Add a student
     </div>
   </div>
 </div>
+
+
+<div class="container">
+    <div>
+        <img src="" alt="photo cannot be displayed" id="picture">
+    </div>
+</div>
+
+<!-- This generates random photos as user profile photos -->
+<script>
+
+
+$.ajax({
+  url: 'https://randomuser.me/api/',
+  dataType: 'json',
+  success: function(data) {
+    console.log(data);
+    let photo = $('#picture');
+    photo.attr('src', data.results[0].picture.thumbnail);
+  }
+});
+
+
+</script>
 
 {% endblock %}
