@@ -18,6 +18,7 @@ app.secret_key = os.environ["SERVER_APP_SECRET_KEY"]
 
 app.jinja_env.undefined = StrictUndefined
 
+
 @app.route('/')
 def index():
     """Homepage"""
@@ -112,7 +113,17 @@ def user_info(user_id):
     #This gives you a list of the student objects, so you can reference attributes of each student
     students = user.students
 
-    print(students)
+    students_dict = {}
+    for student in students:
+        students_dict[student.student_id]={"first_name" : student.fname,
+                                "last_name" : student.lname,
+                                "birthdate" : student.birthdate,
+                                "phone_number": student.phone_number,
+                                "user_id": student.user_id,
+                                "photo" : student.photo}
+
+
+    students_json = json.dumps(students_dict, default=str)
 
     # generates list of student names for the user
     student_info = []
@@ -123,7 +134,7 @@ def user_info(user_id):
 
     return render_template("user_info.html", user=user, user_name=user_name,
                             user_id=user_id, students=students,
-                            student_info=student_info)
+                            student_info=student_info, students_json=students_json)
 
 
 @app.route("/student_history/<student_id>")
@@ -624,7 +635,7 @@ def send_progress(student_id):
                               body=report,
                               from_='+12486218673',
                               to=phone_number
-                            )
+                              )
 
     print(message.sid)
     return redirect(f"/student_history/{student_id}")
@@ -674,9 +685,6 @@ def edit_user_profile(user_id):
 
     # get student object
     user = User.query.get(user_id)
-    print(">>>>>>>>>>")
-    print(user)
-    print(">>>>>>>>>>")
 
     current_password = request.form.get("current_password")
     new_password = request.form.get("new_password").strip(" ")

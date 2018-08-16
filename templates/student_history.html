@@ -149,8 +149,8 @@
 
 <script type="text/javascript">
 
-let behavior = {{ chart_json|tojson }}
-behavior = JSON.parse(behavior)
+let behavior = {{ chart_json|tojson }};
+behavior = JSON.parse(behavior);
 
 const data_ary = [];
 for (let b in behavior){
