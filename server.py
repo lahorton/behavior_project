@@ -25,13 +25,6 @@ def index():
     return render_template("homepage.html")
 
 
-@app.route('/login')
-def user_login():
-    """gets username and password from user"""
-
-    return render_template('login.html')
-
-
 @app.route('/login', methods=["POST"])
 def check_login():
     """login existing users"""
@@ -67,22 +60,15 @@ def logout():
         flash("Logged out.")
         return redirect("/")
     else:
-        flash("Please login")
+        flash("Please login.")
         return redirect("/")
-
-
-@app.route('/register')
-def user_register():
-    """Gets email and password from user"""
-
-    return render_template("register.html")
 
 
 @app.route("/register", methods=["POST"])
 def register_new_user():
     """adds new user to the db"""
 
-    user_name = request.form.get("name").strip().capitalize()
+    user_name = request.form.get("name").strip().title()
     password = request.form.get("password")
 
     user = User.query.filter(User.user_name == user_name).first()
@@ -107,34 +93,8 @@ def user_info(user_id):
         return redirect('/login')
 
     user = User.query.get(user_id)
-    user_name = user.user_name
-    user_id = user.user_id
 
-    #This gives you a list of the student objects, so you can reference attributes of each student
-    students = user.students
-
-    students_dict = {}
-    for student in students:
-        students_dict[student.student_id]={"first_name" : student.fname,
-                                "last_name" : student.lname,
-                                "birthdate" : student.birthdate,
-                                "phone_number": student.phone_number,
-                                "user_id": student.user_id,
-                                "photo" : student.photo}
-
-
-    students_json = json.dumps(students_dict, default=str)
-
-    # generates list of student names for the user
-    student_info = []
-    i = 0
-    while i < len(students):
-        student_info.append((students[i].fname, students[i].lname, students[i].student_id))
-        i += 1
-
-    return render_template("user_info.html", user=user, user_name=user_name,
-                            user_id=user_id, students=students,
-                            student_info=student_info, students_json=students_json)
+    return render_template("user_info.html", user=user)
 
 
 @app.route("/student_history/<student_id>")
@@ -143,27 +103,23 @@ def student_history(student_id):
 
     #get student object
     student = Student.query.get(student_id)
-    student.birthdate = student.birthdate.strftime("%B %d, %Y")
 
     user_id = session["user_id"]
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
 
-    # #in this nested dictionary, each of the student's behaviors is a dictionary key with a nested dictionary
-    # #that contains list of progress report dates as the value of 'dates' and a list of corresponding progress ratings
-    # #as the values of 'ratings'.
+    # create dictionary that groups progress objects by the behavior name.
     behaviors = {}
-    inner_dict = {}
 
     for report in progress:
         # behaviors[report.behavior.behavior_name] = {}
         report.date = report.date.strftime("%B %d, %Y")
         if report.behavior.behavior_name not in behaviors.keys():
             # behaviors[report.behavior.behavior_name] = inner_dict
-            behaviors[report.behavior.behavior_name] = {'reports': [(report.date, report.rating, report.comment)]}
+            behaviors[report.behavior.behavior_name] = [report]
         else:
-            behaviors[report.behavior.behavior_name]['reports'].append((report.date, report.rating, report.comment))
+            behaviors[report.behavior.behavior_name].append(report)
 
     #create dictionary with data formatted for charts.js
     chart_data = {}
@@ -207,11 +163,9 @@ def behavior_history(student_id):
 
     #get student object:
     student = Student.query.get(student_id)
-    # birthdate = student.birthdate.strftime("%B %d, %Y")
 
     #get progress objects matching the specified behavior for student:
     progress = Progress.query.filter(Progress.student_id==student.student_id, Progress.behavior_id==behavior_id).order_by(Progress.date.desc()).all()
-    # date = progress.date.strftime("%B %d, %Y")
 
     #create dictionary with data formatted for charts.js
     behavior_progress = {}
@@ -242,16 +196,11 @@ def behavior_history(student_id):
                             interventions=interventions, behaviors_list=behaviors_list)
 
 
-@app.route("/student_search")
-def student_search_form():
-    """gets students search info from user"""
-
-    return render_template("student_search.html")
-
-
 @app.route("/student_list")
 def student_list():
     """displays results from student search"""
+
+    user_id = session["user_id"]
 
     #gets information from student_search form
     fname = request.args.get("fname").capitalize()
@@ -274,27 +223,9 @@ def student_list():
         student = Student.query.filter(Student.lname==lname).all()
     else:
         flash("Please try again.  That name/ID is not found")
-        return redirect("/student_search")
+        return redirect(f"/user_info/{user_id}")
 
     return render_template("student_list.html", student=student)
-
-
-@app.route("/add_progress/<student_id>")
-def progress_report(student_id):
-    """Gets new progress report info from user"""
-
-    #gets list of all intervention objects from db:
-    interventions = db.session.query(Intervention).all()
-
-    #gets list of all behavior objects from db:
-    behaviors = db.session.query(Behavior).all()
-
-    #get student object
-    student = Student.query.get(student_id)
-    user_id = session["user_id"]
-
-    return render_template("progress.html", interventions=interventions, behaviors=behaviors,
-                            student_id=student_id, student=student, user_id=user_id,)
 
 
 @app.route("/add_progress/<student_id>", methods=["POST"])
@@ -308,8 +239,6 @@ def add_progress(student_id):
     intervent_name = {}
     for intervention in interventions:
         intervent_name[intervention.intervention_id] = intervention.intervention_name
-
-    # ADD IN CHECKS TO MAKE SURE ALL FIELDS ARE FILLED OUT
 
     date = request.form.get("date")
     behavior_id = request.form.get('behave')
@@ -386,14 +315,6 @@ def add_progress(student_id):
         return redirect(f"/student_history/{student_id}")
 
 
-
-@app.route("/add_student")
-def new_student_form():
-    """gets new student info from user"""
-
-    return render_template("new_student.html")
-
-
 @app.route("/add_student", methods=["POST"])
 def add_student():
     """adds a new student to the db"""
@@ -443,13 +364,6 @@ def display_interventions():
     return render_template("interventions.html", interventions=interventions,
                             interventions_json=interventions_json, behaviors=behaviors,
                             int_id_json=int_id_json)
-
-
-@app.route("/new_intervention")
-def show_intervention_info():
-    """gets new intervention info from user"""
-
-    return render_template('new_intervention.html')
 
 
 @app.route("/add_intervention", methods=["POST"])
@@ -545,13 +459,6 @@ def behavior_info(behavior_id):
 
     return render_template("behavior_info.html", behavior=behavior,
                            description=description, associated_interventions=associated_interventions)
-
-
-@app.route("/new_behavior")
-def show_behavior_info():
-    """gets new behavior info from user"""
-
-    return render_template('new_behavior.html')
 
 
 @app.route("/add_behavior", methods=["POST"])

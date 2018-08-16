@@ -5,7 +5,7 @@
 <h4>Student History</h4>
 
 <p>Student Name : {{ student.fname }} {{ student.lname }}</p>
-<p>Birthdate : {{ student.birthdate }}</p>
+<p>Birthdate : {{ student.birthdate.strftime('%b %d, %Y') }}</p>
 <p>Photo: <img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
 
 <p>Behaviors being tracked: </p>
@@ -170,6 +170,8 @@ for (let name in behavior){
     label_name.push(name);
 }
 
+console.log(behavior)
+console.log(data_ary)
 
 let ctx = document.getElementById('myChart').getContext('2d');
 let chart = new Chart(ctx, {
@@ -210,13 +212,20 @@ let chart = new Chart(ctx, {
 </p>
 
   {% for behavior in behaviors %}
-    {% for info in behaviors[behavior]['reports'] %} 
+    {% for item in behaviors[behavior] %} 
         <div class="collapse" id="{{ behavior|replace(" ", "_") }}">
             <div class="card card-body">
-                <li>Date: {{ info[0] }}, Rating: {{ info[1] }}, Comment: {{ info[2] }}</li>
+                <li>Progress Report: <br>
+                    Date: {{ item.date }}<br>
+                    Behavior: {{ item.behavior.behavior_name }}<br>
+                    Intervention: {{ item.intervention.intervention_name }}<br>
+                    User_id: {{ item.user_id }}<br>
+                    Rating: {{ item.rating }}<br>
+                    Comment: {{ item.comment }}<br>
+                </li>
             </div>
         </div>
-    {% endfor %}<br>
+    {% endfor %}
   {% endfor %}
 </ul>
 

@@ -203,13 +203,16 @@ let chart = new Chart(ctx, {
 
 <h2>Progresss History</h2>
 
+<ul id="behavior_progress_buttons">
+    {% for item in progress %}
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#A{{ item.progress_id }}" aria-expanded="false" aria-controls="collapseExample">{{ item.date.strftime('%b %d, %Y') }}
+        </button>
+    {% endfor %}
+</ul>
+
 <ul id="behavior_progress">
     {% for item in progress %}
-    <p>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#item" aria-expanded="false" aria-controls="collapseExample">{{ item.date.strftime('%b %d, %Y') }}
-        </button>
-    </p>
-        <div class="collapse" id="item">
+        <div class="collapse" id="A{{ item.progress_id }}">
             <div class="card card-body">
                <li> Progress Report: <br>
                     Date: {{ item.date.strftime('%b %d, %Y') }}<br>

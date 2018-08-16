@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Welcome, {{ user_name }}!</h2>
+<h2>Welcome, {{ user.user_name }}!</h2>
 
-<p>User ID: {{ user_id }} </p>
+<p>User ID: {{ user.user_id }} </p>
  
 <!-- Button trigger addStudent modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudent">
@@ -17,7 +17,7 @@ Add a student
 <p> Click on Student ID to see student progress history: </p>
 
 <ul id="student_info" >
-{% for student in students %}
+{% for student in user.students %}
     <li id="{{ student.student_id }}"><a href="/student_history/{{ student.student_id }}" data-toggle= "tooltip" title= "Phone: {{ student.phone_number }} Birthdate: {{ student.birthdate.strftime('%b %d, %Y') }} Student ID: {{ student.user_id }}" >
         {{ student.fname }} {{student.lname }}</a>
         <p><img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
@@ -95,41 +95,11 @@ Add a student
   </div>
 </div>
 
-
-
-<!-- 
-
-<div class="container">
-    <div>
-        <img src="" alt="photo cannot be displayed" id="picture">
-    </div>
-</div> -->
-
-<!-- This generates random photos as user profile photos -->
-
 <script>
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
-
-// This was old code for an infobox, but the tooltip was more clear.
-// let students = {{ students_json|tojson }};
-// students = JSON.parse(students);
-
-// function showStudentInfo(evt){
-//     console.log(evt.target.id);
-//     console.log(students[evt.target.id]);
-//     function show(evt){
-//         $("#tooltip").show();
-//     }
-//     function hide(evt){
-//         $("#tooltip").hide();
-//     }
-// }
-
-// $('#student_info li').on('mouseover', showStudentInfo);
-
 
 </script>
 
