@@ -109,7 +109,7 @@ def student_history(student_id):
     #get student object
     student = Student.query.get(student_id)
 
-    user_id = session["user_id"]
+    user = User.query.get(session["user_id"])
 
     #get progress object for student (in a list of progress objects).  Loop through these in Jinja and call specific attributes.
     progress = Progress.query.filter(Progress.student_id == student.student_id).order_by(Progress.date.desc()).all()
@@ -151,8 +151,8 @@ def student_history(student_id):
     behaviors_list = db.session.query(Behavior).all()
 
     return render_template("student_history.html", student=student, progress=progress,
-                            user_id=user_id, behaviors=behaviors, chart_json=chart_json,
-                            interventions=interventions, behaviors_list=behaviors_list)
+                            behaviors=behaviors, chart_json=chart_json,
+                            interventions=interventions, behaviors_list=behaviors_list, user=user)
 
 
 @app.route("/student_history/<student_id>/behavior_history")
@@ -162,6 +162,8 @@ def behavior_history(student_id):
     behavior_name = request.args.get("behavior_name")
     behavior = Behavior.query.filter(Behavior.behavior_name==behavior_name).first()
     behavior_id = behavior.behavior_id
+
+    user = User.query.get(session["user_id"])
 
     #creates an iterable list from behavior_description
     behavior_description = behavior.behavior_description.strip('"{}"').split('","')
@@ -198,14 +200,14 @@ def behavior_history(student_id):
 
     return render_template("behavior_history.html", progress=progress, student=student, behavior=behavior,
                             behavior_description=behavior_description, behavior_progress_json=behavior_progress_json,
-                            interventions=interventions, behaviors_list=behaviors_list)
+                            interventions=interventions, behaviors_list=behaviors_list, user=user)
 
 
 @app.route("/student_list")
 def student_list():
     """displays results from student search"""
 
-    user_id = session["user_id"]
+    user = User.query.get(session["user_id"])
 
     #gets information from student_search form
     fname = request.args.get("fname").capitalize()
@@ -230,7 +232,7 @@ def student_list():
         flash("Please try again.  That name/ID is not found")
         return redirect(f"/user_info/{user_id}")
 
-    return render_template("student_list.html", student=student)
+    return render_template("student_list.html", student=student, user=user)
 
 
 @app.route("/add_progress/<student_id>", methods=["POST"])
