@@ -33,9 +33,16 @@
       </li>
       <!-- Makes sure only logged in users can search students -->
       {% if 'user_id' in session %}
-        <a class="nav-link" href="/user_info/{{ session['user_id'] }}">User Info</a>
-        <!-- modal href button for student search modal -->
-        <a class="nav-link" type="btn" data-toggle="modal" href="#student_search">Student Search</a>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User Info
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/user_info/{{ session['user_id'] }}">Students</a>
+          <a class="dropdown-item" type="btn" data-toggle="modal" href="#student_search">Student Search</a>
+          <a class="dropdown-item" type="btn" data-toggle="modal" href="#addStudent">Add a Student</a>
+          <a class="dropdown-item" type="btn" data-toggle="modal" href="#editUserPassword">Edit User Password</a>
+        </div>
+      </li>
       {% endif %}
       <li class="nav-item">
         <a class="nav-link" href="/behaviors">Behaviors</a>
@@ -43,6 +50,12 @@
       <li class="nav-item">
         <a class="nav-link" href="/interventions">Interventions</a>
       </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" type="btn" data-toggle="modal" href="#Login">Login</a>
+          <a class="dropdown-item" type="btn" data-toggle="modal" href="#Register">Register</a>
       <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>
       </li>
@@ -85,6 +98,130 @@
     </div>
   </div>
 </div>
+
+
+<!-- addStudent Form Modal -->
+{% if 'user_id' in session %}
+<div class="modal fade" id="addStudent" tabindex="-1" role="dialog" aria-labelledby="addStudent" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/add_student" method="POST">
+            Enter student's first name:
+            <input type="text" name="fname"><br>
+            Enter student's last name:
+            <input type="text" name="lname"><br>
+            Enter student's birthdate:
+            <input type="date" name="birthdate"><br>
+            Enter phone number:
+            <input type="text" name="phone"><br>
+            Add a photo (link to jpg):
+            <input type="text" name="photo"><br>
+      </div>
+      <div class="modal-footer">
+        <input type="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+
+<!-- Edit user password Modal -->
+{% if 'user_id' in session %}
+<div class="modal fade" id="editUserPassword" tabindex="-1" role="dialog" aria-labelledby="editUserPassword" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Reset User Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/edit_user/{{ user.user_id }}" method="POST">
+        <h2>{{ user.user_name }}</h2>
+        <div>
+        Please enter your current password:
+        <input type="text" name="current_password"><br>
+        </div>
+        <div>
+        New Password:
+        <input type="text" name="new_password"><br>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <input type="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+
+<!-- Login Form Modal -->
+<div class="modal fade" id="Login" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/login" method="POST">
+        Enter your username:
+        <input type="text" name="name"><br>
+        <br>
+        Enter a password:
+        <input type="text" name="password"><br>
+        <br>
+      </div>
+      <div class="modal-footer">
+        <input type="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register Form Modal -->
+<div class="modal fade" id="Register" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Register</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action = "/register" method="POST">
+            Enter your username:
+            <input type="text" name="name"><br>
+            <br>
+            Enter a password:
+            <input type="text" name="password"><br>
+            <br>
+      </div>
+      <div class="modal-footer">
+        <input type="submit" id="new_user_submit", value="Register">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <script>
 

@@ -23,7 +23,12 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """Homepage"""
-    return render_template("homepage.html")
+
+    if 'user_id' in session:
+        user = User.query.get(session["user_id"])
+        return render_template("homepage.html", user=user)
+    else:
+        return render_template("homepage.html")
 
 
 @app.route('/login', methods=["POST"])
@@ -43,7 +48,6 @@ def check_login():
         password_match = password_match[0]
         if password == password_match:
             session["user_id"] = user_id[0]
-            flash("Welcome!")
             return redirect(f"/user_info/{user.user_id}")
         else:
             flash("Login failed. Please double-check your password.")

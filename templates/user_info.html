@@ -4,18 +4,6 @@
 <h2>Welcome, {{ user.user_name }}!</h2>
 
 <p>User ID: {{ user.user_id }} </p>
- 
-<!-- Button trigger addStudent modal -->
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addStudent" style="background-color: #e3f2fd;">
-Add a student
-</button>
-
-<!-- Button trigger editUserProfile -->
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#editUserPassword" style="background-color: #e3f2fd;">Reset User Password
-</button>
-
-<br>
-<br>
 
 <ul id="student_info" >
 {% for student in user.students %}
