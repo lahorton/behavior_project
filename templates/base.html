@@ -174,7 +174,7 @@
       <div class="modal-header text-center">
         <h5 class="modal-title" id="exampleModalLabel">Login</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
@@ -183,8 +183,9 @@
         <input type="text" name="name"><br>
         <br>
         Enter a password:
-        <input type="text" name="password"><br>
+        <input type="password" name="password" value ="password" id="passwordInput"><br>
         <br>
+        <input type="checkbox" onclick="myFunction()">Show Password
       </div>
       <div class="modal-footer">
         <input type="Submit">
@@ -221,8 +222,6 @@
   </div>
 </div>
 
-
-
 <script>
 
 //This references the search student modal and acts as the eventClicker
@@ -241,6 +240,15 @@ console.log("document is ready");
   });
 });  
 
+
+function myFunction() {
+    var x = document.getElementById("passwordInput");
+    if (x.type === "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
+}
 
  </script >
 

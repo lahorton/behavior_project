@@ -351,6 +351,8 @@ def display_interventions():
     names = db.session.query(Intervention.intervention_name).order_by(Intervention.intervention_name).all()
     behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
 
+    user = User.query.get(session["user_id"])
+
     #creates an iterable list from behavior_description
     for behavior in behaviors:
         behavior.behavior_description = behavior.behavior_description.strip('"{}"').split('","')
@@ -370,7 +372,7 @@ def display_interventions():
 
     return render_template("interventions.html", interventions=interventions,
                             interventions_json=interventions_json, behaviors=behaviors,
-                            int_id_json=int_id_json)
+                            int_id_json=int_id_json, user=user)
 
 
 @app.route("/add_intervention", methods=["POST"])
@@ -424,6 +426,8 @@ def display_behaviors():
     """displays a list of optional behaviors"""
 
     behaviors = db.session.query(Behavior).order_by(Behavior.behavior_name).all()
+    user = User.query.get(session["user_id"])
+
     #creates an iterable list from behavior_description
     for behavior in behaviors:
         behavior.behavior_description = behavior.behavior_description.strip('"{}"').split('","')
@@ -444,7 +448,7 @@ def display_behaviors():
     behaviors_json = json.dumps(behavior_names)
 
     return render_template("behaviors.html", behaviors=behaviors,
-                           behaviors_json=behaviors_json, b_id_json=b_id_json)
+                           behaviors_json=behaviors_json, b_id_json=b_id_json, user=user)
 
 
 @app.route("/behavior_info/<behavior_id>")
@@ -527,8 +531,6 @@ def add_behavior():
 def send_progress(student_id):
     """sends progress report to parent"""
 
-    user_id = session["user_id"]
-
     # get student object
     student = Student.query.get(student_id)
 
@@ -597,7 +599,7 @@ def edit_student_profile(student_id):
 def edit_user_profile(user_id):
     """allows user to edit user profile"""
 
-    # get student object
+    # get user object
     user = User.query.get(user_id)
 
     current_password = request.form.get("current_password")
