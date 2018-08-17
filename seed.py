@@ -136,7 +136,7 @@ def load_progress():
         behavior_id = random.choice(all_behaviors)
         intervention_id = random.choice(all_interventions)
         date = fake.past_date(start_date="-360d", tzinfo=None)
-        user_id = random.choice(all_users)
+        user_id = random.choice(all_users)  
         rating = random.randint(0, 10)
         comment = random.choice(comments)
 

@@ -11,6 +11,7 @@ import os
 import json
 from twilio.rest import Client
 from sqlalchemy import update
+import doctest
 
 app = Flask(__name__)
 
