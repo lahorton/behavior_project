@@ -6,7 +6,7 @@
 
 <p>Student Name : {{ student.fname }} {{ student.lname }}</p>
 <p>Birthdate : {{ student.birthdate.strftime('%b %d, %Y') }}</p>
-<p>Photo: <img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
+<p><img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
 
 <p>Behaviors being tracked: </p>
 
@@ -120,7 +120,7 @@
         <p><img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
         <p>Student ID: {{ student.student_id }}</P>
         <p>Current phone number: {{ student.phone_number }}</P>
-        <p>Birthdate: {{ student.birthdate }}</P>
+        <p>Birthdate: {{ student.birthdate.strftime('%b %d, %Y') }}</P>
         <div>
         First Name:
         <input type="text" name="fname"><br>

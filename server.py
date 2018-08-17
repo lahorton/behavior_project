@@ -561,25 +561,25 @@ def edit_student_profile(student_id):
     photo = request.form.get("photo")
 
     # check to see if form is filled out or keep previous values.
-    if fname is '':
-        student.fname = student.fname
-    else:
+    if fname:
         student.fname = fname
-
-    if phone_number is None:
-        student.phone_number = student.phone_number
     else:
+        student.fname = student.fname
+
+    if phone_number:
         student.phone_number = phone_number.strip("- ")
+    else:
+        student.phone_number = student.phone_number
 
     if birthdate == '':
         student.birthdate = student.birthdate
     else:
         student.birthdate = birthdate
 
-    if photo == " ":
-        student.photo = student.photo
-    else:
+    if photo:
         student.photo = photo
+    else:
+        student.photo = student.photo
 
     db.session.commit()
 

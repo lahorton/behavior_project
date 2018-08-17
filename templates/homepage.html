@@ -12,6 +12,7 @@ Login
 Register
 </button>
 
+
 <!-- Login Form Modal -->
 <div class="modal fade" id="Login" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -66,8 +67,11 @@ Register
   </div>
 </div>
 
-
+<div class="container">
+    <div class="row justify-content-md-center">
 <h2>Behavior Intervention Basics</h2>
+    </div>
+    <div class="row">
 <ol id="basics">
     <li>Choose one targeted behavior and thoughtfully select one intervention to address it. 
     </li><br>
@@ -79,7 +83,9 @@ Register
     </li><br>
     <li>Once you've tried the intervention for the determined timeframe, evaluate progress.  This is a good opportunity to reflect on how appropriate the intervention was for the targetted behavior, strategize next steps, and celebrate student success!  
     </li><br>
-</ul>
+</ol}>
+    </div>
+</div>
 
 
 <div class="container">
@@ -88,10 +94,10 @@ Register
     </div>
 </div>
 
-
 <script>
 
 // uses ajax & jquery to generate random src linked to an image generator
+
 $.ajax({
   url: 'https://randomuser.me/api/',
   dataType: 'json',
@@ -101,6 +107,7 @@ $.ajax({
     photo.attr('src', data.results[0].picture.thumbnail);
   }
 });
+
 
 </script>
 
