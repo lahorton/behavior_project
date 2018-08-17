@@ -20,28 +20,41 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-<div class="topnav">
-    <a class="active" href="/">Login</a>
-    <!-- Makes sure only logged in users can search students -->
-    {% if 'user_id' in session %}
-        <a href="/user_info/{{ session['user_id'] }}">User Info</a>
+
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <a class="navbar-brand" href="#">User Options</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Login <span class="sr-only">(current)</span></a>
+      </li>
+      <!-- Makes sure only logged in users can search students -->
+      {% if 'user_id' in session %}
+        <a class="nav-link" href="/user_info/{{ session['user_id'] }}">User Info</a>
         <!-- modal href button for student search modal -->
-        <a href="#student_search" class="btn" class="btn">Student Search</a>
-    {% endif %}
-    <a href="/interventions">Interventions</a>
-    <a href="/behaviors">Behaviors</a>
-    <a href="/logout">logout</a>
-</div>
+        <a class="nav-link" type="button" data-toggle="modal" href="#student_search">Student Search</a>
+      {% endif %}
+      <li class="nav-item">
+        <a class="nav-link" href="/behaviors">Behaviors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/interventions">Interventions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
   <ul>
         {% for message in get_flashed_messages() %}
             <li> {{ message }} </li>
         {% endfor %}
   </ul>
-
- Behaviors
-  <hr>
 
 <!-- Student Search Form Modal -->
 <div class="modal fade" id="student_search" tabindex="-1" role="dialog" aria-labelledby="searchStudentModal" aria-hidden="true">
@@ -85,7 +98,6 @@ console.log("document is ready");
     // prevents from taking it to the href
     e.preventDefault();
     // take the href of the element that was clicked on
-
     let href = jQuery(this).attr('href');
     // select the item with that href and show the modal
     jQuery(href).modal('toggle');
@@ -93,7 +105,7 @@ console.log("document is ready");
 });  
 
 
-</script >
+ </script >
 
 
   {% block content %} put your content here {% endblock %}
