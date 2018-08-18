@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="container">
 <h2>Welcome, {{ user.user_name }}!</h2>
 
 <p>User ID: {{ user.user_id }} </p>
+</div>
 
+<div class="container">
 <ul id="student_info" >
 {% for student in user.students %}
     <li id="{{ student.student_id }}"><a href="/student_history/{{ student.student_id }}" data-toggle= "tooltip" title= "Phone: {{ student.phone_number }} Birthdate: {{ student.birthdate.strftime('%b %d, %Y') }} Student ID: {{ student.user_id }}" >
@@ -13,11 +15,12 @@
     </li>
 {% endfor %}
 </ul>
+</div>
+
 
 <div class="tooltip bs-tooltip-top" role="tooltip">
   <div class="arrow"></div>
-  <div class="tooltip-inner">
-    Some tooltip text!
+  <div class="tooltip-inner">Tooltip Info
   </div>
 </div>
 

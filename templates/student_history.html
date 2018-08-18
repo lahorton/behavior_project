@@ -1,13 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
 
-<h4>Student History</h4>
 
+<!-- Button trigger addProgressModal -->
+<h4>Student History
+<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addProgressModal" style="background-color: #e3f2fd;">Add a Progress Report
+</button>
+
+
+<!-- Button trigger editStudentProfile -->
+<button type="button" class="btn btn-light" data-toggle="modal" data-target="#editStudentProfile" style="background-color: #e3f2fd;">Edit Student Profile
+</button>
+</h4>
 <p>Student Name : {{ student.fname }} {{ student.lname }}</p>
 <p>Birthdate : {{ student.birthdate.strftime('%b %d, %Y') }}</p>
 <p><img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
+</div>
 
+
+
+<div class="container">
 <p>Behaviors being tracked: </p>
 
 <ul id="student_progress">
@@ -16,6 +30,7 @@
          </li>
      {% endfor %}
 </ul>
+</div>
 
 <div class="container">
     <h3>Progress Chart</h3>
@@ -200,7 +215,7 @@ let chart = new Chart(ctx, {
 
 </script>
 
-
+<div class="container">
 <h3> Progress Reports: </h3>
 
 <ul id="progress reports">
@@ -228,5 +243,6 @@ let chart = new Chart(ctx, {
     {% endfor %}
   {% endfor %}
 </ul>
+</div>
 
 {% endblock %} 

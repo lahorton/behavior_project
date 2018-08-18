@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="container">
 <a href="/student_history/{{ student.student_id }}" name="student_history"> Return to student history</a><br>
 
 <h4> Behavior Progress: </h4>
 
 <p>Student Name: {{ student.fname }} {{ student.lname }}</p>
-
+</div>
 
 <div class="container">
 <!--     <h3>Behavior Progress Chart</h3>
@@ -64,7 +64,7 @@ let chart = new Chart(ctx, {
     });
 </script>
 
-
+<div class="container">
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ behavior.behavior_name|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapseExample">
 {{ behavior.behavior_name }}
 </button>
@@ -87,6 +87,7 @@ let chart = new Chart(ctx, {
 <!-- Button trigger send SMS -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sendSMSModal">Text Progress Report Home
 </button>
+</div>
 
 <!-- Add SMS # Form Modal -->
 <div class="modal fade" id="sendSMSModal" tabindex="-1" role="dialog" aria-labelledby="sendSMSModal" aria-hidden="true">
@@ -200,7 +201,7 @@ let chart = new Chart(ctx, {
   </div>
 </div>
 
-
+<div class="container">
 <h2>Progresss History</h2>
 
 <ul id="behavior_progress_buttons">
@@ -226,5 +227,5 @@ let chart = new Chart(ctx, {
         </div>
     {% endfor %}
 </ul>
-
+</div>
 {% endblock %}
