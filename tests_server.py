@@ -24,33 +24,50 @@ class IntegrationTestCase(unittest.TestCase):
         self.client = server.app.test_client()
         server.app.config['TESTING'] = True
 
+    def test_login(self):
+        """test login page."""
+        result = self.client.post('/login', data={"name": "Jane doe", "password": "ubermelon"},
+                                  follow_redirects=True)
+        self.assertIn(b"<h2>Welcome, ", result.data)
+
     def test_homepage(self):
         result = self.client.get('/')
         self.assertIn(b'<li>Choose a behavior', result.data)
 
     def test_user_info(self):
-        result = self.client.get('/user_info/<user_id>')
-        self.assertIn(b'User ID: ', result.data)
+        result = self.client.get("/user_info/<user_id>", data={"user_id": 26},
+                                  follow_redirects=True)
+        self.assertIn(b'<h2>Welcome,', result.data)
+        # self.assertEqual(result.status_code, 200)
 
     def test_student_history(self):
-        result = self.client.get("/student_history/<student_id>")
+        result = self.client.get("/student_history/<student_id>", data={"student_id": 506},
+                                 follow_redirects=True)
         self.assertIn(b'<p>Student Name :', result.data)
+        self.assertEqual(result.status_code, 200)
 
     def test_behavior_history(self):
-        result = self.client.get("/student_history/<student_id>/behavior_history")
+        result = self.client.get("/student_history/<student_id>/behavior_history",
+                                 data={"user_id": "26", "password": "ubermelon",
+                                 "student_id": "506", "behavior_name": "Disorganized"})
         self.assertIn(b'<h4> Behavior Progress: </h4>', result.data)
+        self.assertEqual(result.status_code, 200)
 
     def test_behaviors(self):
-        result = self.client.get("/behaviors")
+        result = self.client.get("/behaviors", data={"behaviors": "Defiant"})
         self.assertIn(b'<h3>Behaviors</h3>')
+        self.assertEqual(result.status_code, 200)
 
     def test_student_list(self):
-        result = self.client.get("/student_list")
+        result = self.client.get("/student_list", data={"session['user_id']": 26})
         self.assertIn(b'<h2>Students matching your search: </h2>')
+        self.assertEqual(result.status_code, 200)
 
     def test_interventions(self):
-        result = self.client.get("/interventions")
+        result = self.client.get("/interventions", data={"intervention_name": "Daily planner"},
+                                 follow_redirects=True)
         self.assertIn(b'<h2>Interventions</h2>')
+        self.assertEqual(result.status_code, 200)
 
 
 # Code below is not working to create a test db... no tables are created after running tests_model.py to create it.
