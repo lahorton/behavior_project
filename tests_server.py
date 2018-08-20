@@ -1,7 +1,99 @@
 import unittest
 from unittest import TestCase
 from faker import Faker
-import server
+from server import app
+from flask import Flask
+from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from model import User, Student, Behavior, Intervention, BehaviorIntervention, Progress, connect_to_db, db
+
+
+# Code below is not working to create a test db... no tables are created after running tests_model.py to create it.
+def example_data():
+    """creates sample data for testing"""
+
+    # Add sample data
+    test_user = User(user_name="test_user", password="12345", user_id=1)
+    db.session.add(test_user)
+    test_student = Student(fname="test", lname="student",
+                           birthdate=datetime(2000, 9, 7),
+                           phone_number="3132589798", user_id=test_user.user_id, student_id=1)
+    db.session.add(test_student)
+    test_behavior = Behavior(behavior_name="test_behavior", behavior_description="tests stuff", behavior_id=1)
+    db.session.add(test_behavior)
+    test_intervention = Intervention(intervention_name="test_intervention", intervention_id=1)
+    db.session.add(test_intervention)
+    test_progress = Progress(student_id=test_student.student_id, behavior_id=test_behavior.behavior_id,
+                             intervention_id=test_intervention.intervention_id,
+                             date=datetime(2018, 8, 30),
+                             rating="5", comment="test comment", user_id=test_user.user_id)
+    db.session.add(test_progress)
+
+    # db.session.add_all([test_user, test_student, test_behavior, test_intervention, test_progress])
+    db.session.commit()
+
+
+class IntegrationTestCase(unittest.TestCase):
+
+    def setUp(self):
+        app.config['Testing'] = True
+        app.config['SECRET_KEY'] = 'testing'
+        self.client = app.test_client()
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['user_id'] = 1
+
+        db.create_all()
+        example_data()
+
+    def test_login(self):
+        """test login page."""
+        result = self.client.post('/login', data={"name": "test_user", "password": "12345"},
+                                  follow_redirects=True)
+        self.assertIn(b'<li>Collect baseline data.', result.data)
+
+    def test_homepage(self):
+        result = self.client.get('/')
+        self.assertIn(b'<li>Choose a behavior', result.data)
+
+    def test_user_info(self):
+        result = self.client.get("/user_info/1")
+        self.assertIn(b'<h2>Welcome,', result.data)
+        self.assertEqual(result.status_code, 200)
+
+    def test_student_history(self):
+        result = self.client.get("/student_history/1",
+                                 follow_redirects=True)
+        self.assertIn(b'<p>Student Name :', result.data)
+        # self.assertEqual(result.status_code, 200)
+
+    def test_behavior_history(self):
+        result = self.client.get("/student_history/1/behavior_history?behavior_name=test_behavior")
+        # self.assertEqual(result.status_code, 200)
+        self.assertIn(b'<h4> Behavior Progress: </h4>', result.data)
+
+    def test_behaviors(self):
+        result = self.client.get("/behaviors")
+        self.assertEqual(result.status_code, 200)
+        self.assertIn(b"Add a Behavior", result.data)
+
+    def test_student_list(self):
+        result = self.client.get("/student_list", query_string={"lname": "student",
+                                 "fname": "test", "student_id": 1, "birthdate": datetime(2000, 9, 7)},
+                                 follow_redirects=True)
+        self.assertIn(b'<h2>Students matching your search: </h2>', result.data)
+        # self.assertEqual(result.status_code, 200)
+
+    def test_interventions(self):
+        result = self.client.get("/interventions")
+        self.assertIn(b'<h2>Interventions</h2>', result.data)
+        # self.assertEqual(result.status_code, 200)
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
 
 
 class UnitTestCase(unittest.TestCase):
@@ -18,96 +110,12 @@ class UnitTestCase(unittest.TestCase):
         self.assertIsNotNone("Tardiness")
 
 
-class IntegrationTestCase(unittest.TestCase):
+if __name__ == "__main__":
+    """If run interactively will allow you to work with db directly"""
 
-    def setUp(self):
-        self.client = server.app.test_client()
-        server.app.config['TESTING'] = True
-
-    def test_login(self):
-        """test login page."""
-        result = self.client.post('/login', data={"name": "Jane doe", "password": "ubermelon"},
-                                  follow_redirects=True)
-        self.assertIn(b"<h2>Welcome, ", result.data)
-
-    def test_homepage(self):
-        result = self.client.get('/')
-        self.assertIn(b'<li>Choose a behavior', result.data)
-
-    def test_user_info(self):
-        result = self.client.get("/user_info/<user_id>", data={"user_id": 26},
-                                  follow_redirects=True)
-        self.assertIn(b'<h2>Welcome,', result.data)
-        # self.assertEqual(result.status_code, 200)
-
-    def test_student_history(self):
-        result = self.client.get("/student_history/<student_id>", data={"student_id": 506},
-                                 follow_redirects=True)
-        self.assertIn(b'<p>Student Name :', result.data)
-        self.assertEqual(result.status_code, 200)
-
-    def test_behavior_history(self):
-        result = self.client.get("/student_history/<student_id>/behavior_history",
-                                 data={"user_id": "26", "password": "ubermelon",
-                                 "student_id": "506", "behavior_name": "Disorganized"})
-        self.assertIn(b'<h4> Behavior Progress: </h4>', result.data)
-        self.assertEqual(result.status_code, 200)
-
-    def test_behaviors(self):
-        result = self.client.get("/behaviors", data={"behaviors": "Defiant"})
-        self.assertIn(b'<h3>Behaviors</h3>')
-        self.assertEqual(result.status_code, 200)
-
-    def test_student_list(self):
-        result = self.client.get("/student_list", data={"session['user_id']": 26})
-        self.assertIn(b'<h2>Students matching your search: </h2>')
-        self.assertEqual(result.status_code, 200)
-
-    def test_interventions(self):
-        result = self.client.get("/interventions", data={"intervention_name": "Daily planner"},
-                                 follow_redirects=True)
-        self.assertIn(b'<h2>Interventions</h2>')
-        self.assertEqual(result.status_code, 200)
-
-
-# Code below is not working to create a test db... no tables are created after running tests_model.py to create it.
-# def example_data():
-#     """creates sample data for testing"""
-
-#     # empty out existing data in case it's run more than once.
-#     User.query.delete()
-#     Student.query.delete()
-#     Behavior.query.delete()
-#     Intervention.query.delete()
-#     Progress.query.delete()
-
-#     # Add sample data
-#     test_user = User(user_name="test_user", password="12345")
-#     test_student = Student(fname="test", lname="student",
-#                            birthdate=fake.date_of_birth(tzinfo=None, minimum_age=5, maximum_age=18),
-#                            phone_number="3132589798", user_id=user_id)
-#     test_behavior = Behavior(behavior_name="test_behavior", behavior_description="tests stuff")
-#     test_intervention = Intervention(intervention_name="test_intervention")
-#     test_progress = Progress(student_id=test_student.student_id, behavior_id=test_behavior.behavior_id,
-#                              intervention_id=test_intervention.intervention_id,
-#                              date=fake.past_date(start_date="-360d", tzinfo=None),
-#                              rating=5, comment="test comment")
-
-#     db.session.add_all([test_user, test_student, test_behavior, test_intervention, test_progress])
-#     db.session.commit()
-
-
-# class FlaskTests(TestCase):
-#     def setUp(self):
-
-#         self.client = app.test_client()
-#         app.config['Testing'] = True
-
-#         #connect to db, create tables and sample data
-#         connect_to_db(app, "postgresql://testdb")
-#         db.create_all()
-#         example_data()
-
-
-if __name__ == '__main__':
+    # from server import app
+    app.debug = True
+    connect_to_db(app, 'postgresql:///testdb')
+    print("Connected to DB.")
+    IntegrationTestCase()
     unittest.main()

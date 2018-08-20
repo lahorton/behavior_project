@@ -8,11 +8,11 @@ from datetime import datetime
 db = SQLAlchemy()
 
 
-def connect_to_db(app):
+def connect_to_db(app, database='postgresql:///behavior'):
     """Connect database to Flask app."""
 
     #Configure to use the PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///behavior'
+    app.config['SQLALCHEMY_DATABASE_URI'] = database
     app.config['SQLALCHEMY_ECHO'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app

@@ -209,6 +209,10 @@ def student_list():
 
     user = User.query.get(session["user_id"])
 
+    # debugger to use when testing to freeze because you can't print:
+    # import pdb; pdb.set_trace()
+
+
     #gets information from student_search form
     fname = request.args.get("fname").capitalize()
     lname = request.args.get("lname").capitalize()
@@ -625,7 +629,7 @@ if __name__ == "__main__":
 
     connect_to_db(app)
 
-    #DebugToolbar
-    DebugToolbarExtension(app)
+    # #DebugToolbar
+    # DebugToolbarExtension(app)
 
     app.run(port=5000, host="0.0.0.0")
