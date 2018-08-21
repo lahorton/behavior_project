@@ -16,12 +16,17 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/0.11.0/typeahead.bundle.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/0.11.0/bloodhound.js"></script>
 
+  <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai" rel="stylesheet">
+
 </head>
 <body>
 
-
-  <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;">
-  <a class="navbar-brand" href="#">User Options</a>
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-sm navbar-light" style="background-color: blue;">
+  <a class="navbar-brand" href="#">
+    <img src="https://cdn.dribbble.com/users/28449/screenshots/1040285/cap-logo-ideas3_1x.png"
+    width="30" height="30" alt="">
+    </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -29,6 +34,9 @@
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" type="btn" data-toggle="modal" href="#behaviorBasics">Get started</a></a>
       </li>
       <!-- Makes sure only logged in users can search students -->
       {% if 'user_id' in session %}
@@ -61,6 +69,7 @@
     </ul>
   </div>
 </nav>
+</div>
 
   <ul>
         {% for message in get_flashed_messages() %}
@@ -216,6 +225,37 @@
       <div class="modal-footer">
         <input type="submit" id="new_user_submit", value="Register">
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="behaviorBasics" tabindex="-1" role="dialog" aria-labelledby="behaviorBasics" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Behavior Intervention Basics</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ol id="basics">
+            <li>Choose a behavior you'd like to address and thoughtfully select ONE intervention to address it. 
+            </li><br>
+            <li>Collect baseline data.  Collect 3-5 data-points before starting the intervention to determine the student’s baseline, or starting point, in the behavior that is being addressed. This baseline will be useful to compare to the the outcome and measure progress after implementing the intervention. 
+            </li><br>
+            <li>Determine the length of the intervention.  Good practice suggests 6 weeks, or at least 6 data points, to evaluate meaningful progress.
+            </li><br>
+            <li>Based on the baseline and the length of the intervention, determine the intervention goal.  
+            </li><br>
+            <li>Once you've tried the intervention for the determined timeframe, evaluate progress.  This is a good opportunity to reflect on how appropriate the intervention was for the targetted behavior, strategize next steps, and celebrate student success!  
+            </li><br>
+        </ol}>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
