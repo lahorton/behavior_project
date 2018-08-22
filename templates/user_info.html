@@ -1,21 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="container">
 <h2>Welcome, {{ user.user_name }}!</h2>
-
-<p>User ID: {{ user.user_id }} </p>
 </div>
 
-<div class="container">
+<style>
+.card-deck{
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
+    font-family: 'Open Sans';
+    color: #0E2379;
+
+}
+#student_info .card {
+    flex: 0 0 auto;
+    width: 200px !important;
+}
+
+
+</style>
+
 <ul id="student_info" >
+<div class="card-deck">
 {% for student in user.students %}
-    <li id="{{ student.student_id }}"><a href="/student_history/{{ student.student_id }}" data-toggle= "tooltip" title= "Phone: {{ student.phone_number }} Birthdate: {{ student.birthdate.strftime('%b %d, %Y') }} Student ID: {{ student.user_id }}" >
-        {{ student.fname }} {{student.lname }}</a>
-        <p><img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
-    </li>
+    <div class="card text-center bg-light border-#028090 mb-3" style="width:18rem">
+        <img class="card-img-top mx-auto" src="{{ student.photo }}" style="width:100px" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title"> <p id="{{ student.student_id }}"><a href="/student_history/{{ student.student_id }}" data-toggle= "tooltip" title= "Phone: {{ student.phone_number }} Birthdate: {{ student.birthdate.strftime('%b %d, %Y') }} Student ID: {{ student.user_id }}" >{{ student.fname }} {{student.lname }}</a></p></h5>
+        </div>
+    </div>
 {% endfor %}
-</ul>
 </div>
+</ul>
+
 
 
 <div class="tooltip bs-tooltip-top" role="tooltip">

@@ -38,7 +38,16 @@
 </div>
 
 
+<style>
+.interventions-container{
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>
+
 <div class="interventions-container" id="interventions">
+  <div class="row">
+    <div class="col-sm">
   {% for item in interventions %}
   <div class = "intervention-item">
     <!-- creates a link to activate modal -->
@@ -75,6 +84,8 @@
         </div>
       </div>
   {% endfor %}
+</div>
+</div>
 </div>
 
 

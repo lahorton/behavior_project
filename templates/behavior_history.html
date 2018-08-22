@@ -1,11 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-<a href="/student_history/{{ student.student_id }}" name="student_history"> Return to student history</a><br>
+
+<style>
+
+.student-history{
+    color: #028090;
+}
+
+h4{
+    font-family: Baloo Bhai;
+}
+
+.student{
+    font-family: Open Sans;
+}
+</style>
 
 <h4> Behavior Progress: </h4>
 
-<p>Student Name: {{ student.fname }} {{ student.lname }}</p>
+<p class='student'>Student Name: {{ student.fname }} {{ student.lname }}</p>
+
+
+<a class = "student-history" href="/student_history/{{ student.student_id }}" name="student_history"> Return to student history</a><br>
 </div>
 
 <div class="container">
@@ -65,7 +82,7 @@ let chart = new Chart(ctx, {
 </script>
 
 <div class="container">
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ behavior.behavior_name|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapseExample">
+<button class="btn btn-light" type="button" data-toggle="collapse" style="background-color: #028090;" data-target="#{{ behavior.behavior_name|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapseExample">
 {{ behavior.behavior_name }}
 </button>
 
@@ -81,11 +98,11 @@ let chart = new Chart(ctx, {
 </div>
 
 <!-- Button trigger addProgressModal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProgressModal">Add a Progress Report
+<button type="button" class="btn btn-light" data-toggle="modal" style="background-color: #028090;" data-target="#addProgressModal">Add a Progress Report
 </button>
 
 <!-- Button trigger send SMS -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sendSMSModal">Text Progress Report Home
+<button type="button" class="btn btn-light" data-toggle="modal" style="background-color: #028090;" data-target="#sendSMSModal">Text Progress Report Home
 </button>
 </div>
 
@@ -202,11 +219,11 @@ let chart = new Chart(ctx, {
 </div>
 
 <div class="container">
-<h2>Progresss History</h2>
+<h4>Progresss History</h4>
 
 <ul id="behavior_progress_buttons">
     {% for item in progress %}
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#A{{ item.progress_id }}" aria-expanded="false" aria-controls="collapseExample">{{ item.date.strftime('%b %d, %Y') }}
+        <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#A{{ item.progress_id }}" style="background-color: #028090;" aria-expanded="false" aria-controls="collapseExample">{{ item.date.strftime('%b %d, %Y') }}
         </button>
     {% endfor %}
 </ul>

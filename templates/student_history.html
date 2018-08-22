@@ -1,53 +1,59 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+.student-basics{
+    font-family: Baloo Bhai;
+}
+.tracked-behaviors{
+    color: #028090;
+}
+
+</style>
 <div class="container">
 
 
 <!-- Button trigger addProgressModal -->
-<h4>Student History
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addProgressModal" style="background-color: #e3f2fd;">Add a Progress Report
+<h5>
+<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addProgressModal" style="background-color: #028090;">Add a Progress Report
 </button>
 
 
 <!-- Button trigger editStudentProfile -->
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#editStudentProfile" style="background-color: #e3f2fd;">Edit Student Profile
+<button type="button" class="btn btn-light" data-toggle="modal" data-target="#editStudentProfile" style="background-color: #028090;">Edit Student Profile
 </button>
-</h4>
-<p>Student Name : {{ student.fname }} {{ student.lname }}</p>
+</h5>
+<div class="student-basics">
+<h4>{{ student.fname }} {{ student.lname }}</h4>
 <p>Birthdate : {{ student.birthdate.strftime('%b %d, %Y') }}</p>
 <p><img src="{{ student.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
 </div>
+</div>
 
+<style>
+.behaviors{
+    font-family: Open Sans;
 
+}
+</style>
 
 <div class="container">
-<p>Behaviors being tracked: </p>
+<p class="behaviors" >Behaviors being tracked: </p>
 
 <ul id="student_progress">
     {% for item in behaviors %}
-        <li> <a href="/student_history/{{ student.student_id }}/behavior_history?behavior_name={{ item }}" name="behavior_history">{{ item }}</a><br>
+        <li> <a class="tracked-behaviors" href="/student_history/{{ student.student_id }}/behavior_history?behavior_name={{ item }}" name="behavior_history">{{ item }}</a><br>
          </li>
      {% endfor %}
 </ul>
 </div>
 
 <div class="container">
-    <h3>Progress Chart</h3>
     <div>
         <canvas id="myChart"></canvas>
     </div>
 </div>
-
-
-<!-- Button trigger addProgressModal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProgressModal">Add a Progress Report
-</button>
-
-
-<!-- Button trigger editStudentProfile -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editStudentProfile">Edit Student Profile
-</button>
 
 
 <!-- Add Progress Form Modal -->
@@ -215,28 +221,41 @@ let chart = new Chart(ctx, {
 
 </script>
 
+<style>
+h3{
+    font-family: Baloo Bhai;
+}
+</style>
+
 <div class="container">
 <h3> Progress Reports: </h3>
 
 <ul id="progress reports">
 <p>
   {% for behavior in behaviors %}
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#{{ behavior|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapse">{{ behavior }}<br>
+  <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#{{ behavior|replace(" ", "_") }}" style="background-color: #028090;" aria-expanded="false" aria-controls="collapse">{{ behavior }}<br>
   </button>
   {% endfor %}
 </p>
+
+<style>
+.card card-body #{
+    background: #FCE7CF;
+    font-family: Open Sans;
+}
+
+.rating{
+    font-family: Baloo Bhai;
+}
+</style>
 
   {% for behavior in behaviors %}
     {% for item in behaviors[behavior] %} 
         <div class="collapse" id="{{ behavior|replace(" ", "_") }}">
             <div class="card card-body">
-                <li>Progress Report: <br>
-                    Date: {{ item.date }}<br>
-                    Behavior: {{ item.behavior.behavior_name }}<br>
-                    Intervention: {{ item.intervention.intervention_name }}<br>
-                    User_id: {{ item.user_id }}<br>
-                    Rating: {{ item.rating }}<br>
-                    Comment: {{ item.comment }}<br>
+                <li>{{ item.date }} | {{ item.user.user_name }}<br>
+                    {{ item.behavior.behavior_name }}: {{ item.intervention.intervention_name }}<br>
+                    <span class= "rating" >Rating: {{ item.rating }}, "{{ item.comment }}"</span><br>
                 </li>
             </div>
         </div>
