@@ -48,12 +48,13 @@ def check_login():
         password_match = password_match[0]
         if password == password_match:
             session["user_id"] = user_id[0]
+            flash(f"Welcome, {user.user_name}!", category='success')
             return redirect(f"/user_info/{user.user_id}")
         else:
-            flash("Login failed. Please double-check your password.")
+            flash("Login failed. Please double-check your password.", category='warning')
             return redirect("/")
     else:
-        flash("Looks like you're not registered.  Please register.")
+        flash("Looks like you're not registered.  Please register.", category='warning')
         return redirect("/")
 
 
@@ -62,10 +63,10 @@ def logout():
     """Clears user_id from session"""
     if 'user_id' in session:
         del session['user_id']
-        flash("Logged out.")
+        flash("Logged out.", category='info')
         return redirect("/")
     else:
-        flash("Please login.")
+        flash("Please login.", category='info')
         return redirect("/")
 
 
@@ -79,13 +80,13 @@ def register_new_user():
     user = User.query.filter(User.user_name == user_name).first()
 
     if user:
-        flash("That user_name is already registered.  Please choose another name.")
+        flash("That user_name is already registered.  Please choose another name.", category='info')
         return redirect('/')
     else:
         user_name = User(user_name=user_name, password=password)
         db.session.add(user_name)
         db.session.commit()
-        flash("Thank you for registering.  Please login to get started!")
+        flash("Thank you for registering.  Please login to get started!", category='success')
         return redirect("/")
 
 
@@ -94,7 +95,7 @@ def user_info(user_id):
     """lists students associated with the user"""
 
     if "user_id" not in session:
-        flash("Please log in.")
+        flash("Please log in.", category='warning')
         return redirect('/login')
 
     user = User.query.get(user_id)
@@ -208,10 +209,10 @@ def student_list():
     """displays results from student search"""
 
     user = User.query.get(session["user_id"])
+    user_id = user.user_id
 
     # debugger to use when testing to freeze because you can't print:
     # import pdb; pdb.set_trace()
-
 
     #gets information from student_search form
     fname = request.args.get("fname").capitalize()
@@ -221,20 +222,37 @@ def student_list():
 
     #checks to see what info the user entered and generates list of objects that Jinja will loop through.
     if student_id:
+        if int(student_id) > 5000000:
+            flash("Please try again.  That name/ID is not found", category='info')
+            return redirect(f"/user_info/{user_id}")
         student = Student.query.filter(Student.student_id==student_id).all()
+        if not student:
+            flash("Please try again.  That name/ID is not found", category='info')
+            return redirect(f"/user_info/{user_id}")
     elif birthdate:
         student = Student.query.filter(Student.birthdate==birthdate).all()
+        if not student:
+            flash("Please try again.  That name/ID is not found", category='info')
+            return redirect(f"/user_info/{user_id}")
     elif fname and lname:
         student = Student.query.filter(Student.fname==fname, Student.lname==lname).all()
+        if not student:
+            flash("Please try again.  That name/ID is not found", category='info')
+            return redirect(f"/user_info/{user_id}")
     elif fname and (not lname):
-        print(fname)
         student = Student.query.filter(Student.fname==fname).all()
+        if not student:
+            flash("Please try again.  That name/ID is not found", category='info')
+            return redirect(f"/user_info/{user_id}")
     elif lname and (not fname):
-        print(lname)
         student = Student.query.filter(Student.lname==lname).all()
+        if not student:
+            flash("Please try again.  That name/ID is not found", category='info')
+            return redirect(f"/user_info/{user_id}")
     else:
-        flash("Please try again.  That name/ID is not found")
+        flash("Please try again.  That name/ID is not found", category='info')
         return redirect(f"/user_info/{user_id}")
+
 
     return render_template("student_list.html", student=student, user=user)
 
@@ -259,7 +277,7 @@ def add_progress(student_id):
     comment = request.form.get("comment")
 
     if date is '':
-        flash("Please select a date.")
+        flash("Please select a date.", category='danger')
         return redirect(f"/student_history/{student_id}")
 
     #get progress objects matching the specified behavior for student:
@@ -302,8 +320,9 @@ def add_progress(student_id):
         for item in intervents:
             # if other interventions have been tried <6 times, don't add the new intervention.
             if intervents[item] < 6:
-                flash(f"You've only tried '{intervent_name[item]}' {intervents[item]} times.")
-                flash("We reccommend applying the same intervention to the targeted behavior at least 6 times before changing interventions.")
+                flash(f"""You've only tried '{intervent_name[item]}' {intervents[item]} times. \n
+                       We reccommend applying the same intervention to the targeted behavior at
+                       least 6 times before changing interventions.""", category='danger')
                 return redirect(f"/student_history/{student_id}")
             else:
                 # if other interventions have been tried >6 times, add this new intervention.
@@ -338,7 +357,7 @@ def add_student():
     photo = request.form.get("photo")
 
     if (fname is '') or (lname is '') or (phone_number is '') or (birthdate is ''):
-        flash("Please complete all fields of the student profile.")
+        flash("Please complete all fields of the student profile.", category='danger')
         return redirect(f"/user_info/{user_id}")
 
     student = Student(fname=fname, lname=lname, user_id=user_id, birthdate=birthdate, phone_number=phone_number, photo=photo)
@@ -404,12 +423,12 @@ def add_intervention():
 
     #make sure user is not able to add a duplicate behavior.
     if intervention_name in intervention_list:
-        flash("That intervention is already an option.")
+        flash("That intervention is already an option.", category='info')
         return redirect("/interventions")
 
     #make sure all the fields are filled out:
     if intervention_name is None:
-        flash("Please enter an intervention name")
+        flash("Please enter an intervention name", category='danger')
         return redirect("/add_intervention")
 
     intervention = Intervention(intervention_name=intervention_name)
@@ -507,15 +526,15 @@ def add_behavior():
 
     #make sure user is not able to add a duplicate behavior.
     if behavior_name in behavior_list:
-        flash("That behavior is already an option.")
+        flash("That behavior is already an option.", category='info')
         return redirect("/behaviors")
 
     #make sure all the fields are filled out:
     if behavior_name is None:
-        flash("Please enter a behavior name")
+        flash("Please enter a behavior name", category='danger')
         return redirect("/add_behavior")
     if behavior_d is None:
-        flash("Please enter a behavior description")
+        flash("Please enter a behavior description", category='danger')
         return redirect("/add_behavior")
 
     behavior = Behavior(behavior_name=behavior_name, behavior_description=behavior_description)
@@ -615,7 +634,7 @@ def edit_user_profile(user_id):
         db.session.commit()
         return redirect(f"/user_info/{user_id}")
     else:
-        flash("Your current password does not match our records.  Please try again.")
+        flash("Your current password does not match our records.  Please try again.", category='danger')
         return redirect(f"/user_info/{user_id}")
 
 
