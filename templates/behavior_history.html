@@ -86,7 +86,7 @@ let chart = new Chart(ctx, {
 </script>
 
 <div class="container">
-<button class="btn btn-light" type="button" data-toggle="collapse" style="background-color: #028090;" data-target="#{{ behavior.behavior_name|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapseExample">
+<button class="btn btn-dark" type="button" data-toggle="collapse" style="background-color: #028090;" data-target="#{{ behavior.behavior_name|replace(" ", "_") }}" aria-expanded="false" aria-controls="collapseExample">
 {{ behavior.behavior_name }}
 </button>
 
@@ -102,11 +102,11 @@ let chart = new Chart(ctx, {
 </div>
 
 <!-- Button trigger addProgressModal -->
-<button type="button" class="btn btn-light" data-toggle="modal" style="background-color: #028090;" data-target="#addProgressModal">Add a Progress Report
+<button type="button" class="btn btn-dark" data-toggle="modal" style="background-color: #028090;" data-target="#addProgressModal">Add a Progress Report
 </button>
 
 <!-- Button trigger send SMS -->
-<button type="button" class="btn btn-light" data-toggle="modal" style="background-color: #028090;" data-target="#sendSMSModal">Text Progress Report Home
+<button type="button" class="btn btn-dark" data-toggle="modal" style="background-color: #028090;" data-target="#sendSMSModal">Text Progress Report Home
 </button>
 </div>
 
@@ -227,7 +227,7 @@ let chart = new Chart(ctx, {
 
 <ul id="behavior_progress_buttons">
     {% for item in progress %}
-        <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#A{{ item.progress_id }}" style="background-color: #028090;" aria-expanded="false" aria-controls="collapseExample">{{ item.date.strftime('%b %d, %Y') }}
+        <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#A{{ item.progress_id }}" style="background-color: #028090;" aria-expanded="false" aria-controls="collapseExample">{{ item.date.strftime('%b %d, %Y') }}
         </button>
     {% endfor %}
 </ul>

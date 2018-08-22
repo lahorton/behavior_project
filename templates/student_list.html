@@ -1,21 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Students matching your search: </h2>
+<style>
 
-<p> Please click on Student ID to see student progress history: </p>
+body{
+  background: #FCE7CF;
+}
+
+h2{
+    font-family: Baloo Bhai;
+}
+
+#student{
+    font-family: Open Sans;
+}
+</style>
+
+<div class="container">
+<h2>Students matching your search: </h2>
+<br>
 
 <ul id="student">
     {% for i in student %}
-        <li> Student: <br>
-             First name: {{ i.fname }}<br>
-             Last name: {{ i.lname }}<br>
-             Student ID: <a href="/student_history/{{ i.student_id }}" name="student_id"> {{ i.student_id }}</a>
-             <br>
-             <br>
-        </li>
+        <p><img src="{{ i.photo }}" alt="No Photo Available" style="width:100px;height:100px;"></p>
+        <a href="/student_history/{{ i.student_id }}" name="student_id"> {{ i.fname }} {{ i.lname }}</a>
+        <br>
+        <br>
+        
     {% endfor %}
 </ul>
+</div>
 
 
 

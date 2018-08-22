@@ -2,6 +2,21 @@
 <html lang="en">
 <head>
 
+<style>
+  .navbar{
+    font-family: Open Sans;
+  }
+
+  #behaviorBasics{
+    font-family: Open Sans;
+ }
+
+.modal-backdrop {
+    background-color: blue;
+}
+
+</style>
+
   <title>Behavior_Tracker</title>
 
 
@@ -23,9 +38,9 @@
 <body>
 
 <div class="container-fluid">
-  <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #028090;">
+  <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #028090;">
   <a class="navbar-brand" href="#">
-    <img src="https://cdn.dribbble.com/users/28449/screenshots/1040285/cap-logo-ideas3_1x.png"
+    <img src="/static/images/C.png"
     width="30" height="30" alt="">
     </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,10 +88,22 @@
 </nav>
 </div>
 
-  <ul>
-        {% for message in get_flashed_messages() %}
-            <li> {{ message }} </li>
-        {% endfor %}
+  
+
+    <!-- FIX THIS SO IT WORKS W FLASH MESSAGES - OR CHANGE BACK TO OLD CODE -->
+<ul>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <!-- <strong>Title</strong> --> {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+      
   </ul>
 
 <!-- Student Search Form Modal -->
@@ -175,12 +202,6 @@
   </div>
 </div>
 {% endif %}
-
-<style>
-.modal-backdrop {
-    background-color: blue;
-}
-</style>
 
 <!-- Login Form Modal -->
 <div class="modal fade" id="Login" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">

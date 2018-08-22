@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container">
-<h2>Welcome, {{ user.user_name }}!</h2>
-</div>
-
 <style>
 
 body{
   background: #FCE7CF;
+}
+
+h2{ 
+    font-family: Baloo Bhai;
 }
 
 .card-deck{
@@ -27,14 +27,14 @@ body{
     width: 200px !important;
 }
 
-
-
 </style>
+
+<!-- ADD FLASH TO WELCOME ON FIRST SIGN IN - SERVER -->
 
 <ul id="student_info" >
 <div class="card-deck">
 {% for student in user.students %}
-    <div class="card text-center bg-light border-#028090 mb-3" style="width:18rem">
+    <div class="card text-center bg-dark border-#028090 mb-3" style="width:18rem">
         <img class="card-img-top mx-auto" id="top" src="{{ student.photo }}" style="width:100px" alt="Card image cap">
         <div class="card-body">
             <h5 class="card-title"> <p id="{{ student.student_id }}"><a href="/student_history/{{ student.student_id }}" data-toggle= "tooltip" title= "Phone: {{ student.phone_number }} Birthdate: {{ student.birthdate.strftime('%b %d, %Y') }} Student ID: {{ student.user_id }}" >{{ student.fname }} {{student.lname }}</a></p></h5>
@@ -119,6 +119,7 @@ body{
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
+
 
 </script>
 

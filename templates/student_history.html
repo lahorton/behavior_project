@@ -16,12 +16,12 @@
 
 <!-- Button trigger addProgressModal -->
 <h5>
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addProgressModal" style="background-color: #028090;">Add a Progress Report
+<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addProgressModal" style="background-color: #028090;">Add a Progress Report
 </button>
 
 
 <!-- Button trigger editStudentProfile -->
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#editStudentProfile" style="background-color: #028090;">Edit Student Profile
+<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#editStudentProfile" style="background-color: #028090;">Edit Student Profile
 </button>
 </h5>
 <div class="student-basics">
@@ -237,7 +237,7 @@ h3{
 <ul id="progress reports">
 <p>
   {% for behavior in behaviors %}
-  <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#{{ behavior|replace(" ", "_") }}" style="background-color: #028090;" aria-expanded="false" aria-controls="collapse">{{ behavior }}<br>
+  <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#{{ behavior|replace(" ", "_") }}" style="background-color: #028090;" aria-expanded="false" aria-controls="collapse">{{ behavior }}<br>
   </button>
   {% endfor %}
 </p>
