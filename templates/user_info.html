@@ -6,17 +6,27 @@
 </div>
 
 <style>
+
+body{
+  background: #FCE7CF;
+}
+
 .card-deck{
     /*display: flex;*/
     /*flex-wrap: wrap;*/
     font-family: 'Open Sans';
-    color: #0E2379;
-
 }
+
+.card-deck a{
+    color: #007B8C;
+}
+
 #student_info .card {
     flex: 0 0 auto;
+    background: #FCF8F4;
     width: 200px !important;
 }
+
 
 
 </style>
@@ -25,7 +35,7 @@
 <div class="card-deck">
 {% for student in user.students %}
     <div class="card text-center bg-light border-#028090 mb-3" style="width:18rem">
-        <img class="card-img-top mx-auto" src="{{ student.photo }}" style="width:100px" alt="Card image cap">
+        <img class="card-img-top mx-auto" id="top" src="{{ student.photo }}" style="width:100px" alt="Card image cap">
         <div class="card-body">
             <h5 class="card-title"> <p id="{{ student.student_id }}"><a href="/student_history/{{ student.student_id }}" data-toggle= "tooltip" title= "Phone: {{ student.phone_number }} Birthdate: {{ student.birthdate.strftime('%b %d, %Y') }} Student ID: {{ student.user_id }}" >{{ student.fname }} {{student.lname }}</a></p></h5>
         </div>

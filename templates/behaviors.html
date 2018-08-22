@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<style>
+body{
+  background: #FCE7CF;
+}
+
+.behavior-item #name{
+    color: #028090;
+}
+</style>
+
 <div id="bloodhound">
   <input class="typeahead" type="text" placeholder="Search Behaviors" >
 </div>
@@ -8,13 +18,12 @@
 <h3>Behaviors</h3>
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBehaviorModal">
+<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addBehaviorModal" style="background-color: #028090;">
 Add a Behavior
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="addBehaviorModal" tabindex="-1" role="dialog" aria-labelledby="addBehaviorModal
-            "aria-hidden="true">
+<div class="modal fade" id="addBehaviorModal" tabindex="-1" role="dialog" aria-labelledby="addBehaviorModal "aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
@@ -46,14 +55,14 @@ Add a Behavior
         <div class="behavior-item">
             <!-- creates link to activate modal -->
             <li>
-                <a href="#{{ item.behavior_id }}" class="btn">
+                <a id = "name" href="#{{ item.behavior_id }}" class="btn">
                         {{ item.behavior_name }}
                 </a>
             </li>
             <!-- creates modal -->
             <div class="modal fade" id="{{ item.behavior_id }}" 
                  tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            >
+                 >
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">

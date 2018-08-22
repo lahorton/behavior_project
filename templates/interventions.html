@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<style>
+body{
+  background: #FCE7CF;
+}
+
+.intervention-item #name{
+  color: #028090;
+}
+
+</style>
+
 <div id="bloodhound">
   <input class="typeahead" type="text" placeholder="Search Interventions">
 </div>
@@ -8,7 +19,7 @@
 <h2>Interventions</h2>
 
 <!-- Button trigger addIntervention modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addInterventionModal">
+<button type="button" class="btn btn-light" data-toggle="modal" style="background-color: #028090;" data-target="#addInterventionModal">
   Add an intervention
 </button>
 
@@ -38,20 +49,13 @@
 </div>
 
 
-<style>
-.interventions-container{
-  display: flex;
-  flex-wrap: wrap;
-}
-</style>
-
 <div class="interventions-container" id="interventions">
   <div class="row">
     <div class="col-sm">
   {% for item in interventions %}
   <div class = "intervention-item">
     <!-- creates a link to activate modal -->
-    <li><a href="#{{ item.intervention_id }}" class="btn">{{ item.intervention_name }}
+    <li><a id = "name" href="#{{ item.intervention_id }}" class="btn">{{ item.intervention_name }}
     </a></li>
     <!-- creates the content for the modal -->
       <div class="modal fade" id="{{ item.intervention_id }}"
