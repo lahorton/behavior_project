@@ -3,6 +3,9 @@
 <head>
 
 <style>
+body{
+  font-family: Open Sans;
+}
   .navbar{
     font-family: Open Sans;
   }
@@ -52,7 +55,14 @@
         <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" type="btn" data-toggle="modal" href="#behaviorBasics">Get started</a></a>
+        <a class="nav-link" type="btn" data-toggle="modal" href="#behaviorBasics">Get started</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" type="btn" data-toggle="modal" href="#Login">Login</a>
+          <a class="dropdown-item" type="btn" data-toggle="modal" href="#Register">Register</a>
       </li>
       <!-- Makes sure only logged in users can search students -->
       {% if 'user_id' in session %}
@@ -73,15 +83,11 @@
         </li>
       </li>
       {% endif %}
-     
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" type="btn" data-toggle="modal" href="#Login">Login</a>
-          <a class="dropdown-item" type="btn" data-toggle="modal" href="#Register">Register</a>
       <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" type="btn" data-toggle="modal" href="#contactInfo">Contact</a>
       </li>
     </ul>
   </div>
@@ -281,6 +287,30 @@
             <li>Once you've tried the intervention for the determined timeframe, evaluate progress.  This is a good opportunity to reflect on how appropriate the intervention was for the targetted behavior, strategize next steps, and celebrate student success!  
             </li><br>
         </ol}>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="contactInfo" tabindex="-1" role="dialog" aria-labelledby="contactInfo" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center" id="exampleModalLabel">Thanks for using Carrot!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="contact">Check out my other work at:<br>
+          <a class="dropdown-item" href="https:www.linkedin.com/in/lauralhorton">linkedin.com/in/lauralhorton</a>
+          <a class="dropdown-item" href="https:www.github.com/lahorton">github.com/lahorton</a></div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

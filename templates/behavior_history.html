@@ -18,7 +18,18 @@ h4{
 
 body{
   background: #FCE7CF;
+  font-family: Open Sans;
 }
+
+.card card-body #{
+    background: #FCE7CF;
+    font-family: Open Sans;
+}
+
+.rating{
+    font-family: Baloo Bhai;
+}
+
 </style>
 
 <h4> Behavior Progress: </h4>
@@ -236,13 +247,9 @@ let chart = new Chart(ctx, {
     {% for item in progress %}
         <div class="collapse" id="A{{ item.progress_id }}">
             <div class="card card-body">
-               <li> Progress Report: <br>
-                    Date: {{ item.date.strftime('%b %d, %Y') }}<br>
-                    Behavior: {{ item.behavior.behavior_name }}<br>
-                    Intervention: {{ item.intervention.intervention_name }}<br>
-                    User_id: {{ item.user_id }}<br>
-                    Rating: {{ item.rating }}<br>
-                    Comment: {{ item.comment }}<br>
+               <li>User: {{ item.user.user_name }}<br>
+                   {{ item.behavior.behavior_name }} | {{ item.intervention.intervention_name }} <br>
+                    <span class= "rating" >Rating: {{ item.rating }}, "{{ item.comment }}"</span><br>
                 </li>
             </div>
         </div>

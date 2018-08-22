@@ -2,8 +2,10 @@
 {% block content %}
 
 <style>
+
 body{
   background: #FCE7CF;
+  font-family: Open Sans;
 }
 
 .behavior-item #name{
@@ -15,7 +17,8 @@ body{
   <input class="typeahead" type="text" placeholder="Search Behaviors" >
 </div>
 
-<h3>Behaviors</h3>
+
+<h2>Behaviors</h2>
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-light" data-toggle="modal" data-target="#addBehaviorModal" style="background-color: #028090;">
@@ -50,19 +53,18 @@ Add a Behavior
 </div>
 
 
-<div class="behaviors-container" id="behaviors">
-    {% for item in behaviors %}
+<div class="container" id="behaviors">
+  <div class="row">
+    <div class="col-sm">
+        <ul class="list-group">
+        {% for item in behaviors %}
         <div class="behavior-item">
             <!-- creates link to activate modal -->
-            <li>
-                <a id = "name" href="#{{ item.behavior_id }}" class="btn">
-                        {{ item.behavior_name }}
-                </a>
-            </li>
+            <li class="list-group-item"><a id = "name" href="#{{ item.behavior_id }}" class="btn">{{ item.behavior_name }}</a></li>
+        </ul>
             <!-- creates modal -->
             <div class="modal fade" id="{{ item.behavior_id }}" 
-                 tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                 >
+                 tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -90,9 +92,10 @@ Add a Behavior
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>     
+            </div>     
     {% endfor %}
+    </div>
+</div>
 </div>
 
 

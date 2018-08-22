@@ -29,11 +29,9 @@ h2{
 
 </style>
 
-<!-- ADD FLASH TO WELCOME ON FIRST SIGN IN - SERVER -->
-
 <ul id="student_info" >
 <div class="card-deck">
-{% for student in user.students %}
+{% for student in user.students|sort(attribute='lname') %}
     <div class="card text-center bg-dark border-#028090 mb-3" style="width:18rem">
         <img class="card-img-top mx-auto" id="top" src="{{ student.photo }}" style="width:100px" alt="Card image cap">
         <div class="card-body">

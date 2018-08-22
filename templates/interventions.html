@@ -4,6 +4,7 @@
 <style>
 body{
   background: #FCE7CF;
+  font-family: Open Sans;
 }
 
 .intervention-item #name{
@@ -49,21 +50,24 @@ body{
 </div>
 
 
-<div class="interventions-container" id="interventions">
+<div class="container" id="interventions">
   <div class="row">
     <div class="col-sm">
+      <ul class="list-group">
   {% for item in interventions %}
   <div class = "intervention-item">
     <!-- creates a link to activate modal -->
-    <li><a id = "name" href="#{{ item.intervention_id }}" class="btn">{{ item.intervention_name }}
+    <li class="list-group-item"><a id = "name" href="#{{ item.intervention_id }}" class="btn">{{ item.intervention_name }}
     </a></li>
+  </ul>
     <!-- creates the content for the modal -->
       <div class="modal fade" id="{{ item.intervention_id }}"
              tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                
+                <h3>{{ item.intervention_name }}</h3>
+
                 <button type="button" class="close"
                           data-dismiss="modal" aria-label="Close"
                 >
@@ -72,11 +76,10 @@ body{
               </div>
 
             <div class="modal-body">
-              <h3>{{ item.intervention_name }}</h3>
-              <p>Associated Behaviors:</p>
+              <p>Helpful for the following behaviors:</p>
                 {% for behavior in item.behaviors %}
                   <h5>{{ behavior.behavior_name }}</h5>
-                  <p>Behavior Description:</p>
+                  <p>Description:</p>
                   <ul id="behavior_info">
                     {% for item in behavior.behavior_description %}
                       <li>{{ item }} </li>

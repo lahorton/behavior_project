@@ -48,7 +48,7 @@ def check_login():
         password_match = password_match[0]
         if password == password_match:
             session["user_id"] = user_id[0]
-            flash(f"Welcome, {user.user_name}!", category='success')
+            flash(f"Welcome, {user.user_name.title() }!", category='info')
             return redirect(f"/user_info/{user.user_id}")
         else:
             flash("Login failed. Please double-check your password.", category='warning')
