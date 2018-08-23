@@ -11,7 +11,6 @@ Python, Flask, Jinja, SQLAlchemy, Javascript, Bootstrap, HTML, CSS, Twillio API,
 
 
 Features:
-![homepage](https://user-images.githubusercontent.com/38845846/44557024-767c8000-a6f1-11e8-8e0d-f1a85b535385.jpg)
 
 
 ![Alt text](/Users/lauralhorton/src/behavior_project/static/images/user_page.png raw=true "carrot_homepage")
