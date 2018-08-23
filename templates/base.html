@@ -2,24 +2,6 @@
 <html lang="en">
 <head>
 
-<style>
-body{
-  font-family: Open Sans;
-}
-  .navbar{
-    font-family: Open Sans;
-  }
-
-  #behaviorBasics{
-    font-family: Open Sans;
- }
-
-.modal-backdrop {
-    background-color: blue;
-}
-
-</style>
-
   <title>Behavior_Tracker</title>
 
 
@@ -36,12 +18,42 @@ body{
 
   <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
+
+
+<style>
+
+ul .navbar-nav{
+  color: #F46036;
+}
+
+body{
+  font-family: Open Sans;
+}
+
+.navbar{
+  font-family: Open Sans;
+}
+
+#behaviorBasics{
+  font-family: Open Sans;
+}
+
+.modal-backdrop {
+/*  background-color: blue;*/
+}
+
+.navbar-dark .navbar-nav .active>a.nav-link{
+  color: #F46036;
+}
+
+</style>
 </head>
 <body>
 
 <div class="container-fluid">
-  <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #028090;">
+  <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #43494a;">
   <a class="navbar-brand" href="#">
     <img src="/static/images/C.png"
     width="30" height="30" alt="">
@@ -54,9 +66,10 @@ body{
       <li class="nav-item active">
         <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" type="btn" data-toggle="modal" href="#behaviorBasics">Get started</a>
       </li>
+      {% if 'user_id' not in session %}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login
         </a>
@@ -64,9 +77,10 @@ body{
           <a class="dropdown-item" type="btn" data-toggle="modal" href="#Login">Login</a>
           <a class="dropdown-item" type="btn" data-toggle="modal" href="#Register">Register</a>
       </li>
+      {% endif %}
       <!-- Makes sure only logged in users can search students -->
       {% if 'user_id' in session %}
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown active">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User Info
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -75,18 +89,18 @@ body{
           <a class="dropdown-item" type="btn" data-toggle="modal" href="#addStudent">Add a Student</a>
           <a class="dropdown-item" type="btn" data-toggle="modal" href="#editUserPassword">Edit User Password</a>
         </div>
-        <li class="nav-item">
+        <li class="nav-item active">
         <a class="nav-link" href="/behaviors">Behaviors</a>
       </li>
-        <li class="nav-item">
+        <li class="nav-item active">
         <a class="nav-link" href="/interventions">Interventions</a>
         </li>
       </li>
-      {% endif %}
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="/logout">Logout</a>
       </li>
-      <li class="nav-item">
+      {% endif %}
+      <li class="nav-item active">
         <a class="nav-link" type="btn" data-toggle="modal" href="#contactInfo">Contact</a>
       </li>
     </ul>
@@ -94,23 +108,21 @@ body{
 </nav>
 </div>
 
-  
 
     <!-- Controls the background color of flash messages, by categories assigned in Python server.py-->
 <ul>
-    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
   <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
   {% if messages %}
     {% for category, message in messages %}
       <div class="alert alert-{{ category }} alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <!-- <strong>Title</strong> --> {{ message }}
+      {{ message }}
       </div>
     {% endfor %}
   {% endif %}
 {% endwith %}
-      
-  </ul>
+</ul>
 
 <!-- Student Search Form Modal -->
 <div class="modal fade" id="student_search" tabindex="-1" role="dialog" aria-labelledby="searchStudentModal" aria-hidden="true">
@@ -118,7 +130,7 @@ body{
     <div class="modal-content">
       <div class="modal-header text-center">
         <h5 class="modal-title" id="exampleModalLabel">Search Students</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>
           <span aria-hidden="true"></span>
         </button>
       </div>
@@ -150,7 +162,7 @@ body{
     <div class="modal-content">
       <div class="modal-header text-center">
         <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>
           <span aria-hidden="true"></span>
         </button>
       </div>
@@ -183,14 +195,13 @@ body{
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h5 class="modal-title" id="exampleModalLabel">Reset User Password</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="exampleModalLabel">Reset User Password:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>
           <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
         <form action = "/edit_user/{{ user.user_id }}" method="POST">
-        <h2>{{ user.user_name }}</h2>
         <div>
         Please enter your current password:
         <input type="text" name="current_password"><br>
@@ -215,7 +226,7 @@ body{
     <div class="modal-content" background-color: "blue">
       <div class="modal-header text-center">
         <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>
           <span aria-hidden="true"></span>
         </button>
       </div>
@@ -269,27 +280,24 @@ body{
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title text-center" id="exampleModalLabel">Behavior Intervention Basics</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title text-center" id="behaviorBasics">Behavior Intervention Basics</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>
           <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
         <ol id="basics">
-            <li>Choose a behavior you'd like to address and thoughtfully select ONE intervention to address it. 
+            <li>Choose a behavior and ONE intervention to address it.
             </li><br>
-            <li>Collect baseline data.  Collect 3-5 data-points before starting the intervention to determine the student’s baseline, or starting point, in the behavior that is being addressed. This baseline will be useful to compare to the the outcome and measure progress after implementing the intervention. 
+            <li>Collect baseline data.<br>Collect 3-5 data-points before starting the intervention to determine the a baseline. This baseline will be useful to compare to the the outcome and measure progress after implementing the intervention. 
             </li><br>
-            <li>Determine the length of the intervention.  Good practice suggests 6 weeks, or at least 6 data points, to evaluate meaningful progress.
+            <li>Determine the length of the intervention.<br>Good practice suggests 6 weeks, or at least 6 data points, to evaluate meaningful progress.
             </li><br>
-            <li>Based on the baseline and the length of the intervention, determine the intervention goal.  
+            <li>Determine the intervention goal.<br>This will depend on the baseline and the length of the intervention.  
             </li><br>
-            <li>Once you've tried the intervention for the determined timeframe, evaluate progress.  This is a good opportunity to reflect on how appropriate the intervention was for the targetted behavior, strategize next steps, and celebrate student success!  
+            <li>Evaluate progress!<br> After trying the intervention for the chosen timeframe, reflect on how appropriate the intervention was for the targetted behavior, strategize next steps, and celebrate student success. 
             </li><br>
         </ol}>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -302,7 +310,7 @@ body{
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title text-center" id="exampleModalLabel">Thanks for using Carrot!</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>
           <span aria-hidden="true"></span>
         </button>
       </div>
@@ -310,10 +318,6 @@ body{
         <div class="contact">Check out my other work at:<br>
           <a class="dropdown-item" href="https:www.linkedin.com/in/lauralhorton">linkedin.com/in/lauralhorton</a>
           <a class="dropdown-item" href="https:www.github.com/lahorton">github.com/lahorton</a></div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

@@ -77,13 +77,13 @@ Add a Behavior
 
                         <div class="modal-body">
                             <h2>{{ item.behavior_name }}</h2>
-                            <p>Behavior Description:</p>
+                            <p>Description:</p>
                             <ul id="behavior_info">
                                 {% for item in item.behavior_description %}
                                     <li>{{ item }}</li>
                                 {% endfor %}
                             </ul>
-                            <p>Commonly associated interventions:</p>
+                            <p>Associated interventions:</p>
                             <ul id="associated_interventions">
                                 {% for intervention in item.interventions %}
                                     <li>{{ intervention.intervention_name }}</li>

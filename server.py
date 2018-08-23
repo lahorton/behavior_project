@@ -80,7 +80,7 @@ def register_new_user():
     user = User.query.filter(User.user_name == user_name).first()
 
     if user:
-        flash("That user_name is already registered.  Please choose another name.", category='info')
+        flash("That user_name is already registered.  Please choose another name.", category='warning')
         return redirect('/')
     else:
         user_name = User(user_name=user_name, password=password)
