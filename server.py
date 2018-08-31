@@ -559,6 +559,11 @@ def send_progress(student_id):
 
     # Gets the number saved for student in the database
     phone_number = student.phone_number.strip("- ")
+
+    if phone_number != "3132589798":
+        flash("""This feature is currently only available for verified phone numbers.\n
+                  Please check back later or contact the site administrator.""", category='info')
+        return redirect(f"/student_history/{student_id}")
     # Gets the message and report from the form
     comment = request.args.get("comment")
     report = request.args.get("report")
