@@ -225,29 +225,29 @@ def student_list():
         if int(student_id) > 5000000:
             flash("Please try again.  That name/ID is not found", category='info')
             return redirect(f"/user_info/{user_id}")
-        student = Student.query.filter(Student.student_id==student_id).all()
+        student = Student.query.filter(Student.student_id==student_id, Student.user_id==user_id).all()
         if not student:
-            flash("Please try again.  That name/ID is not found", category='info')
+            flash("Please try again.  That name/ID is not found as a student regisered to this user", category='info')
             return redirect(f"/user_info/{user_id}")
     elif birthdate:
-        student = Student.query.filter(Student.birthdate==birthdate).all()
+        student = Student.query.filter(Student.birthdate==birthdate, Student.user_id==user_id).all()
         if not student:
-            flash("Please try again.  That name/ID is not found", category='info')
+            flash("Please try again.  That name/ID is not found as a student regisered to this user", category='info')
             return redirect(f"/user_info/{user_id}")
     elif fname and lname:
-        student = Student.query.filter(Student.fname==fname, Student.lname==lname).all()
+        student = Student.query.filter(Student.fname==fname, Student.lname==lname, Student.user_id==user_id).all()
         if not student:
-            flash("Please try again.  That name/ID is not found", category='info')
+            flash("Please try again.  That name/ID is not found as a student regisered to this user", category='info')
             return redirect(f"/user_info/{user_id}")
     elif fname and (not lname):
-        student = Student.query.filter(Student.fname==fname).all()
+        student = Student.query.filter(Student.fname==fname, Student.user_id==user_id).all()
         if not student:
-            flash("Please try again.  That name/ID is not found", category='info')
+            flash("Please try again.  That name/ID is not found as a student regisered to this user", category='info')
             return redirect(f"/user_info/{user_id}")
     elif lname and (not fname):
-        student = Student.query.filter(Student.lname==lname).all()
+        student = Student.query.filter(Student.lname==lname, Student.user_id==user_id).all()
         if not student:
-            flash("Please try again.  That name/ID is not found", category='info')
+            flash("Please try again.  That name/ID is not found as a student regisered to this user", category='info')
             return redirect(f"/user_info/{user_id}")
     else:
         flash("Please try again.  That name/ID is not found", category='info')
